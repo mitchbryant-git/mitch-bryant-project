@@ -30,8 +30,8 @@ export default function Home() {
       {/* Main Content */}
       <main className="relative z-10">
         <Hero />
-        <About />
         <ToolsGrid />
+        <About />
         <SocialLinks />
       </main>
 

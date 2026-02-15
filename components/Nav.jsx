@@ -43,16 +43,16 @@ export const Nav = () => {
         {/* Nav Links */}
         <nav className="flex items-center gap-2 md:gap-4">
           <button
-            onClick={() => scrollToSection('about')}
-            className="btn-soft text-xs md:text-sm font-bold uppercase tracking-wider font-['Montserrat'] text-[#CFCFCF]"
-          >
-            Mission
-          </button>
-          <button
             onClick={() => scrollToSection('tools')}
             className="btn-soft text-xs md:text-sm font-bold uppercase tracking-wider font-['Montserrat'] text-[#CFCFCF]"
           >
             Tools
+          </button>
+          <button
+            onClick={() => scrollToSection('about')}
+            className="btn-soft text-xs md:text-sm font-bold uppercase tracking-wider font-['Montserrat'] text-[#CFCFCF]"
+          >
+            Mission
           </button>
           <button
             onClick={() => scrollToSection('connect')}
