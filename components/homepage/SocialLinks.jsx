@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Card } from '@/components/Card';
+import { Card } from '@/components/shared/Card';
 
 // Custom TikTok icon (Lucide doesn't have TikTok)
 const TikTokIcon = ({ size = 24 }) => (
