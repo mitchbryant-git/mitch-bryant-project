@@ -2,19 +2,24 @@
 import React from 'react';
 import { ToolCard } from './ToolCard';
 import { tools } from '@/config/tools';
+import Reveal from '@/components/shared/Reveal';
 
 export const ToolsGrid = () => {
   return (
     <section className="max-w-6xl mx-auto px-4 py-12 md:py-16 relative z-10" id="tools">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-black font-['Montserrat'] text-white">
-          Tools & Resources
-        </h2>
-      </div>
+      <Reveal>
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-black font-['Montserrat'] text-white">
+            Tools & Resources
+          </h2>
+        </div>
+      </Reveal>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-        {tools.map((tool) => (
-          <ToolCard key={tool.id} tool={tool} />
+        {tools.map((tool, i) => (
+          <Reveal key={tool.id} delay={i * 80}>
+            <ToolCard tool={tool} />
+          </Reveal>
         ))}
       </div>
     </section>
