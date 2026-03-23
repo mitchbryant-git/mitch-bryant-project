@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Card } from '@/components/shared/Card';
 import { Calculator, Gamepad2, Users, MessageSquare, ExternalLink, Sparkles } from 'lucide-react';
 
@@ -13,13 +14,18 @@ const iconMap = {
 };
 
 export const ToolCard = ({ tool }) => {
+  const router = useRouter();
   const Icon = iconMap[tool.icon] || Calculator;
   const isLive = tool.status === 'live';
   const isBuilding = tool.status === 'building';
   const isRequested = tool.status === 'requested';
+  const isInternal = tool.url?.startsWith('/');
 
   const handleClick = () => {
-    if (tool.url) {
+    if (!tool.url) return;
+    if (isInternal) {
+      router.push(tool.url);
+    } else {
       window.open(tool.url, '_blank', 'noopener,noreferrer');
     }
   };
@@ -95,7 +101,7 @@ export const ToolCard = ({ tool }) => {
             <span className={isLive ? 'text-[#62FFDA]' : 'text-[#6A3CFF]'}>
               {isLive ? 'Launch Tool' : 'Send Message'}
             </span>
-            <ExternalLink size={16} className={isLive ? 'text-[#62FFDA]' : 'text-[#6A3CFF]'} />
+            {!isInternal && <ExternalLink size={16} className={isLive ? 'text-[#62FFDA]' : 'text-[#6A3CFF]'} />}
           </div>
         )}
 

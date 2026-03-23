@@ -8,7 +8,7 @@ import { select, pie, arc as d3Arc, interpolate, easeCubicOut } from "d3";
 // ═══════════════════════════════════════════════════════════════
 const T={primaryBlue:'#0081CB',coachViolet:'#6A3CFF',mintAccent:'#62FFDA',darkBase:'#0D0D0D',softSilver:'#CFCFCF',negativeRed:'#FF3366',offWhite:'#FAFAFA',accentBlue:'#00A3FF',amber:'#FFB347'};
 const F={h:"var(--font-montserrat),'Montserrat',sans-serif",b:"var(--font-lato),'Lato',sans-serif",m:"ui-monospace,SFMono-Regular,'SF Mono',monospace"};
-const NOISE_BG=`url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
+const NOISE_BG=`url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
 // ═══════════════════════════════════════════════════════════════
 // TAX CONSTANTS 2025-26
@@ -102,8 +102,8 @@ const useScrollReveal=(threshold=0.15)=>{
 // COMPONENTS — hybrid Tailwind + inline, matching prototype exactly
 // ═══════════════════════════════════════════════════════════════
 
-const Card=({children,className=""})=>(
-  <div className={`rounded-3xl relative ${className}`} style={{background:'linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))',border:'1px solid rgba(255,255,255,0.14)',boxShadow:'0 18px 45px rgba(0,0,0,0.85),0 0 0 1px rgba(0,0,0,0.5) inset',backdropFilter:'blur(22px)',overflow:'visible'}}>
+const Card=({children,className="",hover=true})=>(
+  <div className={`rounded-3xl relative ${hover?'dlc-card-hover':''} ${className}`} style={{background:'linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))',border:'1px solid rgba(255,255,255,0.14)',boxShadow:'0 18px 45px rgba(0,0,0,0.85),0 0 0 1px rgba(0,0,0,0.5) inset',backdropFilter:'blur(22px)',overflow:'visible',transition:'transform 300ms cubic-bezier(0.34,1.56,0.64,1), border-color 300ms ease, box-shadow 300ms ease'}}>
     <div className="absolute top-0 left-10 right-10 h-px pointer-events-none" style={{background:'linear-gradient(to right,transparent,rgba(255,255,255,0.2),transparent)',opacity:0.7}}/>
     <div className="absolute inset-0 pointer-events-none rounded-3xl" style={{border:'1px solid rgba(255,255,255,0.05)'}}/>
     <div className="relative z-10 w-full">{children}</div>
@@ -169,7 +169,7 @@ const TextInput=({value,onChange,placeholder,className=""})=><input type="text" 
 const Pill=({options,value,onChange})=><div className="flex rounded-full overflow-hidden" style={{border:'1px solid rgba(255,255,255,0.1)',background:'rgba(15,23,42,0.5)'}}>
   {options.map(o=><button key={o.v} onClick={()=>onChange(o.v)} className="px-4 py-1.5 text-xs font-bold transition-all" style={{fontFamily:F.h,background:value===o.v?T.primaryBlue:'transparent',color:value===o.v?'white':T.softSilver,letterSpacing:'0.04em'}}>{o.l}</button>)}</div>;
 
-const StatBox=({label,value,sub,color=T.mintAccent})=><div className="p-4 rounded-xl" style={{background:'rgba(0,0,0,0.2)',border:'1px solid rgba(255,255,255,0.05)'}}>
+const StatBox=({label,value,sub,color=T.mintAccent})=><div className="p-4 rounded-xl dlc-stat-hover" style={{background:'rgba(0,0,0,0.2)',border:'1px solid rgba(255,255,255,0.05)',transition:'transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease'}}>
   <div style={{fontFamily:F.h,fontSize:10,textTransform:'uppercase',letterSpacing:'0.1em',color:'rgba(241,245,249,0.35)',marginBottom:4}}>{label}</div>
   <div style={{fontFamily:F.m,fontSize:22,fontWeight:700,color}}>{value}</div>
   {sub&&<div style={{fontFamily:F.b,fontSize:10,color:'rgba(241,245,249,0.45)',marginTop:4}}>{sub}</div>}</div>;
@@ -218,9 +218,9 @@ const EmptyState=({color,onAdd,onAddBig})=>(
     </div>
     <p style={{fontFamily:F.b,fontSize:13,color:T.softSilver,textAlign:'center'}}>Nothing here yet. What does your<br/>dream life include?</p>
     <div className="flex gap-2">
-      <button onClick={onAdd} className="px-4 py-2 rounded-xl text-xs font-bold transition-all" style={{fontFamily:F.h,fontSize:10,letterSpacing:'0.05em',color,background:`${color}0A`,border:`1px dashed ${color}33`}}
+      <button onClick={onAdd} className="dlc-btn-action px-4 py-2 rounded-xl text-xs font-bold transition-all" style={{fontFamily:F.h,fontSize:10,letterSpacing:'0.05em',color,background:`${color}0A`,border:`1px dashed ${color}33`}}
         onMouseEnter={e=>{e.currentTarget.style.background=`${color}15`}} onMouseLeave={e=>{e.currentTarget.style.background=`${color}0A`}}><Plus size={12} style={{display:'inline',verticalAlign:'-2px',marginRight:4}}/>Add Item</button>
-      <button onClick={onAddBig} className="px-4 py-2 rounded-xl text-xs font-bold transition-all" style={{fontFamily:F.h,fontSize:10,letterSpacing:'0.05em',color:T.coachViolet,background:`${T.coachViolet}0A`,border:`1px dashed ${T.coachViolet}33`}}
+      <button onClick={onAddBig} className="dlc-btn-action px-4 py-2 rounded-xl text-xs font-bold transition-all" style={{fontFamily:F.h,fontSize:10,letterSpacing:'0.05em',color:T.coachViolet,background:`${T.coachViolet}0A`,border:`1px dashed ${T.coachViolet}33`}}
         onMouseEnter={e=>{e.currentTarget.style.background=`${T.coachViolet}15`}} onMouseLeave={e=>{e.currentTarget.style.background=`${T.coachViolet}0A`}}>💰 Big Purchase</button>
     </div>
   </div>
@@ -283,7 +283,7 @@ export default function DreamLifeCalculatorClient(){
         <div className="absolute rounded-full" style={{top:0,left:'10%',width:500,height:500,background:T.coachViolet,mixBlendMode:'screen',filter:'blur(120px)',opacity:0.2,animation:'dlcPulse 10s ease-in-out infinite'}}/>
         <div className="absolute rounded-full" style={{bottom:0,right:'10%',width:600,height:600,background:T.primaryBlue,mixBlendMode:'screen',filter:'blur(130px)',opacity:0.2}}/>
         <div className="absolute rounded-full" style={{top:'50%',left:'50%',transform:'translate(-50%,-50%)',width:800,height:800,background:T.mintAccent,mixBlendMode:'overlay',filter:'blur(150px)',opacity:0.05}}/>
-        <div className="absolute inset-0" style={{opacity:0.1,mixBlendMode:'soft-light',backgroundImage:NOISE_BG}}/>
+        <div className="absolute inset-0" style={{opacity:0.04,mixBlendMode:'soft-light',backgroundImage:NOISE_BG,backgroundSize:'200px 200px'}}/>
       </div>
 
       {/* HEADER */}
@@ -317,9 +317,9 @@ export default function DreamLifeCalculatorClient(){
         </div>
 
         {/* HERO SUMMARY CARD */}
-        <div className="mb-8 rounded-3xl overflow-hidden relative" style={{minHeight:140}}>
+        <div className="mb-8 rounded-3xl overflow-hidden relative dlc-hero-card" style={{minHeight:140}}>
           <div className="absolute inset-0" style={{background:'linear-gradient(110deg,#0081CB 0%,#6A3CFF 100%)'}}/>
-          <div className="absolute inset-0" style={{opacity:0.2,mixBlendMode:'soft-light',backgroundImage:NOISE_BG}}/>
+          <div className="absolute inset-0" style={{opacity:0.08,mixBlendMode:'soft-light',backgroundImage:NOISE_BG,backgroundSize:'200px 200px'}}/>
           <div className="relative p-6 sm:p-8 text-white">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
               <div>
@@ -402,8 +402,8 @@ export default function DreamLifeCalculatorClient(){
                         );
                       })}
                       <div className="flex gap-2 mt-3">
-                        <button onClick={()=>addItem(cat.id)} className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl transition-all" style={{fontFamily:F.h,fontSize:11,fontWeight:700,letterSpacing:'0.05em',color:cat.color,background:`${cat.color}0A`,border:`1px dashed ${cat.color}33`,cursor:'pointer'}} onMouseEnter={e=>{e.currentTarget.style.background=`${cat.color}15`;e.currentTarget.style.borderColor=`${cat.color}55`}} onMouseLeave={e=>{e.currentTarget.style.background=`${cat.color}0A`;e.currentTarget.style.borderColor=`${cat.color}33`}}><Plus size={14}/> ADD ITEM</button>
-                        <button onClick={()=>addItem(cat.id,true)} className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl transition-all" style={{fontFamily:F.h,fontSize:11,fontWeight:700,letterSpacing:'0.05em',color:T.coachViolet,background:`${T.coachViolet}0A`,border:`1px dashed ${T.coachViolet}33`,cursor:'pointer'}} onMouseEnter={e=>{e.currentTarget.style.background=`${T.coachViolet}15`;e.currentTarget.style.borderColor=`${T.coachViolet}55`}} onMouseLeave={e=>{e.currentTarget.style.background=`${T.coachViolet}0A`;e.currentTarget.style.borderColor=`${T.coachViolet}33`}}><span style={{fontSize:13}}>💰</span> ADD BIG PURCHASE</button>
+                        <button onClick={()=>addItem(cat.id)} className="dlc-btn-action flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl transition-all" style={{fontFamily:F.h,fontSize:11,fontWeight:700,letterSpacing:'0.05em',color:cat.color,background:`${cat.color}0A`,border:`1px dashed ${cat.color}33`,cursor:'pointer'}} onMouseEnter={e=>{e.currentTarget.style.background=`${cat.color}15`;e.currentTarget.style.borderColor=`${cat.color}55`}} onMouseLeave={e=>{e.currentTarget.style.background=`${cat.color}0A`;e.currentTarget.style.borderColor=`${cat.color}33`}}><Plus size={14}/> ADD ITEM</button>
+                        <button onClick={()=>addItem(cat.id,true)} className="dlc-btn-action flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl transition-all" style={{fontFamily:F.h,fontSize:11,fontWeight:700,letterSpacing:'0.05em',color:T.coachViolet,background:`${T.coachViolet}0A`,border:`1px dashed ${T.coachViolet}33`,cursor:'pointer'}} onMouseEnter={e=>{e.currentTarget.style.background=`${T.coachViolet}15`;e.currentTarget.style.borderColor=`${T.coachViolet}55`}} onMouseLeave={e=>{e.currentTarget.style.background=`${T.coachViolet}0A`;e.currentTarget.style.borderColor=`${T.coachViolet}33`}}><span style={{fontSize:13}}>💰</span> ADD BIG PURCHASE</button>
                       </div>
                     </>)}
                     {cat.id.startsWith('custom-')&&<button onClick={()=>rmCat(cat.id)} className="text-xs mt-2 transition-colors" style={{fontFamily:F.b,color:'#64748b',background:'transparent',border:'none',cursor:'pointer'}} onMouseEnter={e=>e.currentTarget.style.color=T.negativeRed} onMouseLeave={e=>e.currentTarget.style.color='#64748b'}>Remove this category</button>}
@@ -412,7 +412,7 @@ export default function DreamLifeCalculatorClient(){
               </Card>
             );
           })}
-          <button onClick={addCat} className="w-full py-4 rounded-2xl flex items-center justify-center gap-2 transition-all" style={{fontFamily:F.h,fontSize:12,fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:T.accentBlue,background:'rgba(0,163,255,0.04)',border:'1px dashed rgba(0,163,255,0.2)',cursor:'pointer'}} onMouseEnter={e=>{e.currentTarget.style.background='rgba(0,163,255,0.08)';e.currentTarget.style.borderColor='rgba(0,163,255,0.4)'}} onMouseLeave={e=>{e.currentTarget.style.background='rgba(0,163,255,0.04)';e.currentTarget.style.borderColor='rgba(0,163,255,0.2)'}}><Plus size={16}/> ADD CUSTOM CATEGORY</button>
+          <button onClick={addCat} className="dlc-btn-action w-full py-4 rounded-2xl flex items-center justify-center gap-2 transition-all" style={{fontFamily:F.h,fontSize:12,fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:T.accentBlue,background:'rgba(0,163,255,0.04)',border:'1px dashed rgba(0,163,255,0.2)',cursor:'pointer'}} onMouseEnter={e=>{e.currentTarget.style.background='rgba(0,163,255,0.08)';e.currentTarget.style.borderColor='rgba(0,163,255,0.4)'}} onMouseLeave={e=>{e.currentTarget.style.background='rgba(0,163,255,0.04)';e.currentTarget.style.borderColor='rgba(0,163,255,0.2)'}}><Plus size={16}/> ADD CUSTOM CATEGORY</button>
         </div>
 
         {/* INCOME SECTION */}
@@ -485,7 +485,7 @@ export default function DreamLifeCalculatorClient(){
               <span style={{fontFamily:F.h,fontSize:11,fontWeight:700,color:'rgba(241,245,249,0.5)'}}>@itsmitchbryant</span></div>
           </div>
           <p className="text-center mb-4" style={{fontFamily:F.b,fontSize:12,color:T.softSilver}}>Screenshot this card and share it with your mates!</p>
-          <button onClick={()=>setShowShare(false)} className="w-full py-3.5 rounded-full font-bold text-sm" style={{fontFamily:F.h,background:`linear-gradient(145deg,${T.mintAccent},${T.primaryBlue})`,color:'#020617',fontWeight:800,letterSpacing:'0.04em',textTransform:'uppercase',border:'none',cursor:'pointer'}}>GOT IT</button>
+          <button onClick={()=>setShowShare(false)} className="dlc-btn-action w-full py-3.5 rounded-full font-bold text-sm" style={{fontFamily:F.h,background:`linear-gradient(145deg,${T.mintAccent},${T.primaryBlue})`,color:'#020617',fontWeight:800,letterSpacing:'0.04em',textTransform:'uppercase',border:'none',cursor:'pointer',boxShadow:`0 4px 14px ${T.primaryBlue}55`}}>GOT IT</button>
         </div>
       </div>}
 
@@ -501,7 +501,7 @@ export default function DreamLifeCalculatorClient(){
             <div><div style={{fontFamily:F.h,fontWeight:700,color:T.accentBlue,marginBottom:4,fontSize:13}}>Step 4: Share It</div><p>Screenshot the share card. Compare dream lives with your mates!</p></div>
             <div className="p-3 rounded-xl" style={{background:`${T.mintAccent}10`,border:`1px solid ${T.mintAccent}20`}}><p style={{color:T.mintAccent,fontWeight:600,fontSize:12}}>Your data saves automatically.</p></div>
           </div>
-          <button onClick={()=>setShowHelp(false)} className="w-full mt-8 py-3.5 rounded-full font-bold text-sm" style={{fontFamily:F.h,background:`linear-gradient(145deg,${T.mintAccent},${T.primaryBlue})`,color:'#020617',fontWeight:800,letterSpacing:'0.04em',textTransform:'uppercase',border:'none',cursor:'pointer'}}>GOT IT!</button>
+          <button onClick={()=>setShowHelp(false)} className="dlc-btn-action w-full mt-8 py-3.5 rounded-full font-bold text-sm" style={{fontFamily:F.h,background:`linear-gradient(145deg,${T.mintAccent},${T.primaryBlue})`,color:'#020617',fontWeight:800,letterSpacing:'0.04em',textTransform:'uppercase',border:'none',cursor:'pointer',boxShadow:`0 4px 14px ${T.primaryBlue}55`}}>GOT IT!</button>
         </div>
       </div>}
 
@@ -509,9 +509,17 @@ export default function DreamLifeCalculatorClient(){
         @keyframes dlcFadeIn{to{opacity:1;transform:translateY(0)}}
         @keyframes dlcPulse{0%,100%{opacity:.2}50%{opacity:.3}}
         @keyframes dlcSlideIn{from{opacity:0;transform:translateY(8px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+        .dlc-card-hover:hover{transform:translateY(-4px);border-color:rgba(98,255,218,0.35) !important;box-shadow:0 24px 50px rgba(0,0,0,0.9),0 0 0 1px rgba(0,0,0,0.5) inset,0 0 30px rgba(98,255,218,0.06) !important}
+        .dlc-stat-hover:hover{transform:translateY(-2px);border-color:rgba(98,255,218,0.2) !important;box-shadow:0 8px 20px rgba(0,0,0,0.4),0 0 15px rgba(98,255,218,0.05) !important}
+        .dlc-hero-card{transition:transform 300ms cubic-bezier(0.34,1.56,0.64,1),box-shadow 300ms ease}
+        .dlc-hero-card:hover{transform:translateY(-3px);box-shadow:0 24px 60px rgba(0,129,203,0.3),0 0 40px rgba(106,60,255,0.15) !important}
+        .dlc-btn-action{transition:transform 200ms ease,box-shadow 200ms ease,filter 200ms ease}
+        .dlc-btn-action:hover{transform:translateY(-2px);filter:brightness(1.05)}
+        .dlc-btn-action:active{transform:translateY(1px)}
         input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
         input[type=number]{-moz-appearance:textfield;appearance:textfield}
-        input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:${T.primaryBlue};border:2px solid white;cursor:pointer;margin-top:-5px}
+        input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:${T.primaryBlue};border:2px solid white;cursor:pointer;margin-top:-5px;transition:transform 200ms ease,box-shadow 200ms ease}
+        input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);box-shadow:0 0 12px rgba(0,129,203,0.6)}
         input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px}
         input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:${T.primaryBlue};border:2px solid white;cursor:pointer}
         select{-webkit-appearance:none}

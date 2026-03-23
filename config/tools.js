@@ -11,6 +11,14 @@ export const tools = [
     icon: 'Calculator', // Lucide icon name
   },
   {
+    id: 'dream-life-calculator',
+    name: 'Dream Life Calculator',
+    status: 'live',
+    description: 'Design your dream life. Then figure out what it costs.',
+    url: '/dream-life-calculator',
+    icon: 'Sparkles',
+  },
+  {
     id: 'big-game-playbook',
     name: 'The Big Game Playbook',
     status: 'building',

@@ -17,7 +17,7 @@ export const ToolsGrid = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         {tools.map((tool, i) => (
-          <Reveal key={tool.id} delay={i * 80}>
+          <Reveal key={tool.id} delay={i * 80} className="h-full">
             <ToolCard tool={tool} />
           </Reveal>
         ))}
