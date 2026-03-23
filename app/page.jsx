@@ -1,11 +1,11 @@
 "use client";
 import React from 'react';
-import { Nav } from '@/components/Nav';
-import { Hero } from '@/components/Hero';
-import { About } from '@/components/About';
-import { ToolsGrid } from '@/components/ToolsGrid';
-import { SocialLinks } from '@/components/SocialLinks';
-import { Footer } from '@/components/Footer';
+import { Nav } from '@/components/homepage/Nav';
+import { Hero } from '@/components/homepage/Hero';
+import { About } from '@/components/homepage/About';
+import { ToolsGrid } from '@/components/homepage/ToolsGrid';
+import { SocialLinks } from '@/components/homepage/SocialLinks';
+import { Footer } from '@/components/homepage/Footer';
 
 export default function Home() {
   return (

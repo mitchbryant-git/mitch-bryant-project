@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Card } from './Card';
+import { Card } from '@/components/Card';
 import { Calculator, Gamepad2, Users, MessageSquare, ExternalLink, Sparkles } from 'lucide-react';
 
 // Map icon names to components
