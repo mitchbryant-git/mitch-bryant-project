@@ -13,7 +13,7 @@ export const Hero = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "6vh 1.5rem 8vh",
+        padding: "0 1.5rem",
         position: "relative",
         zIndex: 1,
       }}
@@ -93,6 +93,7 @@ export const Hero = () => {
           maxWidth: "56rem",
           textAlign: "center",
           position: "relative",
+          marginTop: "-18vh",
         }}
       >
         {/* Element 1 — Subtitle */}
@@ -221,7 +222,7 @@ export const Hero = () => {
               color: "#CFCFCF",
               lineHeight: 1.7,
               maxWidth: 520,
-              margin: "0 auto 48px",
+              margin: "0 auto 64px",
             }}
           >
             Tools to level up, master your money, and own your future.
@@ -232,6 +233,7 @@ export const Hero = () => {
         <div
           style={{
             opacity: 0,
+            marginTop: 64,
             animation:
               "heroLineIn 800ms cubic-bezier(0.34,1.56,0.64,1) 1100ms forwards",
           }}
