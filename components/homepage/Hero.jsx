@@ -8,11 +8,12 @@ export const Hero = () => {
   return (
     <section
       style={{
-        minHeight: "100vh",
+        minHeight: "100svh",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "0 1.5rem",
+        padding: "6vh 1.5rem 8vh",
         position: "relative",
         zIndex: 1,
       }}
@@ -110,7 +111,7 @@ export const Hero = () => {
               textTransform: "uppercase",
               letterSpacing: "0.2em",
               color: "rgba(207,207,207,0.5)",
-              marginBottom: 24,
+              marginBottom: 32,
             }}
           >
             Life strategy for 16–19 year olds
@@ -170,7 +171,7 @@ export const Hero = () => {
             animation:
               "heroLineIn 800ms cubic-bezier(0.34,1.56,0.64,1) 700ms forwards",
             overflow: "hidden",
-            margin: "8px 0 32px",
+            margin: "12px 0 40px",
             position: "relative",
           }}
         >
@@ -220,7 +221,7 @@ export const Hero = () => {
               color: "#CFCFCF",
               lineHeight: 1.7,
               maxWidth: 520,
-              margin: "0 auto 40px",
+              margin: "0 auto 48px",
             }}
           >
             Tools to level up, master your money, and own your future.
