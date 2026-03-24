@@ -49,7 +49,7 @@ function useScrollReveal(threshold = 0.15) {
 // ============================================================
 // CLOUD
 // ============================================================
-function Cloud({ style, size = 200, opacity = 0.4, speed = 60 }) {
+function Cloud({ style, size = 200, opacity = 0.4, speed = 60, offset = 0 }) {
   return (
     <div
       style={{
@@ -59,6 +59,7 @@ function Cloud({ style, size = 200, opacity = 0.4, speed = 60 }) {
         opacity,
         ...style,
         animation: `floatCloud ${speed}s linear infinite`,
+        animationDelay: `${-speed * offset}s`,
         pointerEvents: "none",
       }}
     >
@@ -81,15 +82,24 @@ function Cloud({ style, size = 200, opacity = 0.4, speed = 60 }) {
 // ============================================================
 // GLOW DOTS
 // ============================================================
+// Deterministic pseudo-random to avoid SSR/client hydration mismatch
+function seededRandom(seed) {
+  let s = seed;
+  return () => { s = (s * 16807 + 0) % 2147483647; return s / 2147483647; };
+}
+
 function GlowDots() {
-  const dots = Array.from({ length: 18 }, (_, i) => ({
-    id: i,
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
-    size: 2 + Math.random() * 4,
-    delay: Math.random() * 5,
-    duration: 3 + Math.random() * 4,
-  }));
+  const dots = (() => {
+    const rng = seededRandom(42);
+    return Array.from({ length: 18 }, (_, i) => ({
+      id: i,
+      left: `${(rng() * 100).toFixed(4)}%`,
+      top: `${(rng() * 100).toFixed(4)}%`,
+      size: +(2 + rng() * 4).toFixed(4),
+      delay: +(rng() * 5).toFixed(4),
+      duration: +(3 + rng() * 4).toFixed(4),
+    }));
+  })();
   return (
     <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}>
       {dots.map((d) => (
@@ -324,8 +334,10 @@ function RSVPForm() {
             onClick={() => setAttending(true)}
             style={{
               ...btnBase,
-              background: attending === true ? C.blue : "transparent",
+              background: attending === true ? C.blue : "rgba(74, 127, 181, 0.08)",
               color: attending === true ? C.white : C.textMed,
+              border: attending === true ? `1.5px solid ${C.blue}` : `1.5px solid rgba(74, 127, 181, 0.3)`,
+              boxShadow: attending === true ? "none" : "0 2px 8px rgba(74, 127, 181, 0.1)",
             }}
           >
             Joyfully Accept
@@ -334,8 +346,10 @@ function RSVPForm() {
             onClick={() => setAttending(false)}
             style={{
               ...btnBase,
-              background: attending === false ? C.blueSoft : "transparent",
+              background: attending === false ? C.blueSoft : "rgba(74, 127, 181, 0.08)",
               color: attending === false ? C.white : C.textMed,
+              border: attending === false ? `1.5px solid ${C.blueSoft}` : `1.5px solid rgba(74, 127, 181, 0.3)`,
+              boxShadow: attending === false ? "none" : "0 2px 8px rgba(74, 127, 181, 0.1)",
             }}
           >
             Regretfully Decline
@@ -448,8 +462,8 @@ export default function BabyShowerPage() {
       />
       <style>{`
         @keyframes floatCloud {
-          0% { transform: translateX(-300px); }
-          100% { transform: translateX(calc(100vw + 300px)); }
+          0% { transform: translateX(-30vw); }
+          100% { transform: translateX(110vw); }
         }
         @keyframes glowPulse {
           0%, 100% { opacity: 0; transform: scale(0.5); }
@@ -511,11 +525,19 @@ export default function BabyShowerPage() {
       />
 
       {/* Floating Clouds */}
-      <Cloud style={{ top: "5%" }} size={260} opacity={0.6} speed={80} />
-      <Cloud style={{ top: "20%" }} size={200} opacity={0.5} speed={60} />
-      <Cloud style={{ top: "45%" }} size={240} opacity={0.45} speed={90} />
-      <Cloud style={{ top: "70%" }} size={220} opacity={0.55} speed={70} />
-      <Cloud style={{ top: "85%" }} size={280} opacity={0.5} speed={100} />
+      <Cloud style={{ top: "3%" }} size={260} opacity={0.6} speed={80} offset={0.15} />
+      <Cloud style={{ top: "8%" }} size={180} opacity={0.35} speed={110} offset={0.55} />
+      <Cloud style={{ top: "15%" }} size={200} opacity={0.5} speed={60} offset={0.35} />
+      <Cloud style={{ top: "22%" }} size={150} opacity={0.3} speed={95} offset={0.7} />
+      <Cloud style={{ top: "30%" }} size={220} opacity={0.45} speed={75} offset={0.25} />
+      <Cloud style={{ top: "38%" }} size={170} opacity={0.35} speed={105} offset={0.6} />
+      <Cloud style={{ top: "45%" }} size={240} opacity={0.45} speed={90} offset={0.4} />
+      <Cloud style={{ top: "52%" }} size={160} opacity={0.3} speed={115} offset={0.8} />
+      <Cloud style={{ top: "60%" }} size={200} opacity={0.4} speed={65} offset={0.2} />
+      <Cloud style={{ top: "68%" }} size={220} opacity={0.55} speed={70} offset={0.5} />
+      <Cloud style={{ top: "75%" }} size={140} opacity={0.3} speed={100} offset={0.75} />
+      <Cloud style={{ top: "82%" }} size={280} opacity={0.5} speed={85} offset={0.3} />
+      <Cloud style={{ top: "90%" }} size={190} opacity={0.35} speed={120} offset={0.45} />
 
       {/* Soft glow dots */}
       <GlowDots />
@@ -634,16 +656,6 @@ export default function BabyShowerPage() {
             >
               Grazing, good company and a little bubbly
             </div>
-            <div
-              style={{
-                fontSize: "clamp(15px, 2.5vw, 18px)",
-                color: C.textLight,
-                letterSpacing: "0.06em",
-                marginTop: 8,
-              }}
-            >
-              (Please notify of any dietary requirements)
-            </div>
           </div>
 
           {/* Scroll hint */}
@@ -697,7 +709,7 @@ export default function BabyShowerPage() {
                 fontStyle: "italic",
               }}
             >
-              We&apos;d love to know if you can make it
+              by Sunday 5th April if you can make it
             </div>
           </div>
           <RSVPForm />
