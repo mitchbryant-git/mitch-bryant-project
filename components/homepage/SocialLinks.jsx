@@ -47,7 +47,7 @@ export const SocialLinks = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {socials.map((social) => {
           const IconComponent = social.icon;
           return (
@@ -55,31 +55,31 @@ export const SocialLinks = () => {
               key={social.name} 
               hover={true} 
               className="cursor-pointer social-glow group"
-              noPadding={false}
+              noPadding={true}
             >
               <a
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block space-y-4"
+                className="block p-5 space-y-3"
               >
                 {/* Icon with gradient background */}
-                <div className={`p-4 rounded-2xl bg-gradient-to-br ${social.color} bg-opacity-20 border border-white/20 inline-block`}>
-                  <IconComponent size={40} className="text-white" />
+                <div className={`p-3 rounded-2xl bg-gradient-to-br ${social.color} bg-opacity-20 border border-white/20 inline-block`}>
+                  <IconComponent size={28} className="text-white" />
                 </div>
 
                 {/* Platform name */}
-                <h3 className="text-2xl font-bold font-['Montserrat'] text-white">
+                <h3 className="text-[15px] font-bold font-['Montserrat'] text-white">
                   {social.name}
                 </h3>
 
                 {/* Handle */}
-                <p className="text-lg text-[#62FFDA] font-['Lato'] font-semibold">
+                <p className="text-[12px] text-[#62FFDA] font-['Lato'] font-semibold">
                   {social.handle}
                 </p>
 
                 {/* CTA */}
-                <div className="flex items-center gap-2 text-sm font-['Montserrat'] font-bold uppercase tracking-wider text-[#CFCFCF] group-hover:text-[#62FFDA] transition-colors">
+                <div className="flex items-center gap-2 text-[13px] font-['Montserrat'] font-bold uppercase tracking-wider text-[#CFCFCF] group-hover:text-[#62FFDA] transition-colors">
                   <span>Follow</span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
