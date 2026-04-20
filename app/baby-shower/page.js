@@ -607,7 +607,7 @@ export default function BabyShowerPage() {
                 textTransform: "uppercase",
               }}
             >
-              Saturday April 11<sup style={{ fontSize: "0.6em" }}>th</sup> 2026
+              Saturday May 9<sup style={{ fontSize: "0.6em" }}>th</sup> 2026
             </div>
             <div
               style={{
@@ -654,7 +654,7 @@ export default function BabyShowerPage() {
                 fontWeight: 400,
               }}
             >
-              Grazing, good company and a little bubbly
+              Light bites and refreshments provided. BYO alcohol
             </div>
           </div>
 
@@ -709,7 +709,7 @@ export default function BabyShowerPage() {
                 fontStyle: "italic",
               }}
             >
-              by Sunday 5th April if you can make it
+              by Saturday 2nd May if you can make it
             </div>
           </div>
           <RSVPForm />
