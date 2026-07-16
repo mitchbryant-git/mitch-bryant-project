@@ -3,7 +3,8 @@
     "allow": [
       "Bash(npm run:*)",
       "Bash(npm install:*)",
-      "Bash(npx next:*)"
+      "Bash(npx next:*)",
+      "Bash(curl -I -A \"facebookexternalhit/1.1 \\(+http://www.facebook.com/externalhit_uatext.php\\)\" https://www.mitchbryant.com/baby-shower)"
     ]
   }
 }

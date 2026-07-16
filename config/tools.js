@@ -4,9 +4,9 @@
 export const tools = [
   {
     id: 'help-loan-calculator',
-    name: 'HELP Loan Calculator',
+    name: 'HECS Repayment Calculator',
     status: 'live', // 'live', 'building', or 'requested'
-    description: 'Find out the real price of your degree before you sign up.',
+    description: 'How long will it really take to pay off?',
     url: 'https://www.helploancalculator.com',
     icon: 'Calculator', // Lucide icon name
   },

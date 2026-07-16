@@ -96,30 +96,7 @@ export const Hero = () => {
           marginTop: "-18vh",
         }}
       >
-        {/* Element 1 — Subtitle */}
-        <div
-          style={{
-            opacity: 0,
-            animation:
-              "heroLineIn 800ms cubic-bezier(0.34,1.56,0.64,1) 200ms forwards",
-          }}
-        >
-          <p
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: 700,
-              fontSize: 14,
-              textTransform: "uppercase",
-              letterSpacing: "0.2em",
-              color: "rgba(207,207,207,0.5)",
-              marginBottom: 32,
-            }}
-          >
-            Life strategy for 16–19 year olds
-          </p>
-        </div>
-
-        {/* Element 2 — DON'T JUST */}
+        {/* Element 2 — SCHOOL ENDS. */}
         <div
           style={{
             opacity: 0,
@@ -138,34 +115,11 @@ export const Hero = () => {
               display: "block",
             }}
           >
-            DON&apos;T JUST
+            SCHOOL ENDS.
           </h1>
         </div>
 
-        {/* Element 3 — PLAY THE GAME. */}
-        <div
-          style={{
-            opacity: 0,
-            animation:
-              "heroLineIn 800ms cubic-bezier(0.34,1.56,0.64,1) 550ms forwards",
-          }}
-        >
-          <h1
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: 900,
-              fontSize: "clamp(36px, 7vw, 72px)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-              color: "white",
-              display: "block",
-            }}
-          >
-            PLAY THE GAME.
-          </h1>
-        </div>
-
-        {/* Element 4 — REWRITE THE RULES. marquee */}
+        {/* Element 4 — THEN WHAT? marquee */}
         <div
           style={{
             opacity: 0,
@@ -200,7 +154,7 @@ export const Hero = () => {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                REWRITE THE RULES.
+                THEN WHAT?
               </span>
             ))}
           </div>
@@ -225,7 +179,7 @@ export const Hero = () => {
               margin: "0 auto 64px",
             }}
           >
-            Tools to level up, master your money, and own your future.
+            Tools to level up and design a future you&apos;re excited to live.
           </p>
         </div>
 
