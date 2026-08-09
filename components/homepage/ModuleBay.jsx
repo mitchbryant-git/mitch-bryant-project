@@ -1,12 +1,32 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { modules } from "@/config/modules";
 
 export function ModuleBay() {
   const [selectedId, setSelectedId] = useState("help");
+  const [loadState, setLoadState] = useState("idle");
+  const loadTimer = useRef(null);
   const selected = modules.find((module) => module.id === selectedId) ?? modules[0];
+
+  useEffect(() => {
+    setLoadState("idle");
+    window.clearTimeout(loadTimer.current);
+  }, [selectedId]);
+
+  useEffect(() => () => window.clearTimeout(loadTimer.current), []);
+
+  function loadSelectedModule() {
+    setLoadState("loading");
+    loadTimer.current = window.setTimeout(() => setLoadState("ready"), 900);
+  }
+
+  const previewImage = loadState === "ready" ? selected.image : selected.cartridgeImage;
+  const previewAlt =
+    loadState === "ready"
+      ? `${selected.name} cartridge loaded into the MB-01 Life Console`
+      : `${selected.name} cartridge`;
 
   return (
     <section className="module-section" id="modules">
@@ -23,6 +43,7 @@ export function ModuleBay() {
         <div className="module-selector" role="tablist" aria-label="Life Console modules">
           {modules.map((module, index) => {
             const active = module.id === selectedId;
+
             return (
               <button
                 type="button"
@@ -34,24 +55,37 @@ export function ModuleBay() {
                 key={module.id}
                 onClick={() => setSelectedId(module.id)}
               >
-                <span className="module-option__number">0{index + 1}</span>
-                <span className="module-option__copy">
-                  <strong>{module.name}</strong>
-                  <small>{module.detail}</small>
+                <span className="module-option__visual">
+                  <Image
+                    src={module.cartridgeImage}
+                    alt=""
+                    width={1200}
+                    height={900}
+                    sizes="(max-width: 640px) 46vw, (max-width: 900px) 22vw, 220px"
+                    className="module-option__image"
+                  />
                 </span>
-                <span className={`module-status module-status--${module.statusTone}`}>{module.status}</span>
+
+                <span className="module-option__meta">
+                  <span className="module-option__number">0{index + 1}</span>
+                  <span className={`module-status module-status--${module.statusTone}`}>{module.status}</span>
+                  <span className="module-option__copy">
+                    <strong>{module.name}</strong>
+                    <small>{module.detail}</small>
+                  </span>
+                </span>
               </button>
             );
           })}
 
-          <a className="built-in-utility" href="/dream-life-calculator">
+          <a className="built-in-utility" href="/dream-life-calculator" target="_blank" rel="noreferrer">
             <span className="built-in-utility__icon" aria-hidden="true">⌁</span>
             <span>
               <small>Built-in utility // Live</small>
               <strong>Dream Life Calculator</strong>
               <span>Price the lifestyle before you pick the career.</span>
             </span>
-            <span aria-hidden="true">→</span>
+            <span aria-hidden="true">↗</span>
           </a>
         </div>
 
@@ -65,19 +99,22 @@ export function ModuleBay() {
         >
           <div className="module-preview__topline">
             <span>{selected.shortCode}</span>
-            <span>{selected.status}</span>
+            <span>{loadState === "ready" ? "Module ready" : selected.status}</span>
           </div>
 
-          <div className="module-preview__image-shell">
+          <div className={`module-preview__image-shell module-preview__image-shell--${loadState}`}>
             <Image
-              key={selected.image}
-              src={selected.image}
-              alt={`${selected.name} cartridge loaded into the MB-01 Life Console`}
+              key={previewImage}
+              src={previewImage}
+              alt={previewAlt}
               width={1280}
-              height={653}
+              height={loadState === "ready" ? 653 : 960}
               sizes="(max-width: 900px) 94vw, 58vw"
-              className="module-preview__image"
+              className={`module-preview__image module-preview__image--${loadState}`}
             />
+            {loadState === "loading" ? (
+              <span className="module-preview__loading">Inserting module…</span>
+            ) : null}
           </div>
 
           <div className="module-preview__footer">
@@ -87,10 +124,19 @@ export function ModuleBay() {
               <p>{selected.description}</p>
             </div>
 
-            {selected.href ? (
-              <a className="button button--primary" href={selected.href}>
-                {selected.action} <span aria-hidden="true">→</span>
+            {selected.href && loadState === "ready" ? (
+              <a className="button button--primary" href={selected.href} target="_blank" rel="noreferrer">
+                Open module <span aria-hidden="true">↗</span>
               </a>
+            ) : selected.href ? (
+              <button
+                className="button button--primary"
+                type="button"
+                onClick={loadSelectedModule}
+                disabled={loadState === "loading"}
+              >
+                {loadState === "loading" ? "Loading…" : "Load module"}
+              </button>
             ) : (
               <span className="module-preview__unavailable">Not available yet</span>
             )}

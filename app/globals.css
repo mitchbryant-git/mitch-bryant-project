@@ -467,7 +467,7 @@ img {
 
 .module-bay {
   display: grid;
-  grid-template-columns: minmax(300px, 0.78fr) minmax(0, 1.65fr);
+  grid-template-columns: minmax(410px, 0.95fr) minmax(0, 1.35fr);
   max-width: var(--page-max);
   margin: 0 auto;
   border: 3px solid var(--ink);
@@ -478,40 +478,45 @@ img {
 }
 
 .module-selector {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 0.75rem;
   padding: 1rem;
   background: var(--cream-mid);
   border-right: 3px solid var(--ink);
 }
 
 .module-option {
+  --module-colour: var(--mint);
+  --module-soft: var(--mint-soft);
   position: relative;
-  display: grid;
-  grid-template-columns: 2.5rem 1fr auto;
-  align-items: center;
-  gap: 0.75rem;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
   width: 100%;
-  min-height: 88px;
-  padding: 0.85rem 0.8rem;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid rgba(17, 20, 17, 0.22);
+  padding: 0.38rem;
+  background: var(--cream-light);
+  border: 2px solid rgba(17, 20, 17, 0.42);
+  border-radius: 16px;
   color: var(--ink);
   text-align: left;
   cursor: pointer;
+  overflow: hidden;
+  transition: box-shadow 150ms ease, transform 150ms ease, background 150ms ease;
 }
 
 .module-option::before {
   position: absolute;
-  top: 18%;
-  bottom: 18%;
-  left: -1rem;
-  width: 7px;
+  right: 10%;
+  bottom: 0;
+  left: 10%;
+  height: 6px;
   background: var(--module-colour);
   content: "";
-  transform: scaleY(0);
+  transform: scaleX(0);
   transition: transform 150ms ease;
+  z-index: 2;
 }
 
 .module-option--mint {
@@ -537,13 +542,43 @@ img {
 .module-option:hover,
 .module-option.is-active {
   background: var(--module-soft);
+  transform: translateY(-3px);
 }
 
 .module-option.is-active::before {
-  transform: scaleY(1);
+  transform: scaleX(1);
+}
+
+.module-option.is-active {
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.module-option__visual {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--cream-mid);
+  border-radius: 11px;
+  overflow: hidden;
+}
+
+.module-option__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.module-option__meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.42rem 0.65rem;
+  width: 100%;
+  padding: 0.68rem 0.5rem 0.62rem;
 }
 
 .module-option__number {
+  align-self: center;
   font-family: var(--font-ibm-plex-mono), monospace;
   font-size: 0.75rem;
   font-weight: 600;
@@ -554,9 +589,13 @@ img {
   display: block;
 }
 
+.module-option__copy {
+  grid-column: 1 / -1;
+}
+
 .module-option__copy strong {
   font-family: var(--font-archivo-black), Arial Black, sans-serif;
-  font-size: 0.93rem;
+  font-size: 0.88rem;
   line-height: 1.15;
 }
 
@@ -567,6 +606,8 @@ img {
 }
 
 .module-status {
+  align-self: center;
+  justify-self: end;
   padding: 0.32rem 0.48rem;
   border: 1px solid var(--ink);
   border-radius: 999px;
@@ -595,7 +636,8 @@ img {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 0.8rem;
-  margin-top: auto;
+  grid-column: 1 / -1;
+  margin-top: 0.1rem;
   padding: 1rem;
   background: var(--ink);
   border: 2px solid var(--ink);
@@ -684,17 +726,61 @@ img {
 }
 
 .module-preview__image-shell {
+  position: relative;
+  display: grid;
+  place-items: center;
   margin-top: 1rem;
   padding: 0.8rem;
   background: var(--charcoal);
   border: 2px solid var(--ink);
   border-radius: 18px;
+  overflow: hidden;
 }
 
 .module-preview__image {
+  display: block;
   width: 100%;
   height: auto;
   border-radius: 11px;
+  animation: module-arrive 260ms ease both;
+}
+
+.module-preview__image--idle,
+.module-preview__image--loading {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.module-preview__image--loading {
+  animation: insert-module 900ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.module-preview__loading {
+  position: absolute;
+  bottom: 1.6rem;
+  left: 50%;
+  padding: 0.55rem 0.75rem;
+  background: var(--charcoal);
+  border: 1px solid var(--mint);
+  border-radius: 7px;
+  color: var(--mint);
+  font-family: var(--font-ibm-plex-mono), monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+}
+
+@keyframes module-arrive {
+  from { opacity: 0; transform: scale(0.985); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes insert-module {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  70% { opacity: 1; transform: translateY(7%) scale(0.96); }
+  100% { opacity: 0.28; transform: translateY(12%) scale(0.92); }
 }
 
 .module-preview__footer {
@@ -924,16 +1010,7 @@ img {
   }
 
   .module-bay {
-    grid-template-columns: 340px minmax(0, 1fr);
-  }
-
-  .module-option {
-    grid-template-columns: 2rem 1fr;
-  }
-
-  .module-status {
-    grid-column: 2;
-    justify-self: start;
+    grid-template-columns: 360px minmax(0, 1fr);
   }
 }
 
@@ -986,30 +1063,13 @@ img {
   }
 
   .module-selector {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     border-right: 0;
     border-bottom: 3px solid var(--ink);
   }
 
   .module-option {
-    min-height: 104px;
-    border: 1px solid rgba(17, 20, 17, 0.22);
     border-radius: 12px;
-  }
-
-  .module-option::before {
-    top: auto;
-    right: 12%;
-    bottom: -1rem;
-    left: 12%;
-    width: auto;
-    height: 7px;
-    transform: scaleX(0);
-  }
-
-  .module-option.is-active::before {
-    transform: scaleX(1);
   }
 
   .built-in-utility {
@@ -1134,31 +1194,28 @@ img {
   }
 
   .module-selector {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     padding: 0.7rem;
   }
 
   .module-option {
-    grid-template-columns: 2rem 1fr auto;
-    min-height: 88px;
+    padding: 0.3rem;
+  }
+
+  .module-option__meta {
+    padding: 0.58rem 0.38rem 0.55rem;
+  }
+
+  .module-option__copy strong {
+    font-size: 0.8rem;
+  }
+
+  .module-option__copy small {
+    display: none;
   }
 
   .module-status {
-    grid-column: auto;
-  }
-
-  .module-option::before {
-    top: 14%;
-    right: auto;
-    bottom: 14%;
-    left: -0.7rem;
-    width: 6px;
-    height: auto;
-    transform: scaleY(0);
-  }
-
-  .module-option.is-active::before {
-    transform: scaleY(1);
+    font-size: 0.5rem;
   }
 
   .module-preview {
