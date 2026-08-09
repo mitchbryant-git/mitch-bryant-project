@@ -1,5 +1,6 @@
 "use client";
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { Plus, Trash2, ChevronDown, ChevronUp, X, DollarSign, Home, Car, Utensils, Heart, Smartphone, ShoppingBag, GraduationCap, PartyPopper, Gem, HandHeart, PiggyBank, Zap, PawPrint, Lightbulb, TrendingUp, HelpCircle, Calculator, RotateCcw, Sparkles } from "lucide-react";
 import { select, pie, arc as d3Arc, interpolate, easeCubicOut } from "d3";
 
@@ -289,10 +290,10 @@ export default function DreamLifeCalculatorClient(){
       {/* HEADER */}
       <header className="sticky top-0 z-50" style={{backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',borderBottom:'1px solid rgba(255,255,255,0.05)',background:'rgba(13,13,13,0.7)'}}>
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-3 no-underline" style={{color:'inherit',textDecoration:'none'}}>
+          <Link href="/" className="flex items-center gap-3 no-underline" style={{color:'inherit',textDecoration:'none'}}>
             <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{background:`linear-gradient(135deg,${T.primaryBlue},${T.coachViolet})`,boxShadow:`0 4px 12px ${T.primaryBlue}44`}}><Calculator size={18} color="white"/></div>
             <div><div style={{fontFamily:F.h,fontWeight:700,fontSize:14}}>Dream Life Calculator</div><div style={{fontFamily:F.b,fontSize:10,color:T.softSilver,opacity:0.6}}>by Mitch Bryant</div></div>
-          </a>
+          </Link>
           <div className="flex items-center gap-2">
             <button onClick={resetAll} aria-label="Reset" className="p-2 rounded-lg transition-colors" style={{color:T.softSilver,background:'transparent',border:'none',cursor:'pointer'}} onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,0.06)'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}><RotateCcw size={16}/></button>
             <button onClick={()=>setShowHelp(true)} aria-label="Help" className="p-2 rounded-lg transition-colors" style={{color:T.softSilver,background:'transparent',border:'none',cursor:'pointer'}} onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,0.06)'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}><HelpCircle size={18}/></button>

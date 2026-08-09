@@ -6,5 +6,11 @@ export default function sitemap() {
             changeFrequency: 'weekly',
             priority: 1,
         },
+        {
+            url: 'https://www.mitchbryant.com/dream-life-calculator',
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
     ]
 }
