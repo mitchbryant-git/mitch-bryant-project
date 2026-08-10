@@ -1,5 +1,19 @@
 export const modules = [
   {
+    id: "dream-life",
+    shortCode: "MB-01 LIFE",
+    name: "Dream Life Calculator",
+    status: "Live now",
+    statusTone: "live",
+    accent: "purple",
+    cartridgeImage: "/assets/cartridges/dream-life-calculator-cartridge-v1.webp",
+    image: "/assets/console/mb01-console-dream-life-loaded-v1.webp",
+    description: "Build the life you want, price it honestly, then explore the income that could support it.",
+    action: "Launch calculator",
+    href: "/dream-life-calculator",
+    detail: "Free lifestyle module",
+  },
+  {
     id: "help",
     shortCode: "MB-01 MONEY",
     name: "HELP Loan Calculator",

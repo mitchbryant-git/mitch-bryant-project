@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { modules } from "@/config/modules";
 
 export function ModuleBay() {
-  const [selectedId, setSelectedId] = useState("help");
+  const [selectedId, setSelectedId] = useState("dream-life");
   const [loadState, setLoadState] = useState("idle");
   const loadTimer = useRef(null);
   const selected = modules.find((module) => module.id === selectedId) ?? modules[0];
@@ -78,15 +78,6 @@ export function ModuleBay() {
             );
           })}
 
-          <a className="built-in-utility" href="/dream-life-calculator" target="_blank" rel="noreferrer">
-            <span className="built-in-utility__icon" aria-hidden="true">⌁</span>
-            <span>
-              <small>Built-in utility // Live</small>
-              <strong>Dream Life Calculator</strong>
-              <span>Price the lifestyle before you pick the career.</span>
-            </span>
-            <span aria-hidden="true">↗</span>
-          </a>
         </div>
 
         <div
