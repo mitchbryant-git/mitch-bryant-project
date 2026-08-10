@@ -1,531 +1,1504 @@
 "use client";
-import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+
+import Image from "next/image";
 import Link from "next/link";
-import { Plus, Trash2, ChevronDown, ChevronUp, X, DollarSign, Home, Car, Utensils, Heart, Smartphone, ShoppingBag, GraduationCap, PartyPopper, Gem, HandHeart, PiggyBank, Zap, PawPrint, Lightbulb, TrendingUp, HelpCircle, Calculator, RotateCcw, Sparkles } from "lucide-react";
-import { select, pie, arc as d3Arc, interpolate, easeCubicOut } from "d3";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Car,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  ExternalLink,
+  Gem,
+  GraduationCap,
+  HandHeart,
+  Heart,
+  HelpCircle,
+  Home,
+  Info,
+  Lightbulb,
+  LockKeyhole,
+  PartyPopper,
+  PawPrint,
+  PiggyBank,
+  Plus,
+  RotateCcw,
+  Share2,
+  ShoppingBag,
+  Smartphone,
+  Sparkles,
+  Trash2,
+  TrendingUp,
+  Utensils,
+  WalletCards,
+  X,
+  Zap,
+} from "lucide-react";
+import { arc as d3Arc, easeCubicOut, interpolate, pie, select } from "d3";
+import {
+  calculateHECS as calcHelp,
+  calculateMedicare as calcMedicare,
+  calculateTaxATO as calcTax,
+  grossFromNet,
+  grossFromNetSimple as grossSimple,
+  SUPER_RATE,
+  TAX_YEAR,
+} from "@/lib/tax";
+import styles from "./DreamLifeCalculator.module.css";
 
-// ═══════════════════════════════════════════════════════════════
-// BRAND THEME
-// ═══════════════════════════════════════════════════════════════
-const T={primaryBlue:'#0081CB',coachViolet:'#6A3CFF',mintAccent:'#62FFDA',darkBase:'#0D0D0D',softSilver:'#CFCFCF',negativeRed:'#FF3366',offWhite:'#FAFAFA',accentBlue:'#00A3FF',amber:'#FFB347'};
-const F={h:"var(--font-montserrat),'Montserrat',sans-serif",b:"var(--font-lato),'Lato',sans-serif",m:"ui-monospace,SFMono-Regular,'SF Mono',monospace"};
-const NOISE_BG=`url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
+const COLOURS = {
+  blue: "#0068D8",
+  purple: "#7A3CFF",
+  mint: "#08D8B8",
+  yellow: "#F8D018",
+  pink: "#F84878",
+  orange: "#FF6B2C",
+};
 
-// ═══════════════════════════════════════════════════════════════
-// TAX CONSTANTS 2025-26
-// ═══════════════════════════════════════════════════════════════
-const TAX_YEAR='2025-26',SUPER_RATE=0.115,MEDICARE_RATE=0.02;
-const TAX_BRACKETS=[{min:0,max:18200,rate:0,base:0},{min:18201,max:45000,rate:0.16,base:0},{min:45001,max:135000,rate:0.30,base:4288},{min:135001,max:190000,rate:0.37,base:31288},{min:190001,max:Infinity,rate:0.45,base:51638}];
+const formatCurrency = (value) =>
+  new Intl.NumberFormat("en-AU", {
+    style: "currency",
+    currency: "AUD",
+    maximumFractionDigits: 0,
+  }).format(Number.isFinite(value) ? value : 0);
 
-const calcTax=g=>{for(let i=TAX_BRACKETS.length-1;i>=0;i--){const b=TAX_BRACKETS[i];if(g>=b.min)return b.base+(g-(b.min-1))*b.rate}return 0};
-const calcMed=g=>g*MEDICARE_RATE;
-const calcHECS=g=>{if(g<=67000)return 0;if(g>=179286)return g*0.10;if(g<=125000)return(g-67000)*0.15;return(125000-67000)*0.15+(g-125000)*0.17};
-const grossFromNet=(n,h)=>{let lo=n,hi=n*2.5;for(let i=0;i<80;i++){const m=(lo+hi)/2;let d=calcTax(m)+calcMed(m);if(h)d+=calcHECS(m);if(m-d<n)lo=m;else hi=m}return Math.round((lo+hi)/2)};
-const grossSimple=(n,r)=>Math.round(n/(1-r/100));
+const formatInputNumber = (value) => {
+  const number = Number.parseFloat(value);
+  if (Number.isNaN(number) || value === "" || value === 0) return "";
+  return new Intl.NumberFormat("en-AU", { maximumFractionDigits: 2 }).format(number);
+};
 
-// ═══════════════════════════════════════════════════════════════
-// FORMATTING & FREQUENCY
-// ═══════════════════════════════════════════════════════════════
-const fmtC=v=>new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0}).format(v);
-const fmtN=v=>{const n=parseFloat(v);if(isNaN(n)||v===''||v===0)return'';return new Intl.NumberFormat('en-AU',{maximumFractionDigits:2}).format(n)};
-const FREQ=[{v:'weekly',l:'Weekly',m:52},{v:'fortnightly',l:'Fortnightly',m:26},{v:'monthly',l:'Monthly',m:12},{v:'quarterly',l:'Quarterly',m:4},{v:'yearly',l:'Yearly',m:1}];
-const DISP=[{v:'weekly',l:'Weekly',d:52},{v:'monthly',l:'Monthly',d:12},{v:'yearly',l:'Yearly',d:1}];
-const f2y=(a,f)=>(parseFloat(a)||0)*(FREQ.find(o=>o.v===f)?.m||1);
-const y2d=(y,df)=>y/(DISP.find(o=>o.v===df)?.d||1);
-const fl=f=>f==='weekly'?'wk':f==='monthly'?'mo':'yr';
-
-// ═══════════════════════════════════════════════════════════════
-// CATEGORIES
-// ═══════════════════════════════════════════════════════════════
-let _id=0;const nid=()=>++_id;
-const CATS=[
-  {id:'housing',icon:'Home',label:'Housing',color:T.primaryBlue,prompts:["Will you rent or buy? What suburb?","Don't forget renters/contents insurance.","Budget for maintenance, repairs, body corporate.","Utilities: water, council rates?"],defaults:[{name:'Rent / Mortgage',amount:500,freq:'weekly'},{name:'Contents Insurance',amount:30,freq:'monthly'}]},
-  {id:'transport',icon:'Car',label:'Transport',color:T.coachViolet,prompts:["Car repayments, rego, insurance, servicing, tyres.","Fuel — $60-100/week is common.","Public transport, cycling, rideshare?","Tolls, parking, roadside assist."],defaults:[{name:'Car Repayment',amount:400,freq:'monthly'},{name:'Fuel',amount:60,freq:'weekly'},{name:'Rego & Insurance',amount:1800,freq:'yearly'}]},
-  {id:'food',icon:'Utensils',label:'Food & Drink',color:T.mintAccent,prompts:["Groceries: $80-150/week.","Eating out: $30-80+ per dinner.","Daily barista coffee = ~$1,300/year.","UberEats, alcohol, snacks, meal kits."],defaults:[{name:'Groceries',amount:120,freq:'weekly'},{name:'Eating Out',amount:60,freq:'weekly'},{name:'Coffee',amount:25,freq:'weekly'}]},
-  {id:'health',icon:'Heart',label:'Health & Fitness',color:'#FF4D6A',prompts:["Health insurance ~$100-200/month.","Gym: $15/wk basic to $60+/wk premium.","Dental ($200-400/yr), optometrist.","Physio, supplements, mental health."],defaults:[{name:'Health Insurance',amount:120,freq:'monthly'},{name:'Gym Membership',amount:30,freq:'weekly'}]},
-  {id:'tech',icon:'Smartphone',label:'Tech & Subscriptions',color:T.accentBlue,prompts:["Phone plan: $30-80/month.","Internet/NBN: $60-100/month.","Netflix, Spotify, YouTube, gaming subs.","Latest phone yearly? $50-80/month on plan."],defaults:[{name:'Phone Plan',amount:50,freq:'monthly'},{name:'Internet',amount:80,freq:'monthly'},{name:'Streaming',amount:40,freq:'monthly'}]},
-  {id:'personal',icon:'ShoppingBag',label:'Personal & Appearance',color:'#8B5CF6',prompts:["Haircuts: $30-80 every 4-8 weeks.","Clothing budget — quality vs quantity.","Skincare, grooming, fragrance.","Dry cleaning, laundry costs."],defaults:[{name:'Clothing',amount:150,freq:'monthly'},{name:'Haircuts',amount:50,freq:'monthly'}]},
-  {id:'education',icon:'GraduationCap',label:'Education & Growth',color:T.amber,prompts:["Courses, certifications, workshops.","Books, audiobooks, subscriptions.","Coaching: $100-500/month.","Professional memberships."],defaults:[{name:'Books & Courses',amount:50,freq:'monthly'}]},
-  {id:'social',icon:'PartyPopper',label:'Social & Fun',color:T.coachViolet,prompts:["Drinks, events, festivals, concerts.","Hobbies — gear, equipment, supplies.","Date nights, activities.","Holidays — even a weekend is $300-500+."],defaults:[{name:'Going Out / Social',amount:80,freq:'weekly'},{name:'Holidays & Travel',amount:5000,freq:'yearly'}]},
-  {id:'toys',icon:'Gem',label:'Toys & Big Wants',color:T.mintAccent,prompts:["Motorbike, jetski, boat, drone, gaming rig?","Enter total price + years to pay off.","Don't forget ongoing costs — fuel, insurance, storage.","Or add as a flat recurring cost."],defaults:[]},
-  {id:'pets',icon:'PawPrint',label:'Pets',color:T.amber,prompts:["A dog costs $1,500-3,000/year.","Pet insurance: $30-80/month.","Grooming, boarding, training.","Cats: ~$800-1,500/year."],defaults:[]},
-  {id:'giving',icon:'HandHeart',label:'Giving & Gifts',color:T.primaryBlue,prompts:["Birthday & Christmas presents.","Charity & causes you care about.","Wedding gifts, baby showers.","Shouting mates, helping family."],defaults:[{name:'Gifts',amount:1200,freq:'yearly'}]},
-  {id:'savings',icon:'PiggyBank',label:'Savings & Investing',color:T.mintAccent,prompts:["Emergency fund: 3-6 months of expenses.","Investing — ETFs, shares, super top-ups.","House deposit? $500/month is a start.","Pay yourself first, not last."],defaults:[{name:'Savings',amount:200,freq:'monthly'},{name:'Investing',amount:100,freq:'monthly'}]},
-  {id:'bills',icon:'Zap',label:'Bills & Admin',color:T.negativeRed,prompts:["Electricity: $200-500/quarter.","Gas: $100-300/quarter.","Tax return: $150-400/year.","Council rates, strata fees."],defaults:[{name:'Electricity',amount:350,freq:'quarterly'},{name:'Gas',amount:200,freq:'quarterly'}]},
+const FREQUENCIES = [
+  { value: "weekly", label: "Weekly", multiplier: 52 },
+  { value: "fortnightly", label: "Fortnightly", multiplier: 26 },
+  { value: "monthly", label: "Monthly", multiplier: 12 },
+  { value: "quarterly", label: "Quarterly", multiplier: 4 },
+  { value: "yearly", label: "Yearly", multiplier: 1 },
 ];
-const ICONS={Home,Car,Utensils,Heart,Smartphone,ShoppingBag,GraduationCap,PartyPopper,Gem,HandHeart,PiggyBank,Zap,PawPrint};
 
-// ═══════════════════════════════════════════════════════════════
-// STORAGE — SSR-safe: never call localStorage at module/render level
-// ═══════════════════════════════════════════════════════════════
-const SK='dreamlife_v2';
-const save=d=>{try{localStorage.setItem(SK,JSON.stringify(d))}catch{}};
-const load=()=>{try{const r=localStorage.getItem(SK);return r?JSON.parse(r):null}catch{return null}};
-const buildDef=()=>CATS.map(c=>({...c,expanded:['housing','transport','food'].includes(c.id),items:c.defaults.map(it=>({...it,id:nid(),isBigTicket:false,totalPrice:0,years:5}))}));
+const DISPLAY_FREQUENCIES = [
+  { value: "weekly", label: "Weekly", divisor: 52 },
+  { value: "monthly", label: "Monthly", divisor: 12 },
+  { value: "yearly", label: "Yearly", divisor: 1 },
+];
 
-// ═══════════════════════════════════════════════════════════════
-// HOOKS
-// ═══════════════════════════════════════════════════════════════
-const useAnimatedNumber=(target,duration=500)=>{
-  const[display,setDisplay]=useState(target);
-  const prev=useRef(target);
-  const raf=useRef(null);
-  useEffect(()=>{
-    const from=prev.current,to=target;
-    if(from===to)return;
-    const start=performance.now();
-    const step=now=>{
-      const t=Math.min((now-start)/duration,1);
-      const ease=1-Math.pow(1-t,3);
-      setDisplay(from+(to-from)*ease);
-      if(t<1)raf.current=requestAnimationFrame(step);
+const frequencyToYear = (amount, frequency) =>
+  (Number.parseFloat(amount) || 0) *
+  (FREQUENCIES.find((option) => option.value === frequency)?.multiplier || 1);
+
+const yearToDisplay = (yearly, frequency) =>
+  yearly / (DISPLAY_FREQUENCIES.find((option) => option.value === frequency)?.divisor || 1);
+
+const frequencyShort = (frequency) =>
+  frequency === "weekly" ? "wk" : frequency === "monthly" ? "mo" : "yr";
+
+let itemSequence = 0;
+const nextItemId = () => `item-${++itemSequence}`;
+
+const CATEGORY_DEFINITIONS = [
+  {
+    id: "housing",
+    icon: "Home",
+    label: "Housing",
+    color: COLOURS.purple,
+    prompts: [
+      "Will you rent or buy, and in which suburb?",
+      "Include contents or home insurance.",
+      "Budget for maintenance, repairs or body corporate.",
+      "Remember water, rates and utilities.",
+    ],
+    defaults: [
+      { name: "Rent / mortgage", amount: 500, frequency: "weekly" },
+      { name: "Contents insurance", amount: 30, frequency: "monthly" },
+    ],
+  },
+  {
+    id: "transport",
+    icon: "Car",
+    label: "Transport",
+    color: COLOURS.blue,
+    prompts: [
+      "Include repayments, registration, insurance and servicing.",
+      "Fuel might be $60–100 each week.",
+      "Could public transport, cycling or rideshare replace a car?",
+      "Remember tolls, parking and roadside assistance.",
+    ],
+    defaults: [
+      { name: "Car repayment", amount: 400, frequency: "monthly" },
+      { name: "Fuel", amount: 60, frequency: "weekly" },
+      { name: "Registration and insurance", amount: 1_800, frequency: "yearly" },
+    ],
+  },
+  {
+    id: "food",
+    icon: "Utensils",
+    label: "Food & drink",
+    color: COLOURS.mint,
+    prompts: [
+      "Groceries might be $80–150 each week.",
+      "What does eating out realistically look like?",
+      "A daily barista coffee can exceed $1,300 each year.",
+      "Remember delivery, alcohol, snacks and meal kits.",
+    ],
+    defaults: [
+      { name: "Groceries", amount: 120, frequency: "weekly" },
+      { name: "Eating out", amount: 60, frequency: "weekly" },
+      { name: "Coffee", amount: 25, frequency: "weekly" },
+    ],
+  },
+  {
+    id: "health",
+    icon: "Heart",
+    label: "Health & fitness",
+    color: COLOURS.pink,
+    prompts: [
+      "Will you pay for private health insurance?",
+      "What kind of gym or sport membership suits you?",
+      "Include dental, optical and physio costs.",
+      "Remember mental health and regular prescriptions.",
+    ],
+    defaults: [
+      { name: "Health insurance", amount: 120, frequency: "monthly" },
+      { name: "Gym membership", amount: 30, frequency: "weekly" },
+    ],
+  },
+  {
+    id: "tech",
+    icon: "Smartphone",
+    label: "Tech & subscriptions",
+    color: COLOURS.blue,
+    prompts: [
+      "Include your phone plan and internet.",
+      "List streaming, music, gaming and software subscriptions.",
+      "Do you replace your devices regularly?",
+      "Check for subscriptions you would not actually keep.",
+    ],
+    defaults: [
+      { name: "Phone plan", amount: 50, frequency: "monthly" },
+      { name: "Internet", amount: 80, frequency: "monthly" },
+      { name: "Streaming", amount: 40, frequency: "monthly" },
+    ],
+  },
+  {
+    id: "personal",
+    icon: "ShoppingBag",
+    label: "Personal & appearance",
+    color: COLOURS.purple,
+    prompts: [
+      "How often do you buy clothing?",
+      "Include haircuts, skincare and grooming.",
+      "Would quality purchases replace frequent cheap ones?",
+      "Remember laundry and dry cleaning.",
+    ],
+    defaults: [
+      { name: "Clothing", amount: 150, frequency: "monthly" },
+      { name: "Haircuts", amount: 50, frequency: "monthly" },
+    ],
+  },
+  {
+    id: "education",
+    icon: "GraduationCap",
+    label: "Education & growth",
+    color: COLOURS.yellow,
+    prompts: [
+      "Include courses, certifications and workshops.",
+      "Remember books and learning subscriptions.",
+      "Would coaching or mentoring matter to you?",
+      "Include professional memberships.",
+    ],
+    defaults: [{ name: "Books and courses", amount: 50, frequency: "monthly" }],
+  },
+  {
+    id: "social",
+    icon: "PartyPopper",
+    label: "Social & fun",
+    color: COLOURS.pink,
+    prompts: [
+      "Include events, festivals, concerts and drinks.",
+      "What do your hobbies cost?",
+      "Remember date nights and activities.",
+      "Add realistic holidays and weekend trips.",
+    ],
+    defaults: [
+      { name: "Going out and social", amount: 80, frequency: "weekly" },
+      { name: "Holidays and travel", amount: 5_000, frequency: "yearly" },
+    ],
+  },
+  {
+    id: "toys",
+    icon: "Gem",
+    label: "Toys & big wants",
+    color: COLOURS.orange,
+    prompts: [
+      "Motorbike, boat, camera, gaming rig or something else?",
+      "Enter a total price and a realistic payoff period.",
+      "Include fuel, insurance, maintenance or storage.",
+      "Would renting or sharing make more sense?",
+    ],
+    defaults: [],
+  },
+  {
+    id: "pets",
+    icon: "PawPrint",
+    label: "Pets",
+    color: COLOURS.yellow,
+    prompts: [
+      "Include food, vet costs and registration.",
+      "Would you pay for pet insurance?",
+      "Remember grooming, boarding and training.",
+      "Could your housing choice support the pet you want?",
+    ],
+    defaults: [],
+  },
+  {
+    id: "giving",
+    icon: "HandHeart",
+    label: "Giving & gifts",
+    color: COLOURS.blue,
+    prompts: [
+      "Include birthdays and Christmas.",
+      "Would you regularly support a charity or cause?",
+      "Remember weddings and major celebrations.",
+      "Do you want capacity to help family or friends?",
+    ],
+    defaults: [{ name: "Gifts", amount: 1_200, frequency: "yearly" }],
+  },
+  {
+    id: "savings",
+    icon: "PiggyBank",
+    label: "Savings & investing",
+    color: COLOURS.mint,
+    prompts: [
+      "Build an emergency fund before treating savings as optional.",
+      "Include investing, super top-ups or other long-term goals.",
+      "Are you saving for a home deposit?",
+      "Pay your future self first, not last.",
+    ],
+    defaults: [
+      { name: "Savings", amount: 200, frequency: "monthly" },
+      { name: "Investing", amount: 100, frequency: "monthly" },
+    ],
+  },
+  {
+    id: "bills",
+    icon: "Zap",
+    label: "Bills & admin",
+    color: COLOURS.orange,
+    prompts: [
+      "Include electricity, gas and water.",
+      "Remember accounting or tax-return fees.",
+      "Add council rates or strata if they apply.",
+      "Leave room for the boring costs that still happen.",
+    ],
+    defaults: [
+      { name: "Electricity", amount: 350, frequency: "quarterly" },
+      { name: "Gas", amount: 200, frequency: "quarterly" },
+    ],
+  },
+];
+
+const ICONS = {
+  Car,
+  Gem,
+  GraduationCap,
+  HandHeart,
+  Heart,
+  Home,
+  PartyPopper,
+  PawPrint,
+  PiggyBank,
+  ShoppingBag,
+  Smartphone,
+  Utensils,
+  Zap,
+};
+
+const STORAGE_KEY = "dreamlife_v2";
+
+const saveState = (data) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch {}
+};
+
+const loadState = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
+const buildDefaults = () =>
+  CATEGORY_DEFINITIONS.map((category) => ({
+    ...category,
+    expanded: category.id === "housing",
+    items: category.defaults.map((item) => ({
+      id: nextItemId(),
+      name: item.name,
+      amount: item.amount,
+      freq: item.frequency,
+      isBigTicket: false,
+      totalPrice: 0,
+      years: 5,
+    })),
+  }));
+
+const normaliseSavedCategories = (savedCategories) =>
+  savedCategories.map((savedCategory) => {
+    const canonical = CATEGORY_DEFINITIONS.find((category) => category.id === savedCategory.id);
+    if (!canonical) return savedCategory;
+    return {
+      ...savedCategory,
+      icon: canonical.icon,
+      color: canonical.color,
+      prompts: canonical.prompts,
     };
-    raf.current=requestAnimationFrame(step);
-    prev.current=to;
-    return()=>{if(raf.current)cancelAnimationFrame(raf.current)};
-  },[target,duration]);
+  });
+
+function useAnimatedNumber(target, duration = 420) {
+  const [display, setDisplay] = useState(target);
+  const previous = useRef(target);
+  const frame = useRef(null);
+
+  useEffect(() => {
+    const from = previous.current;
+    const to = target;
+    if (from === to) return undefined;
+
+    const started = performance.now();
+    const step = (now) => {
+      const progress = Math.min((now - started) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay(from + (to - from) * eased);
+      if (progress < 1) frame.current = requestAnimationFrame(step);
+    };
+
+    frame.current = requestAnimationFrame(step);
+    previous.current = to;
+    return () => frame.current && cancelAnimationFrame(frame.current);
+  }, [duration, target]);
+
   return display;
-};
+}
 
-const useScrollReveal=(threshold=0.15)=>{
-  const ref=useRef(null);
-  const[visible,setVisible]=useState(false);
-  useEffect(()=>{
-    const el=ref.current;if(!el)return;
-    const obs=new IntersectionObserver(([e])=>{if(e.isIntersecting){setVisible(true);obs.disconnect();}},{threshold});
-    obs.observe(el);
-    return()=>obs.disconnect();
-  },[threshold]);
-  return[ref,visible];
-};
-
-// ═══════════════════════════════════════════════════════════════
-// COMPONENTS — hybrid Tailwind + inline, matching prototype exactly
-// ═══════════════════════════════════════════════════════════════
-
-const Card=({children,className="",hover=true})=>(
-  <div className={`rounded-3xl relative ${hover?'dlc-card-hover':''} ${className}`} style={{background:'linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))',border:'1px solid rgba(255,255,255,0.14)',boxShadow:'0 18px 45px rgba(0,0,0,0.85),0 0 0 1px rgba(0,0,0,0.5) inset',backdropFilter:'blur(22px)',overflow:'visible',transition:'transform 300ms cubic-bezier(0.34,1.56,0.64,1), border-color 300ms ease, box-shadow 300ms ease'}}>
-    <div className="absolute top-0 left-10 right-10 h-px pointer-events-none" style={{background:'linear-gradient(to right,transparent,rgba(255,255,255,0.2),transparent)',opacity:0.7}}/>
-    <div className="absolute inset-0 pointer-events-none rounded-3xl" style={{border:'1px solid rgba(255,255,255,0.05)'}}/>
-    <div className="relative z-10 w-full">{children}</div>
-  </div>
-);
-
-const AnimatedCurrency=({value,color='white',size=48,suffix=''})=>{
-  const animated=useAnimatedNumber(value);
-  return(
-    <span style={{fontFamily:F.m,fontWeight:700,fontSize:size,color,letterSpacing:'-0.02em',fontVariantNumeric:'tabular-nums'}}>
-      {fmtC(Math.round(animated))}{suffix&&<span style={{fontSize:size*0.42,fontWeight:700,opacity:0.7,marginLeft:4}}>{suffix}</span>}
+function AnimatedCurrency({ value, className = "", suffix = "" }) {
+  const animated = useAnimatedNumber(value);
+  return (
+    <span className={className}>
+      {formatCurrency(Math.round(animated))}
+      {suffix ? <small>{suffix}</small> : null}
     </span>
   );
-};
+}
 
-const Reveal=({children,delay=0,className=""})=>{
-  const[ref,visible]=useScrollReveal(0.1);
-  return(
-    <div ref={ref} className={className} style={{opacity:visible?1:0,transform:visible?'translateY(0)':'translateY(20px)',transition:`opacity 600ms cubic-bezier(0.34,1.56,0.64,1) ${delay}ms, transform 600ms cubic-bezier(0.34,1.56,0.64,1) ${delay}ms`}}>
-      {children}
+function SegmentedControl({ options, value, onChange, label }) {
+  return (
+    <div className={styles.segmentGroup} aria-label={label} role="group">
+      {options.map((option) => (
+        <button
+          className={`${styles.segmentButton} ${value === option.value ? styles.segmentButtonActive : ""}`}
+          key={option.value}
+          onClick={() => onChange(option.value)}
+          type="button"
+        >
+          {option.label}
+        </button>
+      ))}
     </div>
   );
-};
+}
 
-const Tip=({prompts,color})=>{
-  const[open,setOpen]=useState(false);
-  const[pos,setPos]=useState({top:0,left:0});
-  const btn=useRef(null),tip=useRef(null);
-  const up=useCallback(()=>{if(btn.current){const r=btn.current.getBoundingClientRect();setPos({top:r.top-8,left:Math.max(148,Math.min(r.left+r.width/2,window.innerWidth-148))})}},[]);
-  useEffect(()=>{
-    if(!open)return;up();
-    window.addEventListener('scroll',up,true);window.addEventListener('resize',up);
-    const cl=e=>{if(!btn.current?.contains(e.target)&&!tip.current?.contains(e.target))setOpen(false)};
-    const t=setTimeout(()=>{document.addEventListener('mousedown',cl);document.addEventListener('touchstart',cl)},0);
-    return()=>{clearTimeout(t);window.removeEventListener('scroll',up,true);window.removeEventListener('resize',up);document.removeEventListener('mousedown',cl);document.removeEventListener('touchstart',cl)};
-  },[open,up]);
-  return(<>
-    <button ref={btn} onClick={e=>{e.stopPropagation();up();setOpen(!open)}} aria-label="Tips" className="inline-flex items-center justify-center w-5 h-5 rounded-full transition-all" style={{border:`1px solid ${color}`,color,background:open?`${color}22`:'transparent',position:'relative',zIndex:open?9998:'auto'}}><Lightbulb size={12}/></button>
-    {open&&<div ref={tip} style={{position:'fixed',top:pos.top,left:pos.left,transform:'translate(-50%,-100%)',zIndex:9999,width:288,padding:16,borderRadius:12,background:'rgba(13,13,13,0.97)',border:`1px solid ${color}44`,backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',boxShadow:'0 20px 40px rgba(0,0,0,0.6)'}}>
-      <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:12}}><Lightbulb size={14} style={{color,flexShrink:0}}/><span style={{fontFamily:F.h,fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.08em',color}}>Things to think about</span></div>
-      <div style={{display:'flex',flexDirection:'column',gap:8}}>{prompts.map((p,i)=><p key={i} style={{fontFamily:F.b,fontSize:12,color:T.softSilver,lineHeight:1.5,paddingLeft:8,borderLeft:`2px solid ${color}33`,margin:0}}>{p}</p>)}</div>
-      <div style={{position:'absolute',top:'100%',left:'50%',transform:'translateX(-50%)',width:0,height:0,borderLeft:'6px solid transparent',borderRight:'6px solid transparent',borderTop:`6px solid ${color}44`}}/>
-    </div>}
-  </>);
-};
+function Tip({ prompts, color }) {
+  const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0, above: true });
+  const buttonRef = useRef(null);
+  const popoverRef = useRef(null);
 
-const CurrencyInput=({value,onChange,placeholder="0",className="",style:s={}})=>{
-  const[focused,setFocused]=useState(false);
-  return<input type="text" inputMode="decimal" placeholder={placeholder}
-    value={focused?(value===''||value===0?'':value):fmtN(value)}
-    onChange={e=>{const r=e.target.value.replace(/[^0-9.]/g,'');onChange(r===''?'':parseFloat(r))}}
-    onFocus={e=>{setFocused(true);e.target.style.borderColor='rgba(98,255,218,0.9)';e.target.style.boxShadow='0 0 0 1px rgba(98,255,218,0.7),0 0 20px rgba(98,255,218,0.25)'}}
-    onBlur={e=>{setFocused(false);e.target.style.borderColor='rgba(148,163,184,0.3)';e.target.style.boxShadow='none'}}
-    className={`rounded-xl text-sm outline-none transition-all ${className}`}
-    style={{fontFamily:F.m,background:'rgba(15,23,42,0.75)',border:'1px solid rgba(148,163,184,0.3)',color:'#E5E7EB',...s}}/>;
-};
+  const updatePosition = useCallback(() => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    const above = rect.top > 340;
+    setPosition({
+      top: above ? rect.top - 10 : rect.bottom + 10,
+      left: Math.max(170, Math.min(rect.left + rect.width / 2, window.innerWidth - 170)),
+      above,
+    });
+  }, []);
 
-const TextInput=({value,onChange,placeholder,className=""})=><input type="text" placeholder={placeholder} value={value} onChange={e=>onChange(e.target.value)}
-  className={`rounded-xl text-sm outline-none transition-all ${className}`} style={{fontFamily:F.b,background:'rgba(15,23,42,0.75)',border:'1px solid rgba(148,163,184,0.3)',color:'#E5E7EB'}}
-  onFocus={e=>{e.target.style.borderColor='rgba(98,255,218,0.9)';e.target.style.boxShadow='0 0 0 1px rgba(98,255,218,0.7),0 0 20px rgba(98,255,218,0.25)'}}
-  onBlur={e=>{e.target.style.borderColor='rgba(148,163,184,0.3)';e.target.style.boxShadow='none'}}/>;
+  useEffect(() => {
+    if (!open) return undefined;
+    updatePosition();
 
-const Pill=({options,value,onChange})=><div className="flex rounded-full overflow-hidden" style={{border:'1px solid rgba(255,255,255,0.1)',background:'rgba(15,23,42,0.5)'}}>
-  {options.map(o=><button key={o.v} onClick={()=>onChange(o.v)} className="px-4 py-1.5 text-xs font-bold transition-all" style={{fontFamily:F.h,background:value===o.v?T.primaryBlue:'transparent',color:value===o.v?'white':T.softSilver,letterSpacing:'0.04em'}}>{o.l}</button>)}</div>;
+    const closeFromOutside = (event) => {
+      if (!buttonRef.current?.contains(event.target) && !popoverRef.current?.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    const closeFromEscape = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
 
-const StatBox=({label,value,sub,color=T.mintAccent})=><div className="p-4 rounded-xl dlc-stat-hover" style={{background:'rgba(0,0,0,0.2)',border:'1px solid rgba(255,255,255,0.05)',transition:'transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease'}}>
-  <div style={{fontFamily:F.h,fontSize:10,textTransform:'uppercase',letterSpacing:'0.1em',color:'rgba(241,245,249,0.35)',marginBottom:4}}>{label}</div>
-  <div style={{fontFamily:F.m,fontSize:22,fontWeight:700,color}}>{value}</div>
-  {sub&&<div style={{fontFamily:F.b,fontSize:10,color:'rgba(241,245,249,0.45)',marginTop:4}}>{sub}</div>}</div>;
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+    document.addEventListener("pointerdown", closeFromOutside);
+    document.addEventListener("keydown", closeFromEscape);
+    return () => {
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+      document.removeEventListener("pointerdown", closeFromOutside);
+      document.removeEventListener("keydown", closeFromEscape);
+    };
+  }, [open, updatePosition]);
 
-const DonutChart=({data,size=200})=>{
-  const ref=useRef(null);
-  const[scrollRef,visible]=useScrollReveal(0.3);
-  const[hovered,setHovered]=useState(null);
-  useEffect(()=>{
-    if(!ref.current||!visible||data.length===0)return;
-    const svg=select(ref.current);
-    svg.selectAll('*').remove();
-    const w=size,h=size,radius=Math.min(w,h)/2;
-    const g=svg.attr('width',w).attr('height',h).append('g').attr('transform',`translate(${w/2},${h/2})`);
-    const pieGen=pie().value(d=>d.value).sort(null).padAngle(0.03);
-    const arc=d3Arc().innerRadius(radius*0.62).outerRadius(radius*0.88).cornerRadius(4);
-    const arcHover=d3Arc().innerRadius(radius*0.60).outerRadius(radius*0.92).cornerRadius(4);
-    const paths=g.selectAll('path').data(pieGen(data)).enter().append('path')
-      .attr('d',arc).attr('fill',d=>d.data.color).attr('opacity',0).attr('stroke','none')
-      .style('cursor','pointer').style('filter','drop-shadow(0 2px 8px rgba(0,0,0,0.3))');
-    paths.transition().duration(800).delay((d,i)=>i*80).ease(easeCubicOut)
-      .attrTween('d',function(d){const i=interpolate({startAngle:d.startAngle,endAngle:d.startAngle},d);return t=>arc(i(t));}).attr('opacity',0.9);
-    paths.on('mouseenter',function(event,d){select(this).transition().duration(200).attr('d',arcHover).attr('opacity',1);setHovered(d.data);})
-         .on('mouseleave',function(){select(this).transition().duration(200).attr('d',arc).attr('opacity',0.9);setHovered(null);});
-  },[data,visible,size]);
-  return(
-    <div ref={scrollRef} style={{position:'relative',width:size,height:size,margin:'0 auto'}}>
-      <svg ref={ref}/>
-      <div style={{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',textAlign:'center',pointerEvents:'none'}}>
-        {hovered?(<>
-          <div style={{fontFamily:F.h,fontSize:9,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.08em',color:hovered.color,marginBottom:2}}>{hovered.label}</div>
-          <div style={{fontFamily:F.m,fontSize:18,fontWeight:700,color:'white'}}>{hovered.pct}%</div>
-        </>):(<>
-          <div style={{fontFamily:F.h,fontSize:9,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.08em',color:'rgba(241,245,249,0.35)',marginBottom:2}}>Total</div>
-          <div style={{fontFamily:F.m,fontSize:16,fontWeight:700,color:T.mintAccent}}>{data.length} categories</div>
-        </>)}
+  return (
+    <>
+      <button
+        ref={buttonRef}
+        className={styles.tipButton}
+        type="button"
+        aria-label="Show ideas for this category"
+        aria-expanded={open}
+        onClick={(event) => {
+          event.stopPropagation();
+          updatePosition();
+          setOpen((current) => !current);
+        }}
+      >
+        <Lightbulb size={14} />
+      </button>
+      {open ? (
+        <div
+          ref={popoverRef}
+          className={styles.tipPopover}
+          role="dialog"
+          style={{
+            top: position.top,
+            left: position.left,
+            transform: position.above ? "translate(-50%, -100%)" : "translate(-50%, 0)",
+            "--tip-color": color,
+          }}
+        >
+          <strong>Things to think about</strong>
+          {prompts.map((prompt) => (
+            <p key={prompt}>{prompt}</p>
+          ))}
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+function CurrencyInput({ value, onChange, placeholder = "0", ariaLabel }) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <input
+      className={styles.input}
+      type="text"
+      inputMode="decimal"
+      aria-label={ariaLabel}
+      placeholder={placeholder}
+      value={focused ? (value === "" || value === 0 ? "" : value) : formatInputNumber(value)}
+      onChange={(event) => {
+        const raw = event.target.value.replace(/[^0-9.]/g, "");
+        onChange(raw === "" ? "" : Number.parseFloat(raw));
+      }}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+    />
+  );
+}
+
+function TextInput({ value, onChange, placeholder, ariaLabel }) {
+  return (
+    <input
+      className={styles.input}
+      type="text"
+      aria-label={ariaLabel}
+      placeholder={placeholder}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+    />
+  );
+}
+
+function StatBox({ label, value, note, color }) {
+  return (
+    <div className={styles.statBox} style={{ "--stat-colour": color }}>
+      <span className={styles.microLabel}>{label}</span>
+      <strong>{value}</strong>
+      {note ? <small>{note}</small> : null}
+    </div>
+  );
+}
+
+function DonutChart({ data, size = 220 }) {
+  const svgRef = useRef(null);
+  const [hovered, setHovered] = useState(null);
+
+  useEffect(() => {
+    if (!svgRef.current || data.length === 0) return;
+    const svg = select(svgRef.current);
+    svg.selectAll("*").remove();
+
+    const radius = size / 2;
+    const group = svg
+      .attr("width", size)
+      .attr("height", size)
+      .append("g")
+      .attr("transform", `translate(${radius},${radius})`);
+    const pieGenerator = pie().value((item) => item.value).sort(null).padAngle(0.035);
+    const arc = d3Arc().innerRadius(radius * 0.6).outerRadius(radius * 0.88).cornerRadius(5);
+    const hoverArc = d3Arc().innerRadius(radius * 0.57).outerRadius(radius * 0.93).cornerRadius(5);
+    const paths = group
+      .selectAll("path")
+      .data(pieGenerator(data))
+      .enter()
+      .append("path")
+      .attr("d", arc)
+      .attr("fill", (item) => item.data.color)
+      .attr("stroke", "#111411")
+      .attr("stroke-width", 2)
+      .attr("opacity", 0);
+
+    paths
+      .transition()
+      .duration(650)
+      .delay((item, index) => index * 55)
+      .ease(easeCubicOut)
+      .attrTween("d", (item) => {
+        const tween = interpolate(
+          { startAngle: item.startAngle, endAngle: item.startAngle },
+          item,
+        );
+        return (progress) => arc(tween(progress));
+      })
+      .attr("opacity", 1);
+
+    paths
+      .style("cursor", "pointer")
+      .on("mouseenter", function handleEnter(event, item) {
+        select(this).transition().duration(150).attr("d", hoverArc);
+        setHovered(item.data);
+      })
+      .on("mouseleave", function handleLeave() {
+        select(this).transition().duration(150).attr("d", arc);
+        setHovered(null);
+      });
+  }, [data, size]);
+
+  return (
+    <div className={styles.donutWrap}>
+      <svg ref={svgRef} aria-label="Spending breakdown chart" role="img" />
+      <div
+        className={styles.donutCenter}
+        style={{ "--donut-colour": hovered?.color || COLOURS.purple }}
+      >
+        <small>{hovered?.label || "Active categories"}</small>
+        <strong>{hovered ? `${hovered.percent}%` : data.length}</strong>
       </div>
     </div>
   );
-};
+}
 
-const EmptyState=({color,onAdd,onAddBig})=>(
-  <div className="py-8 flex flex-col items-center gap-3" style={{opacity:0.6}}>
-    <div style={{width:48,height:48,borderRadius:16,background:`${color}0A`,border:`1px dashed ${color}33`,display:'flex',alignItems:'center',justifyContent:'center'}}>
-      <Sparkles size={20} style={{color}}/>
+function EmptyState({ color, onAdd, onAddBig }) {
+  return (
+    <div className={styles.emptyState} style={{ "--cat-color": color }}>
+      <span className={styles.emptyIcon}>
+        <Sparkles size={21} />
+      </span>
+      <p>Nothing here yet. Add only what belongs in the life you actually want.</p>
+      <div className={styles.itemActions}>
+        <button className={`${styles.addButton} ${styles.addButtonPrimary}`} onClick={onAdd} type="button">
+          <Plus size={15} /> Add item
+        </button>
+        <button className={styles.addButton} onClick={onAddBig} type="button">
+          <Gem size={15} /> Big purchase
+        </button>
+      </div>
     </div>
-    <p style={{fontFamily:F.b,fontSize:13,color:T.softSilver,textAlign:'center'}}>Nothing here yet. What does your<br/>dream life include?</p>
-    <div className="flex gap-2">
-      <button onClick={onAdd} className="dlc-btn-action px-4 py-2 rounded-xl text-xs font-bold transition-all" style={{fontFamily:F.h,fontSize:10,letterSpacing:'0.05em',color,background:`${color}0A`,border:`1px dashed ${color}33`}}
-        onMouseEnter={e=>{e.currentTarget.style.background=`${color}15`}} onMouseLeave={e=>{e.currentTarget.style.background=`${color}0A`}}><Plus size={12} style={{display:'inline',verticalAlign:'-2px',marginRight:4}}/>Add Item</button>
-      <button onClick={onAddBig} className="dlc-btn-action px-4 py-2 rounded-xl text-xs font-bold transition-all" style={{fontFamily:F.h,fontSize:10,letterSpacing:'0.05em',color:T.coachViolet,background:`${T.coachViolet}0A`,border:`1px dashed ${T.coachViolet}33`}}
-        onMouseEnter={e=>{e.currentTarget.style.background=`${T.coachViolet}15`}} onMouseLeave={e=>{e.currentTarget.style.background=`${T.coachViolet}0A`}}>💰 Big Purchase</button>
-    </div>
-  </div>
-);
+  );
+}
 
-// ═══════════════════════════════════════════════════════════════
-// MAIN COMPONENT
-// ═══════════════════════════════════════════════════════════════
-export default function DreamLifeCalculatorClient(){
-  // SSR-safe: initialise with defaults, load from localStorage after mount
-  const[categories,setCategories]=useState(buildDef);
-  const[displayFreq,setDisplayFreq]=useState('weekly');
-  const[taxMode,setTaxMode]=useState('ato');
-  const[simpleRate,setSimpleRate]=useState(30);
-  const[includeHECS,setIncludeHECS]=useState(false);
-  const[includeSuper,setIncludeSuper]=useState(false);
-  const[showShare,setShowShare]=useState(false);
-  const[showHelp,setShowHelp]=useState(false);
-  const[removingItems,setRemovingItems]=useState(new Set());
-  const[newItems,setNewItems]=useState(new Set());
-  const[mounted,setMounted]=useState(false);
+export default function DreamLifeCalculatorClient() {
+  const [categories, setCategories] = useState(buildDefaults);
+  const [displayFrequency, setDisplayFrequency] = useState("weekly");
+  const [taxMode, setTaxMode] = useState("ato");
+  const [simpleRate, setSimpleRate] = useState(30);
+  const [includeHelp, setIncludeHelp] = useState(false);
+  const [includeSuper, setIncludeSuper] = useState(false);
+  const [showShare, setShowShare] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [shareNotice, setShareNotice] = useState("");
+  const [removingItems, setRemovingItems] = useState(new Set());
+  const [newItems, setNewItems] = useState(new Set());
+  const [mounted, setMounted] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     setMounted(true);
-    const saved=load();
-    if(saved){
-      if(saved.categories)setCategories(saved.categories);
-      if(saved.displayFreq)setDisplayFreq(saved.displayFreq);
-      if(saved.taxMode)setTaxMode(saved.taxMode);
-      if(saved.simpleRate!=null)setSimpleRate(saved.simpleRate);
-      if(saved.includeHECS!=null)setIncludeHECS(saved.includeHECS);
-      if(saved.includeSuper!=null)setIncludeSuper(saved.includeSuper);
+    const saved = loadState();
+    if (!saved) return;
+    if (saved.categories) setCategories(normaliseSavedCategories(saved.categories));
+    if (saved.displayFreq) setDisplayFrequency(saved.displayFreq);
+    if (saved.taxMode) setTaxMode(saved.taxMode);
+    if (saved.simpleRate != null) setSimpleRate(saved.simpleRate);
+    if (saved.includeHECS != null) setIncludeHelp(saved.includeHECS);
+    if (saved.includeSuper != null) setIncludeSuper(saved.includeSuper);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    saveState({
+      categories,
+      displayFreq: displayFrequency,
+      taxMode,
+      simpleRate,
+      includeHECS: includeHelp,
+      includeSuper,
+    });
+  }, [categories, displayFrequency, includeHelp, includeSuper, mounted, simpleRate, taxMode]);
+
+  useEffect(() => {
+    if (!showShare && !showHelp) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") {
+        setShowShare(false);
+        setShowHelp(false);
+      }
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [showHelp, showShare]);
+
+  const totals = useMemo(() => {
+    const byCategory = {};
+    let grandYearly = 0;
+
+    categories.forEach((category) => {
+      let categoryYearly = 0;
+      category.items.forEach((item) => {
+        if (item.isBigTicket && item.totalPrice > 0 && item.years > 0) {
+          categoryYearly += item.totalPrice / item.years;
+        } else {
+          categoryYearly += frequencyToYear(item.amount, item.freq);
+        }
+      });
+      byCategory[category.id] = categoryYearly;
+      grandYearly += categoryYearly;
+    });
+
+    return { byCategory, grandYearly };
+  }, [categories]);
+
+  const income = useMemo(() => {
+    const net = totals.grandYearly;
+    if (taxMode === "ato") {
+      const gross = grossFromNet(net, includeHelp);
+      const tax = calcTax(gross);
+      const medicare = calcMedicare(gross);
+      const help = includeHelp ? calcHelp(gross) : 0;
+      const packageValue = includeSuper ? Math.round(gross * (1 + SUPER_RATE)) : gross;
+      return { gross, tax, medicare, help, packageValue };
     }
-  },[]);
 
-  useEffect(()=>{
-    if(mounted)save({categories,displayFreq,taxMode,simpleRate,includeHECS,includeSuper});
-  },[mounted,categories,displayFreq,taxMode,simpleRate,includeHECS,includeSuper]);
+    const gross = grossSimple(net, simpleRate);
+    const packageValue = includeSuper ? Math.round(gross * (1 + SUPER_RATE)) : gross;
+    return { gross, tax: gross - net, medicare: 0, help: 0, packageValue };
+  }, [includeHelp, includeSuper, simpleRate, taxMode, totals.grandYearly]);
 
-  const totals=useMemo(()=>{const byCat={};let gy=0;categories.forEach(c=>{let cy=0;c.items.forEach(it=>{if(it.isBigTicket&&it.totalPrice>0&&it.years>0)cy+=it.totalPrice/it.years;else cy+=f2y(it.amount,it.freq)});byCat[c.id]=cy;gy+=cy});return{byCat,grandYearly:gy}},[categories]);
-  const income=useMemo(()=>{const n=totals.grandYearly;if(taxMode==='ato'){const g=grossFromNet(n,includeHECS),tx=calcTax(g),mc=calcMed(g),hc=includeHECS?calcHECS(g):0,pk=includeSuper?Math.round(g*(1+SUPER_RATE)):g;return{gross:g,tax:tx,medicare:mc,hecs:hc,pkg:pk}}const g=grossSimple(n,simpleRate),pk=includeSuper?Math.round(g*(1+SUPER_RATE)):g;return{gross:g,tax:g-n,medicare:0,hecs:0,pkg:pk}},[totals.grandYearly,taxMode,simpleRate,includeHECS,includeSuper]);
-  const displayTotal=y2d(totals.grandYearly,displayFreq);
+  const displayedLifeCost = yearToDisplay(totals.grandYearly, displayFrequency);
+  const displayedIncomeTarget = yearToDisplay(
+    includeSuper ? income.packageValue : income.gross,
+    displayFrequency,
+  );
+  const itemCount = categories.reduce((sum, category) => sum + category.items.length, 0);
 
-  const toggle=id=>setCategories(p=>p.map(c=>c.id===id?{...c,expanded:!c.expanded}:c));
-  const addItem=(id,big=false)=>{const iid=nid();setNewItems(p=>new Set(p).add(iid));setCategories(p=>p.map(c=>c.id===id?{...c,items:[...c.items,{id:iid,name:'',amount:0,freq:'weekly',isBigTicket:big,totalPrice:0,years:5}]}:c));setTimeout(()=>setNewItems(p=>{const n=new Set(p);n.delete(iid);return n}),500)};
-  const rmItem=(cid,iid)=>{setRemovingItems(p=>new Set(p).add(iid));setTimeout(()=>{setCategories(p=>p.map(c=>c.id===cid?{...c,items:c.items.filter(it=>it.id!==iid)}:c));setRemovingItems(p=>{const n=new Set(p);n.delete(iid);return n})},350)};
-  const upItem=(cid,iid,f,v)=>setCategories(p=>p.map(c=>c.id===cid?{...c,items:c.items.map(it=>it.id===iid?{...it,[f]:v}:it)}:c));
-  const addCat=()=>setCategories(p=>[...p,{id:'custom-'+Date.now(),icon:'Gem',label:'Custom Category',color:T.accentBlue,prompts:["What else does your dream life include?"],expanded:true,items:[{id:nid(),name:'',amount:0,freq:'weekly',isBigTicket:false,totalPrice:0,years:5}]}]);
-  const rmCat=id=>setCategories(p=>p.filter(c=>c.id!==id));
-  const renameCat=(id,l)=>setCategories(p=>p.map(c=>c.id===id?{...c,label:l}:c));
-  const resetAll=()=>{if(window.confirm('Reset everything to defaults?')){setCategories(buildDef());setDisplayFreq('weekly');setTaxMode('ato');setSimpleRate(30);setIncludeHECS(false);setIncludeSuper(false)}};
+  const sortedCategories = useMemo(
+    () =>
+      categories
+        .filter((category) => (totals.byCategory[category.id] || 0) > 0)
+        .sort(
+          (first, second) =>
+            (totals.byCategory[second.id] || 0) - (totals.byCategory[first.id] || 0),
+        ),
+    [categories, totals.byCategory],
+  );
 
-  const sorted=useMemo(()=>categories.filter(c=>(totals.byCat[c.id]||0)>0).sort((a,b)=>(totals.byCat[b.id]||0)-(totals.byCat[a.id]||0)),[categories,totals]);
-  const donutData=useMemo(()=>sorted.slice(0,8).map(c=>({label:c.label,value:totals.byCat[c.id]||0,color:c.color,pct:totals.grandYearly>0?((totals.byCat[c.id]||0)/totals.grandYearly*100).toFixed(1):'0'})),[sorted,totals]);
+  const donutData = useMemo(
+    () =>
+      sortedCategories.slice(0, 8).map((category) => ({
+        label: category.label,
+        value: totals.byCategory[category.id] || 0,
+        color: category.color,
+        percent:
+          totals.grandYearly > 0
+            ? (((totals.byCategory[category.id] || 0) / totals.grandYearly) * 100).toFixed(1)
+            : "0",
+      })),
+    [sortedCategories, totals.byCategory, totals.grandYearly],
+  );
 
-  return(
-    <div className="min-h-screen text-white pb-20 relative overflow-x-hidden" style={{background:T.darkBase,fontFamily:F.b}}>
-      {/* BG ORBS */}
-      <div className="fixed inset-0 pointer-events-none" style={{zIndex:0}}>
-        <div className="absolute rounded-full" style={{top:0,left:'10%',width:500,height:500,background:T.coachViolet,mixBlendMode:'screen',filter:'blur(120px)',opacity:0.2,animation:'dlcPulse 10s ease-in-out infinite'}}/>
-        <div className="absolute rounded-full" style={{bottom:0,right:'10%',width:600,height:600,background:T.primaryBlue,mixBlendMode:'screen',filter:'blur(130px)',opacity:0.2}}/>
-        <div className="absolute rounded-full" style={{top:'50%',left:'50%',transform:'translate(-50%,-50%)',width:800,height:800,background:T.mintAccent,mixBlendMode:'overlay',filter:'blur(150px)',opacity:0.05}}/>
-        <div className="absolute inset-0" style={{opacity:0.04,mixBlendMode:'soft-light',backgroundImage:NOISE_BG,backgroundSize:'200px 200px'}}/>
-      </div>
+  const toggleCategory = (categoryId) =>
+    setCategories((current) =>
+      current.map((category) =>
+        category.id === categoryId ? { ...category, expanded: !category.expanded } : category,
+      ),
+    );
 
-      {/* HEADER */}
-      <header className="sticky top-0 z-50" style={{backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',borderBottom:'1px solid rgba(255,255,255,0.05)',background:'rgba(13,13,13,0.7)'}}>
-        <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 no-underline" style={{color:'inherit',textDecoration:'none'}}>
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{background:`linear-gradient(135deg,${T.primaryBlue},${T.coachViolet})`,boxShadow:`0 4px 12px ${T.primaryBlue}44`}}><Calculator size={18} color="white"/></div>
-            <div><div style={{fontFamily:F.h,fontWeight:700,fontSize:14}}>Dream Life Calculator</div><div style={{fontFamily:F.b,fontSize:10,color:T.softSilver,opacity:0.6}}>by Mitch Bryant</div></div>
-          </Link>
-          <div className="flex items-center gap-2">
-            <button onClick={resetAll} aria-label="Reset" className="p-2 rounded-lg transition-colors" style={{color:T.softSilver,background:'transparent',border:'none',cursor:'pointer'}} onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,0.06)'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}><RotateCcw size={16}/></button>
-            <button onClick={()=>setShowHelp(true)} aria-label="Help" className="p-2 rounded-lg transition-colors" style={{color:T.softSilver,background:'transparent',border:'none',cursor:'pointer'}} onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,0.06)'} onMouseLeave={e=>e.currentTarget.style.background='transparent'}><HelpCircle size={18}/></button>
-            <button onClick={()=>setShowShare(true)} className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all" style={{fontFamily:F.h,background:`linear-gradient(135deg,${T.primaryBlue},${T.coachViolet})`,letterSpacing:'0.04em',border:'none',cursor:'pointer',color:'white'}} onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-1px)';e.currentTarget.style.boxShadow=`0 8px 20px ${T.primaryBlue}55`}} onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='none'}}>SHARE</button>
-          </div>
+  const addItem = (categoryId, bigPurchase = false) => {
+    const itemId = nextItemId();
+    setNewItems((current) => new Set(current).add(itemId));
+    setCategories((current) =>
+      current.map((category) =>
+        category.id === categoryId
+          ? {
+              ...category,
+              expanded: true,
+              items: [
+                ...category.items,
+                {
+                  id: itemId,
+                  name: "",
+                  amount: 0,
+                  freq: "weekly",
+                  isBigTicket: bigPurchase,
+                  totalPrice: 0,
+                  years: 5,
+                },
+              ],
+            }
+          : category,
+      ),
+    );
+    window.setTimeout(() => {
+      setNewItems((current) => {
+        const next = new Set(current);
+        next.delete(itemId);
+        return next;
+      });
+    }, 450);
+  };
+
+  const removeItem = (categoryId, itemId) => {
+    setRemovingItems((current) => new Set(current).add(itemId));
+    window.setTimeout(() => {
+      setCategories((current) =>
+        current.map((category) =>
+          category.id === categoryId
+            ? { ...category, items: category.items.filter((item) => item.id !== itemId) }
+            : category,
+        ),
+      );
+      setRemovingItems((current) => {
+        const next = new Set(current);
+        next.delete(itemId);
+        return next;
+      });
+    }, 280);
+  };
+
+  const updateItem = (categoryId, itemId, field, value) =>
+    setCategories((current) =>
+      current.map((category) =>
+        category.id === categoryId
+          ? {
+              ...category,
+              items: category.items.map((item) =>
+                item.id === itemId ? { ...item, [field]: value } : item,
+              ),
+            }
+          : category,
+      ),
+    );
+
+  const addCustomCategory = () => {
+    const categoryId = `custom-${Date.now()}`;
+    setCategories((current) => [
+      ...current,
+      {
+        id: categoryId,
+        icon: "Gem",
+        label: "Custom category",
+        color: COLOURS.purple,
+        prompts: ["What else belongs in the life you want to design?"],
+        expanded: true,
+        items: [
+          {
+            id: nextItemId(),
+            name: "",
+            amount: 0,
+            freq: "weekly",
+            isBigTicket: false,
+            totalPrice: 0,
+            years: 5,
+          },
+        ],
+      },
+    ]);
+  };
+
+  const removeCategory = (categoryId) =>
+    setCategories((current) => current.filter((category) => category.id !== categoryId));
+
+  const renameCategory = (categoryId, label) =>
+    setCategories((current) =>
+      current.map((category) => (category.id === categoryId ? { ...category, label } : category)),
+    );
+
+  const resetAll = () => {
+    if (!window.confirm("Reset every category and setting to the starter values?")) return;
+    setCategories(buildDefaults());
+    setDisplayFrequency("weekly");
+    setTaxMode("ato");
+    setSimpleRate(30);
+    setIncludeHelp(false);
+    setIncludeSuper(false);
+  };
+
+  const shareSummary = async () => {
+    const summary = `My dream life estimate: ${formatCurrency(displayedLifeCost)}/${frequencyShort(
+      displayFrequency,
+    )}. Estimated gross income target: ${formatCurrency(income.gross)}/year.`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "My Dream Life", text: summary });
+        setShareNotice("Shared");
+      } else {
+        await navigator.clipboard.writeText(summary);
+        setShareNotice("Copied");
+      }
+    } catch {
+      setShareNotice("Ready to screenshot");
+    }
+    window.setTimeout(() => setShareNotice(""), 1800);
+  };
+
+  return (
+    <div className={styles.shell}>
+      <a className="skip-link" href="#dream-planner">
+        Skip to planner
+      </a>
+
+      <header className={styles.toolbar}>
+        <Link className={styles.brand} href="/">
+          <span className={styles.brandMark}>MB.</span>
+          <span className={styles.brandCopy}>
+            <strong>Dream Life Calculator</strong>
+            <small>MB-01 // Lifestyle module</small>
+          </span>
+        </Link>
+
+        <div className={styles.toolbarActions}>
+          <button className={styles.iconButton} onClick={resetAll} type="button" aria-label="Reset calculator">
+            <RotateCcw size={17} />
+          </button>
+          <button className={styles.iconButton} onClick={() => setShowHelp(true)} type="button" aria-label="How this calculator works">
+            <HelpCircle size={19} />
+          </button>
+          <button className={styles.shareButton} onClick={() => setShowShare(true)} type="button">
+            <Share2 size={16} /> Share
+          </button>
         </div>
       </header>
 
-      {/* MAIN */}
-      <main className="max-w-5xl mx-auto px-4 py-8 relative" style={{zIndex:10,opacity:0,transform:'translateY(8px)',animation:'dlcFadeIn 600ms cubic-bezier(0.34,1.56,0.64,1) 100ms forwards'}}>
-
-        {/* HERO COPY */}
-        <div className="mb-8">
-          <p style={{fontFamily:F.h,fontWeight:700,fontSize:15,color:T.accentBlue,marginBottom:6}}>Design your dream life. Then figure out what it costs.</p>
-          <p style={{fontFamily:F.b,fontSize:13,color:T.softSilver,lineHeight:1.6}}>Most people pick a career first and hope the lifestyle follows. <strong style={{color:'rgba(241,245,249,0.7)'}}>Life-first thinking flips that.</strong> Fill in what your ideal life actually looks like, and this tool will tell you exactly what you need to earn.</p>
-        </div>
-
-        {/* FREQUENCY TOGGLE */}
-        <div className="flex items-center gap-2 mb-6">
-          <span style={{fontFamily:F.h,fontSize:10,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.1em',color:'rgba(241,245,249,0.4)'}}>Show costs as:</span>
-          <Pill options={DISP.map(o=>({v:o.v,l:o.l}))} value={displayFreq} onChange={setDisplayFreq}/>
-        </div>
-
-        {/* HERO SUMMARY CARD */}
-        <div className="mb-8 rounded-3xl overflow-hidden relative dlc-hero-card" style={{minHeight:140}}>
-          <div className="absolute inset-0" style={{background:'linear-gradient(110deg,#0081CB 0%,#6A3CFF 100%)'}}/>
-          <div className="absolute inset-0" style={{opacity:0.08,mixBlendMode:'soft-light',backgroundImage:NOISE_BG,backgroundSize:'200px 200px'}}/>
-          <div className="relative p-6 sm:p-8 text-white">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-              <div>
-                <div style={{fontFamily:F.h,fontSize:10,fontWeight:700,textTransform:'uppercase',letterSpacing:'0.2em',opacity:0.8,marginBottom:8}}>Your Dream Life Costs</div>
-                <div style={{fontFamily:F.h,fontWeight:900,lineHeight:1}}>
-                  <AnimatedCurrency value={displayTotal} size={48} suffix={`/${fl(displayFreq)}`}/>
-                </div>
-                <div className="flex flex-wrap gap-2 mt-4">
-                  <span className="px-3 py-1 rounded-lg text-xs font-bold" style={{fontFamily:F.b,background:'rgba(255,255,255,0.1)',border:'1px solid rgba(255,255,255,0.2)'}}>{fmtC(totals.grandYearly)}/year</span>
-                  <span className="px-3 py-1 rounded-lg text-xs font-bold" style={{fontFamily:F.b,background:'rgba(255,255,255,0.1)',border:'1px solid rgba(255,255,255,0.2)'}}>{categories.reduce((s,c)=>s+c.items.length,0)} line items</span>
-                </div>
-              </div>
-              <div className="rounded-2xl p-5 w-full md:w-auto md:min-w-[240px]" style={{background:'rgba(0,0,0,0.2)',backdropFilter:'blur(20px)',border:'1px solid rgba(255,255,255,0.1)'}}>
-                <div style={{fontFamily:F.h,fontSize:10,textTransform:'uppercase',letterSpacing:'0.1em',opacity:0.7,marginBottom:4}}>{includeSuper?'Total Package (inc. Super)':'Pre-Tax Income Needed'}</div>
-                <AnimatedCurrency value={includeSuper?income.pkg:income.gross} color={T.mintAccent} size={24}/>
-                <div className="w-full my-3" style={{height:1,background:'rgba(255,255,255,0.1)'}}/>
-                <div style={{fontFamily:F.h,fontSize:10,textTransform:'uppercase',letterSpacing:'0.1em',opacity:0.7,marginBottom:4}}>{"That's"}</div>
-                <AnimatedCurrency value={y2d(includeSuper?income.pkg:income.gross,displayFreq)} size={20} suffix={`/${fl(displayFreq)}`}/>
-              </div>
+      <main className={styles.main}>
+        <section className={styles.hero}>
+          <div className={styles.heroCopy}>
+            <p className={styles.eyebrow}>Dream Life module ready</p>
+            <h1>
+              Design your life.
+              <span>Know the cost.</span>
+            </h1>
+            <p className={styles.heroLead}>
+              Most people pick a career first and hope the lifestyle works out. Flip it. Build the life you
+              want, price it honestly, then see the income that could support it.
+            </p>
+            <div className={styles.heroActions}>
+              <a className={styles.primaryButton} href="#dream-planner">
+                Build my life number <TrendingUp size={16} />
+              </a>
+              <button className={styles.secondaryButton} onClick={() => setShowHelp(true)} type="button">
+                How it works
+              </button>
+            </div>
+            <div className={styles.heroTrust}>
+              <span className={styles.trustChip}><CheckCircle2 size={13} /> {TAX_YEAR} settings</span>
+              <span className={styles.trustChip}><LockKeyhole size={13} /> Saved on this device</span>
+              <span className={styles.trustChip}><Sparkles size={13} /> Free planning tool</span>
             </div>
           </div>
-        </div>
 
-        {/* CATEGORIES */}
-        <div className="space-y-4">
-          {categories.map(cat=>{
-            const IC=ICONS[cat.icon]||Gem;const ct=totals.byCat[cat.id]||0;
-            return(
-              <Card key={cat.id}>
-                <div role="button" tabIndex={0} onClick={()=>toggle(cat.id)} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(cat.id)}}} aria-label={`Toggle ${cat.label}`} className="w-full flex items-center justify-between p-5 cursor-pointer" style={{background:'transparent',border:'none',color:'white'}}>
-                  <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{background:`${cat.color}1A`}}><IC size={18} style={{color:cat.color}}/></div>
-                    <div className="flex items-center gap-2 min-w-0">
-                      {cat.id.startsWith('custom-')?<input value={cat.label} onClick={e=>e.stopPropagation()} onChange={e=>renameCat(cat.id,e.target.value)} className="bg-transparent border-none outline-none text-white font-bold text-sm" style={{fontFamily:F.h,textTransform:'uppercase',letterSpacing:'0.05em',width:'100%'}}/>
-                        :<span style={{fontFamily:F.h,fontWeight:700,fontSize:13,textTransform:'uppercase',letterSpacing:'0.05em'}}>{cat.label}</span>}
-                      <Tip prompts={cat.prompts} color={cat.color}/>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span style={{fontFamily:F.m,fontWeight:700,fontSize:15,color:ct>0?T.mintAccent:'rgba(241,245,249,0.25)'}}>{ct>0?`${fmtC(y2d(ct,displayFreq))}/${fl(displayFreq)}`:'$0'}</span>
-                    {cat.expanded?<ChevronUp size={16} style={{color:T.softSilver,opacity:0.5}}/>:<ChevronDown size={16} style={{color:T.softSilver,opacity:0.5}}/>}
-                  </div>
-                </div>
-                {cat.expanded&&(
-                  <div className="px-5 pb-5" style={{borderTop:'1px solid rgba(255,255,255,0.05)'}}>
-                    {cat.items.length===0?(
-                      <EmptyState color={cat.color} onAdd={()=>addItem(cat.id)} onAddBig={()=>addItem(cat.id,true)}/>
-                    ):(<>
-                      {cat.items.map((item)=>{
-                        const isRemoving=removingItems.has(item.id);
-                        const isNew=newItems.has(item.id);
-                        return(
-                          <div key={item.id} className="pt-3" style={{
-                            opacity:isRemoving?0:1,
-                            transform:isRemoving?'scale(0.92) translateX(-30px)':'scale(1) translateX(0)',
-                            maxHeight:isRemoving?0:300,
-                            paddingTop:isRemoving?0:12,
-                            marginBottom:isRemoving?-8:0,
-                            overflow:'hidden',
-                            transition:'opacity 300ms ease, transform 300ms ease, max-height 350ms ease, padding-top 300ms ease, margin-bottom 300ms ease',
-                            ...(isNew?{animation:'dlcSlideIn 400ms cubic-bezier(0.34,1.56,0.64,1) forwards'}:{}),
-                          }}>
-                            <div className="flex flex-wrap items-start gap-2">
-                              <TextInput value={item.name} onChange={v=>upItem(cat.id,item.id,'name',v)} placeholder={item.isBigTicket?"Big purchase name":"Item name"} className="flex-1 min-w-[140px] px-3 py-2.5"/>
-                              {item.isBigTicket?(<>
-                                <div className="relative"><span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold pointer-events-none" style={{color:T.softSilver,opacity:0.5}}>$</span>
-                                  <CurrencyInput value={item.totalPrice} onChange={v=>upItem(cat.id,item.id,'totalPrice',v||0)} placeholder="Total $" className="w-32 pl-7 pr-3 py-2.5"/></div>
-                                <div className="relative"><CurrencyInput value={item.years} onChange={v=>upItem(cat.id,item.id,'years',v||0)} placeholder="Yrs" className="w-20 px-3 py-2.5"/>
-                                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold pointer-events-none" style={{color:T.softSilver,opacity:0.5}}>yrs</span></div>
-                              </>):(<>
-                                <div className="relative"><span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold pointer-events-none" style={{color:T.softSilver,opacity:0.5}}>$</span>
-                                  <CurrencyInput value={item.amount} onChange={v=>upItem(cat.id,item.id,'amount',v)} className="w-32 pl-7 pr-3 py-2.5"/></div>
-                                <select value={item.freq} onChange={e=>upItem(cat.id,item.id,'freq',e.target.value)} className="px-3 py-2.5 rounded-xl text-sm outline-none cursor-pointer" style={{fontFamily:F.b,background:'rgba(15,23,42,0.75)',border:'1px solid rgba(148,163,184,0.3)',color:'#E5E7EB',minWidth:110}}>
-                                  {FREQ.map(f=><option key={f.v} value={f.v}>{f.l}</option>)}</select>
-                              </>)}
-                              <button onClick={()=>rmItem(cat.id,item.id)} aria-label="Delete" className="p-2.5 rounded-xl transition-all shrink-0" style={{color:'#64748b',background:'transparent',border:'none',cursor:'pointer'}} onMouseEnter={e=>{e.currentTarget.style.color=T.negativeRed;e.currentTarget.style.background='rgba(255,51,102,0.1)'}} onMouseLeave={e=>{e.currentTarget.style.color='#64748b';e.currentTarget.style.background='transparent'}}><Trash2 size={15}/></button>
-                            </div>
-                            {item.isBigTicket&&item.totalPrice>0&&item.years>0&&<div className="mt-2 ml-1 text-xs" style={{fontFamily:F.b,color:T.coachViolet}}>= {fmtC(y2d(item.totalPrice/item.years,displayFreq))}/{fl(displayFreq)} over {item.years} year{item.years!==1?'s':''}</div>}
-                          </div>
-                        );
-                      })}
-                      <div className="flex gap-2 mt-3">
-                        <button onClick={()=>addItem(cat.id)} className="dlc-btn-action flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl transition-all" style={{fontFamily:F.h,fontSize:11,fontWeight:700,letterSpacing:'0.05em',color:cat.color,background:`${cat.color}0A`,border:`1px dashed ${cat.color}33`,cursor:'pointer'}} onMouseEnter={e=>{e.currentTarget.style.background=`${cat.color}15`;e.currentTarget.style.borderColor=`${cat.color}55`}} onMouseLeave={e=>{e.currentTarget.style.background=`${cat.color}0A`;e.currentTarget.style.borderColor=`${cat.color}33`}}><Plus size={14}/> ADD ITEM</button>
-                        <button onClick={()=>addItem(cat.id,true)} className="dlc-btn-action flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl transition-all" style={{fontFamily:F.h,fontSize:11,fontWeight:700,letterSpacing:'0.05em',color:T.coachViolet,background:`${T.coachViolet}0A`,border:`1px dashed ${T.coachViolet}33`,cursor:'pointer'}} onMouseEnter={e=>{e.currentTarget.style.background=`${T.coachViolet}15`;e.currentTarget.style.borderColor=`${T.coachViolet}55`}} onMouseLeave={e=>{e.currentTarget.style.background=`${T.coachViolet}0A`;e.currentTarget.style.borderColor=`${T.coachViolet}33`}}><span style={{fontSize:13}}>💰</span> ADD BIG PURCHASE</button>
-                      </div>
-                    </>)}
-                    {cat.id.startsWith('custom-')&&<button onClick={()=>rmCat(cat.id)} className="text-xs mt-2 transition-colors" style={{fontFamily:F.b,color:'#64748b',background:'transparent',border:'none',cursor:'pointer'}} onMouseEnter={e=>e.currentTarget.style.color=T.negativeRed} onMouseLeave={e=>e.currentTarget.style.color='#64748b'}>Remove this category</button>}
-                  </div>
-                )}
-              </Card>
-            );
-          })}
-          <button onClick={addCat} className="dlc-btn-action w-full py-4 rounded-2xl flex items-center justify-center gap-2 transition-all" style={{fontFamily:F.h,fontSize:12,fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:T.accentBlue,background:'rgba(0,163,255,0.04)',border:'1px dashed rgba(0,163,255,0.2)',cursor:'pointer'}} onMouseEnter={e=>{e.currentTarget.style.background='rgba(0,163,255,0.08)';e.currentTarget.style.borderColor='rgba(0,163,255,0.4)'}} onMouseLeave={e=>{e.currentTarget.style.background='rgba(0,163,255,0.04)';e.currentTarget.style.borderColor='rgba(0,163,255,0.2)'}}><Plus size={16}/> ADD CUSTOM CATEGORY</button>
-        </div>
-
-        {/* INCOME SECTION */}
-        <Reveal delay={0} className="mt-8"><Card><div className="p-6">
-          <div className="flex items-center gap-3 mb-6"><TrendingUp size={20} style={{color:T.primaryBlue}}/><span style={{fontFamily:F.h,fontWeight:700,fontSize:13,textTransform:'uppercase',letterSpacing:'0.08em'}}>How Much Do I Need To Earn?</span></div>
-          <p className="mb-6" style={{fontFamily:F.b,fontSize:13,color:T.softSilver,lineHeight:1.6}}>Your dream life costs <strong style={{color:T.mintAccent}}>{fmtC(totals.grandYearly)}/year</strong> after tax. {"Here's what you'd actually need to earn."}</p>
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <Pill options={[{v:'ato',l:'ATO Brackets'},{v:'simple',l:'Simple %'}]} value={taxMode} onChange={setTaxMode}/>
-            <button onClick={()=>setIncludeHECS(!includeHECS)} className="px-3 py-1.5 rounded-full text-xs font-bold transition-all" style={{fontFamily:F.h,letterSpacing:'0.04em',background:includeHECS?`${T.coachViolet}22`:'rgba(15,23,42,0.5)',border:`1px solid ${includeHECS?T.coachViolet+'55':'rgba(255,255,255,0.1)'}`,color:includeHECS?T.coachViolet:T.softSilver,cursor:'pointer'}}>🎓 HECS {includeHECS?'ON':'OFF'}</button>
-            <button onClick={()=>setIncludeSuper(!includeSuper)} className="px-3 py-1.5 rounded-full text-xs font-bold transition-all" style={{fontFamily:F.h,letterSpacing:'0.04em',background:includeSuper?`${T.amber}22`:'rgba(15,23,42,0.5)',border:`1px solid ${includeSuper?T.amber+'55':'rgba(255,255,255,0.1)'}`,color:includeSuper?T.amber:T.softSilver,cursor:'pointer'}}>🏦 Super {includeSuper?'ON':'OFF'}</button>
-          </div>
-          {taxMode==='ato'?(
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              <StatBox label={includeSuper?'Total Package':'Gross Salary'} value={fmtC(includeSuper?income.pkg:income.gross)} sub={includeSuper?`Base: ${fmtC(income.gross)}`:'before tax'} color={T.mintAccent}/>
-              <StatBox label="Income Tax" value={fmtC(income.tax)} sub={`${TAX_YEAR} rates`} color={T.negativeRed}/>
-              <StatBox label="Medicare" value={fmtC(income.medicare)} sub="2% of gross" color={T.amber}/>
-              {includeHECS?<StatBox label="HECS Repayment" value={fmtC(income.hecs)} sub="Marginal system" color={T.coachViolet}/>:<StatBox label="Take Home" value={fmtC(totals.grandYearly)} sub="Your dream life" color={T.accentBlue}/>}
+          <div className={styles.heroVisual}>
+            <div className={styles.consoleFrame}>
+              <div className={styles.consoleFrameTop}>
+                <span>MB-01 // Dream Life</span>
+                <span>Module loaded</span>
+              </div>
+              <Image
+                className={styles.consoleImage}
+                src="/assets/console/mb01-console-dream-life-loaded-v1.webp"
+                alt="Dream Life Calculator cartridge loaded into the MB-01 Life Console"
+                width={1280}
+                height={653}
+                priority
+                sizes="(max-width: 900px) 94vw, 56vw"
+              />
             </div>
-          ):(
+          </div>
+        </section>
+
+        <section className={styles.workspace} id="dream-planner" style={{ "--section-colour": COLOURS.purple }}>
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionNumber}>01</span>
             <div>
-              <div className="flex items-center gap-4 mb-4"><span style={{fontFamily:F.h,fontSize:11,fontWeight:700,color:T.softSilver}}>Tax Rate:</span>
-                <input type="range" min={10} max={50} step={1} value={simpleRate} onChange={e=>setSimpleRate(parseInt(e.target.value))} className="flex-1 h-1.5 rounded-full appearance-none cursor-pointer" style={{background:`linear-gradient(to right,${T.primaryBlue} ${(simpleRate-10)/40*100}%,rgba(55,65,81,1) ${(simpleRate-10)/40*100}%)`}}/>
-                <span style={{fontFamily:F.m,fontWeight:700,fontSize:18,color:'white',minWidth:45,textAlign:'right'}}>{simpleRate}%</span></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3"><StatBox label={includeSuper?'Total Package':'Gross Salary'} value={fmtC(includeSuper?income.pkg:income.gross)} color={T.mintAccent}/><StatBox label="Tax Paid" value={fmtC(income.tax)} color={T.negativeRed}/></div>
+              <p className={styles.sectionKicker}>Build the lifestyle</p>
+              <h2 className={styles.sectionTitle}>What does your life cost?</h2>
             </div>
-          )}
-          <div className="mt-4 space-y-2">
-            <div className="p-3 rounded-xl flex items-start gap-2" style={{background:`${T.primaryBlue}15`,border:`1px solid ${T.primaryBlue}30`}}><Lightbulb size={14} className="shrink-0 mt-0.5" style={{color:T.primaryBlue}}/><span style={{fontFamily:F.b,fontSize:12,color:T.primaryBlue,fontWeight:500}}>{taxMode==='ato'?`${TAX_YEAR} brackets + Medicare.${includeHECS?' HECS marginal system.':''} No offsets/deductions.`:'Simplified. Use ATO mode for accuracy.'}</span></div>
-            {includeSuper&&<div className="p-3 rounded-xl flex items-start gap-2" style={{background:`${T.amber}15`,border:`1px solid ${T.amber}30`}}><Lightbulb size={14} className="shrink-0 mt-0.5" style={{color:T.amber}}/><span style={{fontFamily:F.b,fontSize:12,color:T.amber,fontWeight:500}}>Super adds {(SUPER_RATE*100).toFixed(1)}% on top. Most AU job ads show &quot;base + super&quot; or &quot;total package&quot; — now you know both.</span></div>}
+            <SegmentedControl
+              label="Display costs as"
+              options={DISPLAY_FREQUENCIES}
+              value={displayFrequency}
+              onChange={setDisplayFrequency}
+            />
           </div>
-        </div></Card></Reveal>
 
-        {/* SPENDING BREAKDOWN */}
-        {sorted.length>0&&<Reveal delay={100} className="mt-8"><Card><div className="p-6">
-          <div className="flex items-center gap-3 mb-5"><DollarSign size={20} style={{color:T.primaryBlue}}/><span style={{fontFamily:F.h,fontWeight:700,fontSize:13,textTransform:'uppercase',letterSpacing:'0.08em'}}>Where Your Money Goes</span></div>
-          <div className="flex flex-col md:flex-row gap-8 items-center">
-            <DonutChart data={donutData} size={200}/>
-            <div className="flex-1 space-y-2 w-full">
-              {sorted.slice(0,8).map(cat=>{
-                const cy=totals.byCat[cat.id]||0;const pct=totals.grandYearly>0?cy/totals.grandYearly*100:0;const IC=ICONS[cat.icon]||Gem;
-                return(<div key={cat.id} className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0" style={{background:`${cat.color}1A`}}><IC size={12} style={{color:cat.color}}/></div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-baseline"><span style={{fontFamily:F.b,fontSize:12,fontWeight:700}}>{cat.label}</span><span style={{fontFamily:F.m,fontSize:12,fontWeight:700,color:T.mintAccent}}>{fmtC(y2d(cy,displayFreq))}/{fl(displayFreq)}</span></div>
-                    <div className="w-full h-1 rounded-full overflow-hidden mt-1" style={{background:'rgba(255,255,255,0.06)'}}><div className="h-full rounded-full transition-all duration-700" style={{width:`${pct}%`,background:cat.color,boxShadow:`0 0 6px ${cat.color}55`}}/></div>
-                  </div>
-                  <span style={{fontFamily:F.m,fontSize:10,color:'rgba(241,245,249,0.35)',minWidth:36,textAlign:'right'}}>{pct.toFixed(1)}%</span>
-                </div>);
+          <div className={styles.workspaceGrid}>
+            <div className={styles.categoryColumn}>
+              <div className={styles.plannerNote}>
+                <Lightbulb size={20} />
+                <span>
+                  Starter amounts are examples, not recommendations. Replace them with the life you actually
+                  want—or remove anything that does not belong.
+                </span>
+              </div>
+
+              {categories.map((category, categoryIndex) => {
+                const Icon = ICONS[category.icon] || Gem;
+                const categoryYearly = totals.byCategory[category.id] || 0;
+                const isCustom = category.id.startsWith("custom-");
+
+                return (
+                  <article
+                    className={`${styles.categoryCard} ${category.expanded ? styles.categoryCardOpen : ""}`}
+                    key={category.id}
+                    style={{ "--cat-color": category.color }}
+                  >
+                    <div
+                      className={styles.categoryTrigger}
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={category.expanded}
+                      onClick={() => toggleCategory(category.id)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          toggleCategory(category.id);
+                        }
+                      }}
+                    >
+                      <span className={styles.categoryIcon} aria-hidden="true">
+                        <Icon size={19} />
+                      </span>
+                      <span className={styles.categoryTitleRow}>
+                        {isCustom ? (
+                          <input
+                            className={styles.customCategoryName}
+                            value={category.label}
+                            aria-label="Custom category name"
+                            onClick={(event) => event.stopPropagation()}
+                            onChange={(event) => renameCategory(category.id, event.target.value)}
+                          />
+                        ) : (
+                          <span className={styles.categoryTitle}>
+                            {String(categoryIndex + 1).padStart(2, "0")} · {category.label}
+                          </span>
+                        )}
+                        <Tip prompts={category.prompts} color={category.color} />
+                      </span>
+                      <span className={styles.categoryTotal}>
+                        {formatCurrency(yearToDisplay(categoryYearly, displayFrequency))}/
+                        {frequencyShort(displayFrequency)}
+                      </span>
+                      {category.expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                    </div>
+
+                    {category.expanded ? (
+                      <div className={styles.categoryBody}>
+                        {category.items.length === 0 ? (
+                          <EmptyState
+                            color={category.color}
+                            onAdd={() => addItem(category.id)}
+                            onAddBig={() => addItem(category.id, true)}
+                          />
+                        ) : (
+                          <>
+                            <div className={styles.itemList}>
+                              {category.items.map((item) => (
+                                <div
+                                  className={`${styles.itemRow} ${
+                                    newItems.has(item.id) ? styles.itemRowNew : ""
+                                  } ${removingItems.has(item.id) ? styles.itemRowRemoving : ""}`}
+                                  key={item.id}
+                                >
+                                  <label className={styles.field}>
+                                    <span className={styles.fieldLabel}>Item</span>
+                                    <TextInput
+                                      value={item.name}
+                                      onChange={(value) => updateItem(category.id, item.id, "name", value)}
+                                      placeholder={item.isBigTicket ? "Big purchase name" : "Item name"}
+                                      ariaLabel={`${category.label} item name`}
+                                    />
+                                  </label>
+
+                                  <label className={styles.field}>
+                                    <span className={styles.fieldLabel}>
+                                      {item.isBigTicket ? "Total price" : "Amount"}
+                                    </span>
+                                    <span className={styles.currencyWrap}>
+                                      <CurrencyInput
+                                        value={item.isBigTicket ? item.totalPrice : item.amount}
+                                        onChange={(value) =>
+                                          updateItem(
+                                            category.id,
+                                            item.id,
+                                            item.isBigTicket ? "totalPrice" : "amount",
+                                            value,
+                                          )
+                                        }
+                                        ariaLabel={`${item.name || category.label} amount`}
+                                      />
+                                    </span>
+                                  </label>
+
+                                  <label className={styles.field}>
+                                    <span className={styles.fieldLabel}>
+                                      {item.isBigTicket ? "Pay off over" : "Frequency"}
+                                    </span>
+                                    {item.isBigTicket ? (
+                                      <CurrencyInput
+                                        value={item.years}
+                                        onChange={(value) => updateItem(category.id, item.id, "years", value || 0)}
+                                        placeholder="Years"
+                                        ariaLabel={`${item.name || category.label} payoff years`}
+                                      />
+                                    ) : (
+                                      <select
+                                        className={styles.select}
+                                        value={item.freq}
+                                        aria-label={`${item.name || category.label} frequency`}
+                                        onChange={(event) =>
+                                          updateItem(category.id, item.id, "freq", event.target.value)
+                                        }
+                                      >
+                                        {FREQUENCIES.map((frequency) => (
+                                          <option key={frequency.value} value={frequency.value}>
+                                            {frequency.label}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    )}
+                                  </label>
+
+                                  <button
+                                    className={styles.removeButton}
+                                    type="button"
+                                    aria-label={`Remove ${item.name || "item"}`}
+                                    onClick={() => removeItem(category.id, item.id)}
+                                  >
+                                    <Trash2 size={17} />
+                                  </button>
+
+                                  {item.isBigTicket && item.totalPrice > 0 && item.years > 0 ? (
+                                    <p className={styles.bigPurchaseNote}>
+                                      {formatCurrency(
+                                        yearToDisplay(item.totalPrice / item.years, displayFrequency),
+                                      )}
+                                      /{frequencyShort(displayFrequency)} for {item.years} year
+                                      {item.years === 1 ? "" : "s"}
+                                    </p>
+                                  ) : null}
+                                </div>
+                              ))}
+                            </div>
+
+                            <div className={styles.itemActions}>
+                              <button
+                                className={`${styles.addButton} ${styles.addButtonPrimary}`}
+                                onClick={() => addItem(category.id)}
+                                type="button"
+                              >
+                                <Plus size={15} /> Add item
+                              </button>
+                              <button
+                                className={styles.addButton}
+                                onClick={() => addItem(category.id, true)}
+                                type="button"
+                              >
+                                <Gem size={15} /> Add big purchase
+                              </button>
+                            </div>
+                          </>
+                        )}
+
+                        {isCustom ? (
+                          <button
+                            className={styles.quietButton}
+                            onClick={() => removeCategory(category.id)}
+                            type="button"
+                          >
+                            Remove this custom category
+                          </button>
+                        ) : null}
+                      </div>
+                    ) : null}
+                  </article>
+                );
               })}
+
+              <button
+                className={`${styles.addButton} ${styles.customCategoryButton}`}
+                onClick={addCustomCategory}
+                type="button"
+              >
+                <Plus size={16} /> Add a custom category
+              </button>
+            </div>
+
+            <aside className={styles.resultsRail} aria-live="polite">
+              <section className={`${styles.resultCard} ${styles.lifeNumberCard}`}>
+                <p className={styles.microLabel}>Your life number</p>
+                <AnimatedCurrency
+                  value={displayedLifeCost}
+                  className={styles.bigNumber}
+                  suffix={`/${frequencyShort(displayFrequency)}`}
+                />
+                <div className={styles.resultMeta}>
+                  <span>{formatCurrency(totals.grandYearly)}/year</span>
+                  <span>{itemCount} line items</span>
+                </div>
+              </section>
+
+              <section className={`${styles.resultCard} ${styles.incomeTargetCard}`}>
+                <p className={styles.microLabel}>Estimated income target</p>
+                <h3>{includeSuper ? "Total package" : "Gross salary"}</h3>
+                <AnimatedCurrency
+                  value={includeSuper ? income.packageValue : income.gross}
+                  className={styles.incomeTargetValue}
+                />
+                <p>
+                  About {formatCurrency(displayedIncomeTarget)}/{frequencyShort(displayFrequency)} before tax
+                  {includeSuper ? ", including super" : ""}.
+                </p>
+                <a className={styles.railLink} href="#income-model">
+                  Inspect the estimate <ExternalLink size={13} />
+                </a>
+              </section>
+
+              <div className={styles.saveStatus}>
+                <CheckCircle2 size={16} /> Changes save automatically on this device
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section
+          className={styles.incomeSection}
+          id="income-model"
+          style={{ "--section-colour": COLOURS.mint }}
+        >
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionNumber}>02</span>
+            <div>
+              <p className={styles.sectionKicker}>Reverse engineer the money</p>
+              <h2 className={styles.sectionTitle}>What might you need to earn?</h2>
             </div>
           </div>
-        </div></Card></Reveal>}
+
+          <div className={styles.incomePanel}>
+            <p className={styles.incomeIntro}>
+              Your selected lifestyle costs <strong>{formatCurrency(totals.grandYearly)} each year after tax</strong>.
+              Adjust the model below to estimate the gross income that could fund it.
+            </p>
+
+            <div className={styles.controlRow}>
+              <SegmentedControl
+                label="Income estimate mode"
+                options={[
+                  { value: "ato", label: "Australian settings" },
+                  { value: "simple", label: "Simple percentage" },
+                ]}
+                value={taxMode}
+                onChange={setTaxMode}
+              />
+              <button
+                className={`${styles.toggleButton} ${includeHelp ? styles.toggleButtonActive : ""}`}
+                style={{ "--toggle-colour": COLOURS.purple }}
+                onClick={() => setIncludeHelp((current) => !current)}
+                type="button"
+                aria-pressed={includeHelp}
+              >
+                <GraduationCap size={16} /> HELP debt {includeHelp ? "on" : "off"}
+              </button>
+              <button
+                className={`${styles.toggleButton} ${includeSuper ? styles.toggleButtonActive : ""}`}
+                style={{ "--toggle-colour": COLOURS.yellow }}
+                onClick={() => setIncludeSuper((current) => !current)}
+                type="button"
+                aria-pressed={includeSuper}
+              >
+                <WalletCards size={16} /> Super {includeSuper ? "on" : "off"}
+              </button>
+            </div>
+
+            {taxMode === "simple" ? (
+              <label className={styles.simpleRate}>
+                <span className={styles.microLabel}>Combined deduction rate</span>
+                <input
+                  type="range"
+                  min={10}
+                  max={50}
+                  step={1}
+                  value={simpleRate}
+                  onChange={(event) => setSimpleRate(Number.parseInt(event.target.value, 10))}
+                />
+                <strong>{simpleRate}%</strong>
+              </label>
+            ) : null}
+
+            <div className={styles.statGrid}>
+              <StatBox
+                label={includeSuper ? "Total package" : "Gross salary"}
+                value={formatCurrency(includeSuper ? income.packageValue : income.gross)}
+                note={includeSuper ? `Base salary ${formatCurrency(income.gross)}` : "Before tax"}
+                color={COLOURS.mint}
+              />
+              <StatBox
+                label="Income tax estimate"
+                value={formatCurrency(income.tax)}
+                note={taxMode === "ato" ? `${TAX_YEAR} resident brackets` : `${simpleRate}% model`}
+                color={COLOURS.pink}
+              />
+              <StatBox
+                label="Medicare allowance"
+                value={formatCurrency(income.medicare)}
+                note={taxMode === "ato" ? "Simple 2% allowance" : "Included in chosen rate"}
+                color={COLOURS.yellow}
+              />
+              <StatBox
+                label={includeHelp ? "HELP repayment estimate" : "After-tax life cost"}
+                value={formatCurrency(includeHelp ? income.help : totals.grandYearly)}
+                note={includeHelp ? `${TAX_YEAR} marginal settings` : "Your selected categories"}
+                color={includeHelp ? COLOURS.purple : COLOURS.blue}
+              />
+            </div>
+
+            <div className={styles.estimateNote}>
+              <Info size={17} />
+              <span>
+                Planning estimate only. Australian mode uses {TAX_YEAR} resident tax brackets, a simple 2%
+                Medicare allowance, 12% super when selected, and current marginal HELP settings. It does not
+                model offsets, deductions, Medicare reductions or surcharge, family circumstances, other
+                repayment-income adjustments, or every payroll rule. Check the official{" "}
+                <a href="https://www.ato.gov.au/tax-rates-and-codes" target="_blank" rel="noreferrer">
+                  ATO rates
+                </a>{" "}
+                and{" "}
+                <a
+                  href="https://www.studyassist.gov.au/managing-and-repaying-your-loan/loan-repayments"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  StudyAssist guidance
+                </a>{" "}
+                for your situation.
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {sortedCategories.length > 0 ? (
+          <section
+            className={styles.breakdownSection}
+            id="spending-breakdown"
+            style={{ "--section-colour": COLOURS.blue }}
+          >
+            <div className={styles.sectionHeader}>
+              <span className={styles.sectionNumber}>03</span>
+              <div>
+                <p className={styles.sectionKicker}>See the trade-offs</p>
+                <h2 className={styles.sectionTitle}>Where does the money go?</h2>
+              </div>
+            </div>
+
+            <div className={styles.breakdownPanel}>
+              <div className={styles.breakdownLayout}>
+                <DonutChart data={donutData} />
+                <div className={styles.breakdownList}>
+                  {sortedCategories.slice(0, 8).map((category) => {
+                    const yearly = totals.byCategory[category.id] || 0;
+                    const percentage = totals.grandYearly > 0 ? (yearly / totals.grandYearly) * 100 : 0;
+                    const Icon = ICONS[category.icon] || Gem;
+                    return (
+                      <div
+                        className={styles.breakdownRow}
+                        key={category.id}
+                        style={{
+                          "--row-colour": category.color,
+                          "--row-width": `${Math.max(percentage, 1)}%`,
+                        }}
+                      >
+                        <span className={styles.breakdownIcon}>
+                          <Icon size={15} />
+                        </span>
+                        <div>
+                          <div className={styles.breakdownName}>
+                            <span>{category.label}</span>
+                            <span>
+                              {formatCurrency(yearToDisplay(yearly, displayFrequency))}/
+                              {frequencyShort(displayFrequency)}
+                            </span>
+                          </div>
+                          <div className={styles.barTrack}>
+                            <div className={styles.barFill} />
+                          </div>
+                        </div>
+                        <span className={styles.breakdownPct}>{percentage.toFixed(1)}%</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : null}
       </main>
 
-      {/* SHARE MODAL */}
-      {showShare&&<div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{background:'rgba(0,0,0,0.8)',backdropFilter:'blur(8px)'}} onClick={()=>setShowShare(false)}>
-        <div className="w-full max-w-md rounded-3xl p-6 relative max-h-[90vh] overflow-y-auto" onClick={e=>e.stopPropagation()} style={{background:'linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))',border:'1px solid rgba(255,255,255,0.14)',boxShadow:'0 18px 45px rgba(0,0,0,0.85)',backdropFilter:'blur(22px)'}}>
-          <button onClick={()=>setShowShare(false)} className="absolute top-4 right-4 p-2" style={{color:'#64748b',background:'transparent',border:'none',cursor:'pointer'}}><X size={18}/></button>
-          <div className="rounded-2xl p-6 mb-6" style={{background:'linear-gradient(135deg,#111827,#0f172a)',border:'1px solid rgba(255,255,255,0.08)'}}>
-            <div className="flex items-center gap-2 mb-4"><div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{background:`linear-gradient(135deg,${T.primaryBlue},${T.coachViolet})`}}><Calculator size={14} color="white"/></div>
-              <span style={{fontFamily:F.h,fontSize:11,fontWeight:700,letterSpacing:'0.08em',textTransform:'uppercase',color:'rgba(241,245,249,0.5)'}}>My Dream Life</span></div>
-            <div style={{fontFamily:F.h,fontWeight:900,fontSize:32,letterSpacing:'-0.02em',marginBottom:4,background:`linear-gradient(135deg,${T.mintAccent},${T.primaryBlue})`,WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>{fmtC(displayTotal)}/{fl(displayFreq)}</div>
-            <div style={{fontFamily:F.b,fontSize:12,color:'rgba(241,245,249,0.45)',marginBottom:16}}>Pre-tax: {fmtC(income.gross)}/yr{includeSuper?` · Pkg: ${fmtC(income.pkg)}`:''}</div>
-            <div className="space-y-2 mb-4">{sorted.slice(0,4).map(c=>{const cy=totals.byCat[c.id]||0;const pct=totals.grandYearly>0?cy/totals.grandYearly*100:0;return(
-              <div key={c.id}><div className="flex justify-between items-center mb-1"><span style={{fontFamily:F.b,fontSize:11,fontWeight:600,color:T.softSilver}}>{c.label}</span><span style={{fontFamily:F.m,fontSize:11,fontWeight:700,color:c.color}}>{fmtC(y2d(cy,displayFreq))}/{fl(displayFreq)}</span></div>
-                <div className="w-full h-1 rounded-full overflow-hidden" style={{background:'rgba(255,255,255,0.06)'}}><div className="h-full rounded-full" style={{width:`${pct}%`,background:c.color}}/></div></div>
-            )})}</div>
-            <div className="flex justify-between items-center pt-3" style={{borderTop:'1px solid rgba(255,255,255,0.06)'}}>
-              <span style={{fontFamily:F.b,fontSize:11,fontWeight:600,color:'rgba(241,245,249,0.35)'}}>Dream Life Calculator</span>
-              <span style={{fontFamily:F.h,fontSize:11,fontWeight:700,color:'rgba(241,245,249,0.5)'}}>@itsmitchbryant</span></div>
-          </div>
-          <p className="text-center mb-4" style={{fontFamily:F.b,fontSize:12,color:T.softSilver}}>Screenshot this card and share it with your mates!</p>
-          <button onClick={()=>setShowShare(false)} className="dlc-btn-action w-full py-3.5 rounded-full font-bold text-sm" style={{fontFamily:F.h,background:`linear-gradient(145deg,${T.mintAccent},${T.primaryBlue})`,color:'#020617',fontWeight:800,letterSpacing:'0.04em',textTransform:'uppercase',border:'none',cursor:'pointer',boxShadow:`0 4px 14px ${T.primaryBlue}55`}}>GOT IT</button>
-        </div>
-      </div>}
+      <footer className={styles.footer}>
+        <span>MB-01 // Dream Life Calculator // Planning estimate only</span>
+        <span>
+          Designed by <Link href="/">Mitch Bryant</Link>
+        </span>
+      </footer>
 
-      {/* HELP MODAL */}
-      {showHelp&&<div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{background:'rgba(0,0,0,0.8)',backdropFilter:'blur(8px)'}} onClick={()=>setShowHelp(false)}>
-        <div className="w-full max-w-lg rounded-3xl p-8 relative max-h-[90vh] overflow-y-auto" onClick={e=>e.stopPropagation()} style={{background:'linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))',border:'1px solid rgba(255,255,255,0.14)',boxShadow:'0 18px 45px rgba(0,0,0,0.85)',backdropFilter:'blur(22px)'}}>
-          <button onClick={()=>setShowHelp(false)} className="absolute top-4 right-4 p-2" style={{color:'#64748b',background:'transparent',border:'none',cursor:'pointer'}}><X size={18}/></button>
-          <div className="flex items-center gap-2 mb-6"><HelpCircle size={22} style={{color:T.primaryBlue}}/><span style={{fontFamily:F.h,fontWeight:700,fontSize:18}}>How This Works</span></div>
-          <div className="space-y-5" style={{fontFamily:F.b,fontSize:13,color:T.softSilver}}>
-            <div><div style={{fontFamily:F.h,fontWeight:700,color:T.primaryBlue,marginBottom:4,fontSize:13}}>Step 1: Fill In Your Dream Life</div><p>Go through each category. Hit 💡 for prompts. Use &quot;Add Big Purchase&quot; for items paid over time.</p></div>
-            <div><div style={{fontFamily:F.h,fontWeight:700,color:T.coachViolet,marginBottom:4,fontSize:13}}>Step 2: Choose Your View</div><p>Toggle weekly, monthly, or yearly. Watch the numbers animate in real-time.</p></div>
-            <div><div style={{fontFamily:F.h,fontWeight:700,color:T.mintAccent,marginBottom:4,fontSize:13}}>Step 3: See What You Need To Earn</div><p>Real ATO tax brackets. Toggle HECS and Super for the full picture.</p></div>
-            <div><div style={{fontFamily:F.h,fontWeight:700,color:T.accentBlue,marginBottom:4,fontSize:13}}>Step 4: Share It</div><p>Screenshot the share card. Compare dream lives with your mates!</p></div>
-            <div className="p-3 rounded-xl" style={{background:`${T.mintAccent}10`,border:`1px solid ${T.mintAccent}20`}}><p style={{color:T.mintAccent,fontWeight:600,fontSize:12}}>Your data saves automatically.</p></div>
+      {showShare ? (
+        <div className={styles.modalOverlay} onClick={() => setShowShare(false)} role="presentation">
+          <div
+            className={styles.modal}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="share-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button className={styles.modalClose} onClick={() => setShowShare(false)} type="button" aria-label="Close share panel">
+              <X size={18} />
+            </button>
+            <div className={styles.modalHeader}>
+              <p className={styles.sectionKicker}>Share centre</p>
+              <h2 id="share-title">Your life number</h2>
+            </div>
+            <div className={styles.shareCard}>
+              <div className={styles.shareCardTop}>
+                <span className={styles.microLabel}>My Dream Life</span>
+                <span className={styles.microLabel}>MB-01</span>
+              </div>
+              <span className={styles.shareCardValue}>
+                {formatCurrency(displayedLifeCost)}
+                <small>/{frequencyShort(displayFrequency)}</small>
+              </span>
+              <p className={styles.shareIncome}>
+                Estimated gross income target: {formatCurrency(income.gross)}/year
+                {includeSuper ? ` · ${formatCurrency(income.packageValue)} package` : ""}
+              </p>
+              <div className={styles.shareRows}>
+                {sortedCategories.slice(0, 4).map((category) => (
+                  <div
+                    className={styles.shareRow}
+                    key={category.id}
+                    style={{ "--share-colour": category.color }}
+                  >
+                    <span>{category.label}</span>
+                    <strong>
+                      {formatCurrency(
+                        yearToDisplay(totals.byCategory[category.id] || 0, displayFrequency),
+                      )}
+                      /{frequencyShort(displayFrequency)}
+                    </strong>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className={styles.modalActions}>
+              <button className={styles.primaryButton} onClick={shareSummary} type="button">
+                <Share2 size={16} /> {shareNotice || "Share summary"}
+              </button>
+              <button className={styles.secondaryButton} onClick={() => setShowShare(false)} type="button">
+                Done
+              </button>
+            </div>
+            <p className={styles.modalNote}>You can also screenshot the card. No private budget data is uploaded.</p>
           </div>
-          <button onClick={()=>setShowHelp(false)} className="dlc-btn-action w-full mt-8 py-3.5 rounded-full font-bold text-sm" style={{fontFamily:F.h,background:`linear-gradient(145deg,${T.mintAccent},${T.primaryBlue})`,color:'#020617',fontWeight:800,letterSpacing:'0.04em',textTransform:'uppercase',border:'none',cursor:'pointer',boxShadow:`0 4px 14px ${T.primaryBlue}55`}}>GOT IT!</button>
         </div>
-      </div>}
+      ) : null}
 
-      <style>{`
-        @keyframes dlcFadeIn{to{opacity:1;transform:translateY(0)}}
-        @keyframes dlcPulse{0%,100%{opacity:.2}50%{opacity:.3}}
-        @keyframes dlcSlideIn{from{opacity:0;transform:translateY(8px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-        .dlc-card-hover:hover{transform:translateY(-4px);border-color:rgba(98,255,218,0.35) !important;box-shadow:0 24px 50px rgba(0,0,0,0.9),0 0 0 1px rgba(0,0,0,0.5) inset,0 0 30px rgba(98,255,218,0.06) !important}
-        .dlc-stat-hover:hover{transform:translateY(-2px);border-color:rgba(98,255,218,0.2) !important;box-shadow:0 8px 20px rgba(0,0,0,0.4),0 0 15px rgba(98,255,218,0.05) !important}
-        .dlc-hero-card{transition:transform 300ms cubic-bezier(0.34,1.56,0.64,1),box-shadow 300ms ease}
-        .dlc-hero-card:hover{transform:translateY(-3px);box-shadow:0 24px 60px rgba(0,129,203,0.3),0 0 40px rgba(106,60,255,0.15) !important}
-        .dlc-btn-action{transition:transform 200ms ease,box-shadow 200ms ease,filter 200ms ease}
-        .dlc-btn-action:hover{transform:translateY(-2px);filter:brightness(1.05)}
-        .dlc-btn-action:active{transform:translateY(1px)}
-        input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-        input[type=number]{-moz-appearance:textfield;appearance:textfield}
-        input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:${T.primaryBlue};border:2px solid white;cursor:pointer;margin-top:-5px;transition:transform 200ms ease,box-shadow 200ms ease}
-        input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);box-shadow:0 0 12px rgba(0,129,203,0.6)}
-        input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px}
-        input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:${T.primaryBlue};border:2px solid white;cursor:pointer}
-        select{-webkit-appearance:none}
-        ::selection{background:${T.primaryBlue};color:white}
-      `}</style>
+      {showHelp ? (
+        <div className={styles.modalOverlay} onClick={() => setShowHelp(false)} role="presentation">
+          <div
+            className={styles.modal}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="help-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button className={styles.modalClose} onClick={() => setShowHelp(false)} type="button" aria-label="Close help panel">
+              <X size={18} />
+            </button>
+            <div className={styles.modalHeader}>
+              <p className={styles.sectionKicker}>Quick start</p>
+              <h2 id="help-title">How this works</h2>
+            </div>
+            <div className={styles.helpSteps}>
+              {[
+                {
+                  number: "1",
+                  color: COLOURS.purple,
+                  title: "Build the life",
+                  text: "Work through each category. Replace the starter amounts and remove what does not belong.",
+                },
+                {
+                  number: "2",
+                  color: COLOURS.mint,
+                  title: "Watch the number move",
+                  text: "Your weekly, monthly or yearly life number updates instantly and saves on this device.",
+                },
+                {
+                  number: "3",
+                  color: COLOURS.yellow,
+                  title: "Estimate the income",
+                  text: "Choose Australian settings or a simple rate, then test HELP debt and super.",
+                },
+                {
+                  number: "4",
+                  color: COLOURS.pink,
+                  title: "Question the trade-offs",
+                  text: "Use the breakdown to decide what matters, what can change and what income paths are realistic.",
+                },
+              ].map((step) => (
+                <div className={styles.helpStep} key={step.number} style={{ "--help-colour": step.color }}>
+                  <span>{step.number}</span>
+                  <div>
+                    <h3>{step.title}</h3>
+                    <p>{step.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className={styles.primaryButton} onClick={() => setShowHelp(false)} type="button" style={{ width: "100%", marginTop: "1rem" }}>
+              Start building
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

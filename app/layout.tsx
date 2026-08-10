@@ -4,8 +4,6 @@ import {
   Archivo_Black,
   IBM_Plex_Mono,
   Instrument_Sans,
-  Lato,
-  Montserrat,
 } from "next/font/google";
 import "./globals.css";
 
@@ -32,22 +30,6 @@ const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
   subsets: ["latin"],
   weight: ["500", "600"],
-  display: "swap",
-});
-
-// Temporary compatibility fonts for the existing Dream Life Calculator route.
-// Remove these when that tool receives its own Life Console visual migration.
-const lato = Lato({
-  variable: "--font-lato",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  display: "swap",
-});
-
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
-  subsets: ["latin"],
-  weight: ["400", "700", "900"],
   display: "swap",
 });
 
@@ -117,7 +99,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body
-        className={`${anybody.variable} ${archivoBlack.variable} ${instrumentSans.variable} ${ibmPlexMono.variable} ${lato.variable} ${montserrat.variable}`}
+        className={`${anybody.variable} ${archivoBlack.variable} ${instrumentSans.variable} ${ibmPlexMono.variable}`}
       >
         {children}
       </body>
