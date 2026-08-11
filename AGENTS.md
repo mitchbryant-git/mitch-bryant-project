@@ -23,11 +23,11 @@ Also read:
 - Canonical public origin: `https://allthatsnext.com`.
 - The GitHub repository and Vercel project keep their historical names unless Mitch explicitly authorises infrastructure migration.
 - MB-01 remains the locked console model for now. Do not rename it to ATN-01 without an explicit artwork and ecosystem decision.
-- The favicon and web logo use transparent backgrounds. Apple touch treatment uses brand cream. Never ship chroma green.
+- The browser favicon uses a brand cream background so the black ATN mark stays legible at tab size. Never ship chroma green.
 
 ## Product truth
 
-- Dream Life Calculator and HELP Loan Calculator are live.
+- Dream Life Calculator and HECS Debt Calculator are live.
 - Tuesday Type is paused after approved Phase 3 and is not deployed or payment-tested.
 - Big Game Playbook is an early concept.
 - The Clubhouse is a concept.

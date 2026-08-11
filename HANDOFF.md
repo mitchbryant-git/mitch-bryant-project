@@ -16,12 +16,14 @@ Complete and review the in-code rebrand from the Mitch Bryant personal-site iden
 ## Implemented locally
 
 - ATN header and footer lockups.
-- Transparent favicon and web logo derivatives.
+- Transparent web logo derivatives and a brand-cream browser favicon for legibility at tab size.
 - Brand-cream Apple touch icon.
 - All That’s Next metadata, canonical URL, Open Graph site name, structured data, manifest, sitemap and robots origin.
 - Why All That’s Next story using the approved meaning and purpose.
 - Separate Mitch Bryant founder trust layer.
 - All That’s Next attribution inside Dream Life Calculator.
+- HECS Debt Calculator module naming and `/hecs-debt-calculator` launch route.
+- Multi-Zone rewrites for the standalone HECS Debt Calculator app, its guides and its static assets.
 - Desktop and mobile responsive review.
 
 ## Deliberate boundaries
@@ -30,6 +32,7 @@ Complete and review the in-code rebrand from the Mitch Bryant personal-site iden
 - The repository and deployment project are not renamed.
 - `hello@mitchbryant.com` remains the contact link until an All That’s Next mailbox or forwarding address is confirmed.
 - Growth Lab is not added to the cartridge selector until approved cartridge artwork and product status exist.
+- The approved HECS Debt Calculator cartridge and loaded-console artwork is locked in the brand system and used on the homepage.
 
 ## Before deployment
 

@@ -17,12 +17,14 @@ The domain switch is complete. `mitchbryant.com` and `www.allthatsnext.com` redi
 
 - `/`: Life Console brand hub and module library.
 - `/dream-life-calculator`: live lifestyle costing utility. Its financial rules require a separate annual evidence audit.
+- `/hecs-debt-calculator`: live HECS and HELP debt calculator, mounted from its standalone repository through Next.js Multi-Zones.
+- `/hecs-debt-calculator/<guide-slug>`: calculator education and search guide pages.
 - `/baby-shower`: isolated personal event route. Do not fold it into the brand design system.
 - `/sitemap.xml` and `/robots.txt`: search crawler files.
 
 ## Product truth
 
-- HELP Loan Calculator: live at `helploancalculator.com`.
+- HECS Debt Calculator: live at `allthatsnext.com/hecs-debt-calculator`; the legacy `helploancalculator.com` domain permanently redirects to it.
 - Dream Life Calculator: live as the purple Life Console cartridge.
 - Tuesday Type: in development, not deployed or payment-tested.
 - Big Game Playbook: early concept.
@@ -68,7 +70,7 @@ The homepage should also be reviewed at compact mobile, large mobile, tablet and
 
 Files under `public/assets/console` are web derivatives. Never edit them into new authority or overwrite the master images in `mitch-brand-system`.
 
-The ATN website lockup is a transparent derivative under `public/assets/brand`. The favicon uses transparent corners. The Apple touch icon uses brand cream. No green chroma-key background is a production asset.
+The ATN website lockup is a transparent derivative under `public/assets/brand`. The small browser favicon uses a brand cream background so the black mark remains legible. The Apple touch icon also uses brand cream. No green chroma-key background is a production asset.
 
 ## Deployment
 
