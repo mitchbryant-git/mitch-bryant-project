@@ -4,7 +4,7 @@ Last updated: 2026-08-11
 
 ## Current objective
 
-Complete and review the in-code rebrand from the Mitch Bryant personal-site identity to the All That’s Next umbrella brand without moving the repository or changing Vercel infrastructure.
+Maintain the live All That’s Next umbrella site and continue product development from the verified HECS Debt Calculator migration checkpoint.
 
 ## Confirmed external state
 
@@ -13,7 +13,7 @@ Complete and review the in-code rebrand from the Mitch Bryant personal-site iden
 - `https://mitchbryant.com` redirects to the apex domain.
 - Repository remains `mitchbryant-git/mitch-bryant-project`.
 
-## Implemented locally
+## Implemented and deployed
 
 - ATN header and footer lockups.
 - Transparent web logo derivatives and a brand-cream browser favicon for legibility at tab size.
@@ -34,8 +34,9 @@ Complete and review the in-code rebrand from the Mitch Bryant personal-site iden
 - Growth Lab is not added to the cartridge selector until approved cartridge artwork and product status exist.
 - The approved HECS Debt Calculator cartridge and loaded-console artwork is locked in the brand system and used on the homepage.
 
-## Before deployment
+## Production checkpoint
 
-- Mitch reviews the local homepage.
-- Recheck `npm run lint` and `npm run build` after final edits.
-- Commit and push only when Mitch asks to publish.
+- HECS integration release commit: `a720b04`.
+- `npm run lint` and `npm run build` passed before release.
+- The homepage, mounted calculator, all calculator guides and assets, sitemap, shared-plan hydration and legacy-domain redirects were verified in production.
+- The live homepage loading sequence opens `/hecs-debt-calculator` in a new tab and reports no browser console errors in the checked flow.
