@@ -35,7 +35,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://allthatsnext.com"),
-  title: "All That’s Next | Tools for what comes next",
+  title: "All That’s Next | Tools for Life After School",
   description:
     "Practical tools that help young people understand themselves, price their choices and start shaping what comes next.",
   keywords: [
@@ -72,8 +72,8 @@ export const metadata: Metadata = {
     images: ["/assets/console/mb01-console-empty-three-quarter-v1.webp"],
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: "/favicon-atn-v1.ico",
+    shortcut: "/favicon-atn-v1.ico",
     apple: "/apple-touch-icon.png",
   },
   manifest: "/manifest.webmanifest",
