@@ -55,8 +55,8 @@ export default function Home() {
             <div className="hero__console-frame">
               <span className="console-frame__label">MB-01 // System ready</span>
               <Image
-                src="/assets/console/mb01-console-empty-three-quarter-v1.webp"
-                alt="Cream MB-01 Life Console ready for a module"
+                src="/assets/console/mb01-console-empty-front-v1.webp"
+                alt="Front view of the cream MB-01 Life Console ready for a module"
                 width={1280}
                 height={653}
                 priority
