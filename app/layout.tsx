@@ -72,8 +72,8 @@ export const metadata: Metadata = {
     images: ["/assets/console/mb01-console-empty-three-quarter-v1.webp"],
   },
   icons: {
-    icon: "/favicon-atn-v1.ico",
-    shortcut: "/favicon-atn-v1.ico",
+    icon: "/favicon-atn-cream-v1.png",
+    shortcut: "/favicon-atn-cream-v1.png",
     apple: "/apple-touch-icon.png",
   },
   manifest: "/manifest.webmanifest",
