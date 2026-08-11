@@ -59,6 +59,21 @@ export default function Home() {
             </h1>
           </div>
 
+          <div className="hero__body">
+            <p className="hero__lede">
+              You don&apos;t need to figure out your whole future. Pick the part you want to work on, load the
+              right module and make one useful next move.
+            </p>
+            <div className="hero__actions">
+              <a className="button button--primary" href="#modules">
+                Choose your next move <span aria-hidden="true">↓</span>
+              </a>
+              <a className="text-link text-link--light" href="#why">
+                Why All That&apos;s Next <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+
           <div className="hero__visual">
             <div className="hero__console-frame">
               <Image
@@ -73,23 +88,19 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="hero__body">
-            <p className="hero__lede">
-              You don&apos;t need your whole life figured out. Start with a practical tool that makes one
-              part of what comes next clearer.
-            </p>
-            <div className="hero__actions">
-              <a className="button button--primary" href="#modules">
-                Choose your next move <span aria-hidden="true">↓</span>
-              </a>
-              <a className="text-link text-link--light" href="#why">
-                Why All That&apos;s Next <span aria-hidden="true">→</span>
-              </a>
-            </div>
-            <div className="hero__system-note">
-              <ColourBars compact />
-              <span>Five modules. One purpose. All that&apos;s next.</span>
-            </div>
+          <div className="hero__path" aria-label="How the Life Console works">
+            <span>
+              <strong>01</strong>
+              Pick a focus
+            </span>
+            <span>
+              <strong>02</strong>
+              Load a module
+            </span>
+            <span>
+              <strong>03</strong>
+              Make a move
+            </span>
           </div>
         </section>
 
