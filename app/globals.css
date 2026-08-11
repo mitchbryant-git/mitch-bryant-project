@@ -560,7 +560,7 @@ img {
 }
 
 .module-option__image--contain {
-  background: var(--cream-mid);
+  background: linear-gradient(180deg, #e8d5c7 0%, #edddd1 55%, #eee0d5 100%);
   object-fit: contain;
 }
 
@@ -692,7 +692,7 @@ img {
 }
 
 .module-preview__image--contain {
-  background: var(--cream-mid);
+  background: linear-gradient(180deg, #e8d5c7 0%, #edddd1 55%, #eee0d5 100%);
   object-fit: contain;
 }
 
