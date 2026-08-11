@@ -2,17 +2,18 @@
 
 ## Purpose
 
-`mitchbryant.com` is the front door to Mitch Bryant's Life Console ecosystem. It needs to explain who Mitch is, make the Life-First Method clear and help a visitor choose a useful next move.
+`allthatsnext.com` is the front door to the All That’s Next Life Console ecosystem. It must explain the umbrella purpose, make the Life-First Method clear, preserve Mitch Bryant as the founder and help a visitor choose a useful next move.
 
 ## Homepage architecture
 
 1. Navigation and brand lockup.
 2. Empty MB-01 console hero with the locked question `School ends. Then what?`.
 3. Honest module library with loaded-console previews.
-4. Dream Life Calculator presented as a built-in utility until its cartridge role is decided.
+4. Dream Life Calculator presented as the live purple cartridge.
 5. Three-step Life-First Method explanation.
-6. Mitch's personal story and promise.
-7. Clear return to the module bay.
+6. Why All That’s Next brand story.
+7. Mitch Bryant founder story and promise.
+8. Clear return to the module bay.
 
 ## Interaction model
 
@@ -41,6 +42,7 @@ components/
 config/
   modules.js
 public/
+  assets/brand/
   assets/console/
 ```
 
@@ -49,14 +51,17 @@ public/
 1. Static Life Console foundation.
 2. Responsive review and visual polish.
 3. Accessible module insertion and launch ritual.
-4. Human photography, metadata and release hardening.
+4. All That’s Next identity, metadata and release hardening.
 5. Dream Life Calculator evidence audit and redesign.
 
 ## Non-negotiables
 
 - Preserve existing live routes.
+- Keep `https://allthatsnext.com` as the canonical public origin.
+- Keep All That’s Next as the umbrella brand and Mitch as the founder, not the site name.
 - Use honest product states.
 - Keep claims evidence-backed.
 - Do not edit the locked console masters.
 - Do not ship fake functionality for concept products.
 - Keep mobile intentional and accessible.
+- Keep the approved ATN logo transparent or on brand cream. Never ship chroma green.

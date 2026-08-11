@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import {
   Anybody,
   Archivo_Black,
@@ -34,26 +34,26 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.mitchbryant.com"),
-  title: "Mitch Bryant | Design the life first",
+  metadataBase: new URL("https://allthatsnext.com"),
+  title: "All That’s Next | Tools for what comes next",
   description:
-    "Sharp tools and straight answers to help young people design the life first, then work out the career and money needed to build it.",
+    "Practical tools that help young people understand themselves, price their choices and start shaping what comes next.",
   keywords: [
     "life design for teens",
     "career planning tools",
     "teen financial literacy",
     "future planning teens",
-    "Mitch Bryant",
+    "All That’s Next",
   ],
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "School ends. Then what? | Mitch Bryant",
+    title: "School ends. Then what? | All That’s Next",
     description:
-      "Figure out who you're becoming, what your life could look like, and how to fund it. Sharp tools, straight answers, no lectures.",
+      "You do not need your whole life figured out. Start with a practical tool that makes one part of what comes next clearer.",
     url: "/",
-    siteName: "Mitch Bryant",
+    siteName: "All That’s Next",
     locale: "en_AU",
     type: "website",
     images: [
@@ -61,20 +61,27 @@ export const metadata: Metadata = {
         url: "/assets/console/mb01-console-empty-three-quarter-v1.webp",
         width: 1280,
         height: 653,
-        alt: "The MB-01 Life Console",
+        alt: "The All That's Next MB-01 Life Console",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "School ends. Then what? | Mitch Bryant",
-    description: "Design the life first. Then work out the career and money needed to build it.",
+    title: "School ends. Then what? | All That’s Next",
+    description: "Practical tools to help you start shaping all that's next.",
     images: ["/assets/console/mb01-console-empty-three-quarter-v1.webp"],
   },
   icons: {
     icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
+  manifest: "/manifest.webmanifest",
+};
+
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#f8f1eb",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -86,13 +93,33 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Mitch Bryant",
-              description: "Building practical life-design and financial tools for young people",
-              url: "https://www.mitchbryant.com",
-              sameAs: [
-                "https://www.tiktok.com/@itsmitchbryant",
-                "https://www.instagram.com/itsmitchbryant",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://allthatsnext.com/#organization",
+                  name: "All That’s Next",
+                  description:
+                    "Practical tools that help young people approach the future with greater clarity, agency and optimism.",
+                  url: "https://allthatsnext.com",
+                  logo: "https://allthatsnext.com/icon-512.png",
+                  founder: {
+                    "@type": "Person",
+                    name: "Mitch Bryant",
+                  },
+                  sameAs: [
+                    "https://www.tiktok.com/@itsmitchbryant",
+                    "https://www.instagram.com/itsmitchbryant",
+                  ],
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://allthatsnext.com/#website",
+                  name: "All That’s Next",
+                  url: "https://allthatsnext.com",
+                  publisher: {
+                    "@id": "https://allthatsnext.com/#organization",
+                  },
+                },
               ],
             }),
           }}

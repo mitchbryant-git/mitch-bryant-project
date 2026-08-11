@@ -1,7 +1,7 @@
 import DreamLifeCalculatorClient from './DreamLifeCalculatorClient';
 
 export const metadata = {
-  title: 'Dream Life Calculator | Mitch Bryant',
+  title: "Dream Life Calculator | All That’s Next",
   description: 'Build the lifestyle you want, estimate what it could cost, and explore the income that might support it using current Australian planning settings.',
   keywords: [
     'dream life calculator',
@@ -10,13 +10,13 @@ export const metadata = {
     'income needed calculator',
     'Australian salary calculator',
     'life design tool',
-    'Mitch Bryant',
+    "All That’s Next",
   ],
   openGraph: {
-    title: 'Dream Life Calculator | Mitch Bryant',
+    title: "Dream Life Calculator | All That’s Next",
     description: 'Build the lifestyle you want, estimate what it could cost, and explore the income that might support it.',
-    url: 'https://www.mitchbryant.com/dream-life-calculator',
-    siteName: 'Mitch Bryant',
+    url: 'https://allthatsnext.com/dream-life-calculator',
+    siteName: "All That’s Next",
     locale: 'en_AU',
     type: 'website',
     images: [
@@ -30,12 +30,12 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Dream Life Calculator | Mitch Bryant',
+    title: "Dream Life Calculator | All That’s Next",
     description: 'Build the lifestyle you want, estimate what it could cost, and explore the income that might support it.',
     images: ['/assets/console/mb01-console-dream-life-loaded-v1.webp'],
   },
   alternates: {
-    canonical: 'https://www.mitchbryant.com/dream-life-calculator',
+    canonical: 'https://allthatsnext.com/dream-life-calculator',
   },
 };
 

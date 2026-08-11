@@ -1377,7 +1377,7 @@ export default function DreamLifeCalculatorClient() {
       <footer className={styles.footer}>
         <span>MB-01 // Dream Life Calculator // Planning estimate only</span>
         <span>
-          Designed by <Link href="/">Mitch Bryant</Link>
+          Built by <Link href="/">All That&apos;s Next</Link>
         </span>
       </footer>
 

@@ -7,7 +7,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: "https://www.mitchbryant.com/belly2-compressed.jpg",
+        url: "https://allthatsnext.com/belly2-compressed.jpg",
         width: 1200,
         height: 900,
         alt: "Baby Shower Invitation",

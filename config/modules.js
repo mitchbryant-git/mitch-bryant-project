@@ -36,8 +36,8 @@ export const modules = [
     accent: "blue",
     cartridgeImage: "/assets/cartridges/tuesday-type-cartridge-v1.webp",
     image: "/assets/console/mb01-console-tuesday-type-loaded-v1.webp",
-    description: "A life-design quiz that helps you decide who you're becoming, not diagnose who you are.",
-    detail: "Discovery module",
+    description: "Choose how you want to operate, picture the ordinary life those choices create, then test the direction.",
+    detail: "Personal operating module",
   },
   {
     id: "big-game",

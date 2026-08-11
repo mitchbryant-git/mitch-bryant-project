@@ -4,6 +4,6 @@ export default function robots() {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://www.mitchbryant.com/sitemap.xml',
+    sitemap: 'https://allthatsnext.com/sitemap.xml',
   }
 }

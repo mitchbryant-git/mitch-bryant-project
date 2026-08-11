@@ -1,10 +1,12 @@
 # Life Console implementation guide
 
-This file describes the production direction used by `mitchbryant.com`. Mitch OS remains the broader source of truth.
+This file describes the production direction used by `allthatsnext.com`. Mitch OS remains the broader source of truth.
 
 ## Brand promise
 
 Make the future feel exciting and buildable. The site should feel optimistic, useful and ownable without becoming gaming cosplay.
+
+All That’s Next is the umbrella identity. Mitch Bryant is the founder and human trust layer. The ATN mark uses ink plus the four ordered bars: blue, mint, pink and yellow. Website logo derivatives use transparency; platform icons may use brand cream.
 
 ## Core tokens
 
@@ -55,6 +57,7 @@ All caps is reserved for short equipment labels. It is not the default for sente
 - Direct product visitors bypass the ritual.
 - Essential copy and controls remain live HTML even when similar words appear inside artwork.
 - Motion and sound enhance a usable static interaction. They never carry the interaction alone.
+- Do not casually rename MB-01 to ATN-01. The existing console and cartridge masters are locked. Any hardware-model rename requires an explicit ecosystem-wide artwork decision.
 
 ## Responsive rules
 
@@ -82,3 +85,9 @@ Master images live outside this repository at:
 `C:\Users\mitch\Code\mitch-brand-system\assets\console\masters`
 
 This repository receives optimised derivatives under `public/assets/console`. Never overwrite the masters.
+
+The approved ATN logo-system master lives at:
+
+`C:\Users\mitch\Code\mitch-brand-system\assets\brand\masters\all-thats-next-logo-system-master-v1.png`
+
+Transparent website derivatives live under `public/assets/brand`.
