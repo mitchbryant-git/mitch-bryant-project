@@ -51,9 +51,16 @@ export default function Home() {
 
       <main id="main-content">
         <section className="hero" id="top">
+          <div className="hero__intro">
+            <p className="equipment-label">All That&apos;s Next // Life Console</p>
+            <h1>
+              School ends.
+              <span>Then what?</span>
+            </h1>
+          </div>
+
           <div className="hero__visual">
             <div className="hero__console-frame">
-              <span className="console-frame__label">MB-01 // System ready</span>
               <Image
                 src="/assets/console/mb01-console-empty-front-v1.webp"
                 alt="Front view of the cream MB-01 Life Console ready for a module"
@@ -63,19 +70,10 @@ export default function Home() {
                 sizes="(max-width: 820px) 94vw, 52vw"
                 className="hero__console-image"
               />
-              <span className="console-frame__status">
-                <span className="status-light" aria-hidden="true" />
-                Ready for your next move
-              </span>
             </div>
           </div>
 
-          <div className="hero__copy">
-            <p className="equipment-label">All That&apos;s Next // Life Console</p>
-            <h1>
-              School ends.
-              <span>Then what?</span>
-            </h1>
+          <div className="hero__body">
             <p className="hero__lede">
               You don&apos;t need your whole life figured out. Start with a practical tool that makes one
               part of what comes next clearer.
