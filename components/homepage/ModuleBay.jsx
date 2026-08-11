@@ -62,7 +62,7 @@ export function ModuleBay() {
                     width={1200}
                     height={900}
                     sizes="(max-width: 640px) 46vw, (max-width: 900px) 22vw, 220px"
-                    className="module-option__image"
+                    className={`module-option__image${module.cartridgeFit === "contain" ? " module-option__image--contain" : ""}`}
                   />
                 </span>
 
@@ -102,7 +102,11 @@ export function ModuleBay() {
               height={loadState === "ready" ? 653 : 960}
               sizes="(max-width: 900px) 94vw, 58vw"
               priority
-              className={`module-preview__image module-preview__image--${loadState}`}
+              className={`module-preview__image module-preview__image--${loadState}${
+                loadState !== "ready" && selected.cartridgeFit === "contain"
+                  ? " module-preview__image--contain"
+                  : ""
+              }`}
             />
             {loadState === "loading" ? (
               <span className="module-preview__loading">Inserting module…</span>

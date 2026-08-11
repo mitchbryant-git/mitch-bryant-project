@@ -21,6 +21,7 @@ export const modules = [
     statusTone: "live",
     accent: "mint",
     cartridgeImage: "/assets/cartridges/hecs-debt-calculator-cartridge-v1.jpg",
+    cartridgeFit: "contain",
     image: "/assets/console/mb01-console-hecs-debt-calculator-loaded-v1.jpg",
     description: "See how debt, income, indexation and life events could change your payoff path.",
     action: "Launch calculator",

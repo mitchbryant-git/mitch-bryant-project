@@ -559,6 +559,11 @@ img {
   object-fit: cover;
 }
 
+.module-option__image--contain {
+  background: var(--cream-mid);
+  object-fit: contain;
+}
+
 .module-option__meta {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -684,6 +689,11 @@ img {
 .module-preview__image--loading {
   aspect-ratio: 4 / 3;
   object-fit: cover;
+}
+
+.module-preview__image--contain {
+  background: var(--cream-mid);
+  object-fit: contain;
 }
 
 .module-preview__image--loading {
