@@ -127,7 +127,7 @@ export function ModuleBay() {
                 {loadState === "loading" ? "Loading…" : "Load module"}
               </button>
             ) : (
-              <span className="module-preview__unavailable">Not available yet</span>
+              <span className="module-preview__unavailable">{selected.status}</span>
             )}
           </div>
         </div>

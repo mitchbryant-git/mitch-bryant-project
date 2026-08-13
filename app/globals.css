@@ -1314,7 +1314,9 @@ img {
   }
 
   .module-option__copy small {
-    display: none;
+    display: block;
+    font-size: 0.68rem;
+    line-height: 1.3;
   }
 
   .module-status {
