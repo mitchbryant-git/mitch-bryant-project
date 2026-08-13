@@ -74,33 +74,35 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="hero__visual">
-            <div className="hero__console-frame">
-              <Image
-                src="/assets/console/mb01-console-empty-front-v1.webp"
-                alt="Front view of the cream MB-01 Life Console ready for a module"
-                width={1280}
-                height={653}
-                priority
-                sizes="(max-width: 820px) 94vw, 52vw"
-                className="hero__console-image"
-              />
+          <div className="hero__showcase">
+            <div className="hero__path" aria-label="How the Life Console works">
+              <span>
+                <strong>01</strong>
+                Pick a focus
+              </span>
+              <span>
+                <strong>02</strong>
+                Load a module
+              </span>
+              <span>
+                <strong>03</strong>
+                Make a move
+              </span>
             </div>
-          </div>
 
-          <div className="hero__path" aria-label="How the Life Console works">
-            <span>
-              <strong>01</strong>
-              Pick a focus
-            </span>
-            <span>
-              <strong>02</strong>
-              Load a module
-            </span>
-            <span>
-              <strong>03</strong>
-              Make a move
-            </span>
+            <div className="hero__visual">
+              <div className="hero__console-frame">
+                <Image
+                  src="/assets/console/mb01-console-empty-front-v1.webp"
+                  alt="Front view of the cream MB-01 Life Console ready for a module"
+                  width={1280}
+                  height={653}
+                  priority
+                  sizes="(max-width: 820px) 94vw, 48vw"
+                  className="hero__console-image"
+                />
+              </div>
+            </div>
           </div>
         </section>
 

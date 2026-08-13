@@ -30,14 +30,7 @@ export function ModuleBay() {
 
   return (
     <section className="module-section" id="modules">
-      <div className="section-intro">
-        <p className="equipment-label equipment-label--dark">Module library</p>
-        <h2>Pick a cartridge. Make a move.</h2>
-        <p>
-          Each module tackles one part of the future. Some are ready now. The others stay honestly labelled
-          until they are worth using.
-        </p>
-      </div>
+      <h2 className="visually-hidden">Life Console modules</h2>
 
       <div className="module-bay">
         <div className="module-selector" role="tablist" aria-label="Life Console modules">

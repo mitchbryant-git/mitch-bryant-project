@@ -95,6 +95,18 @@ img {
   transform: translateY(0);
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .life-console-site {
   min-height: 100vh;
   overflow: clip;
@@ -207,11 +219,10 @@ img {
   position: relative;
   display: grid;
   grid-template-areas:
-    "intro visual"
-    "body visual"
-    "path visual";
-  grid-template-columns: minmax(0, 0.78fr) minmax(620px, 1.22fr);
-  grid-template-rows: auto auto auto;
+    "intro showcase"
+    "body showcase";
+  grid-template-columns: minmax(0, 0.9fr) minmax(560px, 1.1fr);
+  grid-template-rows: auto auto;
   align-content: center;
   column-gap: clamp(1rem, 2vw, 2.5rem);
   min-height: min(830px, calc(100svh - 78px));
@@ -264,11 +275,10 @@ img {
 
 .hero__path {
   display: grid;
-  grid-area: path;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-self: start;
-  max-width: 620px;
-  margin-top: clamp(2rem, 4vw, 3.5rem);
+  width: 100%;
+  max-width: none;
+  margin: 0;
   border-top: 1px solid rgba(248, 241, 235, 0.28);
 }
 
@@ -330,7 +340,7 @@ img {
 }
 
 .hero__lede {
-  max-width: 440px;
+  max-width: 580px;
   margin: clamp(1.8rem, 4vw, 3rem) 0 0;
   color: rgba(248, 241, 235, 0.8);
   font-size: clamp(1.05rem, 1.5vw, 1.3rem);
@@ -394,22 +404,62 @@ img {
   color: var(--cream-light);
 }
 
-.hero__visual {
+.hero__showcase {
   position: relative;
   z-index: 1;
+  display: grid;
+  grid-area: showcase;
+  align-content: center;
+  justify-self: end;
+  gap: clamp(1.5rem, 2.4vw, 2.4rem);
+  width: min(48vw, 980px);
+}
+
+.hero__visual {
+  position: relative;
   display: flex;
-  grid-area: visual;
   align-items: center;
   justify-content: flex-end;
-  margin-right: calc(var(--page-pad) * -0.5);
-  margin-left: clamp(-3.5rem, -3vw, -1.5rem);
-  transform: translateY(-1.5rem);
 }
 
 .hero__console-frame {
   position: relative;
   flex: 0 0 auto;
-  width: min(62vw, 1320px);
+  width: 100%;
+}
+
+@media (min-width: 901px) {
+  .hero__path > span {
+    gap: 0.5rem;
+    min-height: 78px;
+    padding: 1.05rem 1.25rem 0.9rem 0;
+    font-size: clamp(0.72rem, 0.68vw, 0.86rem);
+    letter-spacing: 0.07em;
+  }
+
+  .hero__path > span:not(:last-child)::after {
+    top: 1.35rem;
+    right: 1.25rem;
+    font-size: 1rem;
+  }
+
+  .hero__path strong {
+    font-size: 0.67rem;
+  }
+
+  .hero__actions {
+    gap: 2rem;
+  }
+
+  .hero__actions .button {
+    min-height: 60px;
+    padding: 1rem 1.65rem;
+    font-size: 0.9rem;
+  }
+
+  .hero__actions .text-link {
+    font-size: 1.02rem;
+  }
 }
 
 .hero__console-image {
@@ -428,6 +478,7 @@ img {
 
 .module-section {
   background: var(--cream);
+  padding-top: clamp(2.5rem, 5vw, 5rem);
 }
 
 .section-intro {
@@ -1006,8 +1057,12 @@ img {
     grid-template-columns: minmax(0, 0.88fr) minmax(520px, 1.12fr);
   }
 
+  .hero__showcase {
+    width: min(52vw, 620px);
+  }
+
   .hero__console-frame {
-    width: min(58vw, 700px);
+    width: 100%;
   }
 
   .hero h1 {
@@ -1051,15 +1106,26 @@ img {
   }
 
   .hero__visual {
+    grid-area: visual;
     justify-content: center;
     margin-right: 0;
     margin-left: 0;
     transform: none;
   }
 
+  .hero__showcase {
+    display: contents;
+  }
+
   .hero__intro,
   .hero__path {
     max-width: 760px;
+  }
+
+  .hero__path {
+    grid-area: path;
+    width: 100%;
+    justify-self: stretch;
   }
 
   .hero__body,
@@ -1316,13 +1382,12 @@ img {
 
 @media (min-width: 1600px) {
   .hero {
-    grid-template-columns: minmax(620px, 0.72fr) minmax(0, 1.28fr);
+    grid-template-columns: minmax(680px, 0.92fr) minmax(0, 1.08fr);
   }
 
   .hero__intro,
-  .hero__body,
-  .hero__path {
-    max-width: 720px;
+  .hero__body {
+    max-width: 780px;
   }
 
   .hero h1 {
@@ -1330,11 +1395,11 @@ img {
   }
 
   .hero__lede {
-    max-width: 580px;
+    max-width: 660px;
   }
 
-  .hero__console-frame {
-    width: min(66vw, 1400px);
+  .hero__showcase {
+    width: min(48vw, 1040px);
   }
 }
 
