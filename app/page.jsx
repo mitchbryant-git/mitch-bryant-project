@@ -61,8 +61,8 @@ export default function Home() {
 
           <div className="hero__body">
             <p className="hero__lede">
-              You don&apos;t need to figure out your whole future. Pick the part you want to work on, load the
-              right module and make one useful next move.
+              Your future isn&apos;t something you wait around to discover. Pick the part you want to shape,
+              load the right module and make one move that changes what happens next.
             </p>
             <div className="hero__actions">
               <a className="button button--primary" href="#modules">
