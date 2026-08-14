@@ -61,8 +61,8 @@ export default function Home() {
 
           <div className="hero__body">
             <p className="hero__lede">
-              Your future isn&apos;t something you wait around to discover. Pick the part you want to shape,
-              load the right module and make one move that changes what happens next.
+              Everyone asks what you want to be. Nobody asks how you want to live. Start there. Design your
+              life after school—and all that&apos;s next.
             </p>
             <div className="hero__actions">
               <a className="button button--primary" href="#modules">
