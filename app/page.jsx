@@ -61,8 +61,8 @@ export default function Home() {
 
           <div className="hero__body">
             <p className="hero__lede">
-              Everyone asks what you want to be. Nobody asks how you want to live. Start there. Design your
-              life after school—and all that&apos;s next.
+              Everyone asks what you want to be. Nobody asks how you want to live. Start there. We&apos;ll give
+              you the tools to shape all that&apos;s next.
             </p>
             <div className="hero__actions">
               <a className="button button--primary" href="#modules">
