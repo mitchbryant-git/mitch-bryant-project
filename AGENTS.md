@@ -31,7 +31,7 @@ Also read:
 - Tuesday Type is paused after approved Phase 3 and is not deployed or payment-tested.
 - Big Game Playbook is an early concept.
 - The Clubhouse is a concept.
-- Growth Lab belongs to the broader future vision but is not currently a selectable cartridge on this homepage.
+- Growth Lab has a functional V1 prototype and is a selectable orange cartridge labelled `In development`. It does not receive a launch action until Mitch approves a production release.
 
 Do not create launch actions for products that are not live.
 

@@ -44,6 +44,20 @@ export const modules = [
     detail: "Work out how you want to live and work.",
   },
   {
+    id: "growth-lab",
+    shortCode: "MB-01 GROWTH",
+    name: "Growth Lab",
+    status: "In development",
+    statusTone: "development",
+    accent: "orange",
+    cartridgeImage: "/assets/cartridges/growth-lab-cartridge-v1.jpg",
+    image: "/assets/console/mb01-console-growth-lab-loaded-v1.jpg",
+    imageHeight: 960,
+    description:
+      "Choose the Moves that matter today, turn completed action into real Evidence, and build Momentum without streak guilt or public comparison.",
+    detail: "Turn daily action into proof of who you’re becoming.",
+  },
+  {
     id: "big-game",
     shortCode: "MB-01 GAME",
     name: "Big Game Playbook",

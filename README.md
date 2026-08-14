@@ -27,6 +27,7 @@ The domain switch is complete. `mitchbryant.com` and `www.allthatsnext.com` redi
 - HECS Debt Calculator: live at `allthatsnext.com/hecs-debt-calculator`; the legacy `helploancalculator.com` domain permanently redirects to it.
 - Dream Life Calculator: live as the purple Life Console cartridge.
 - Tuesday Type: in development, not deployed or payment-tested.
+- Growth Lab: functional V1 prototype, shown as an orange cartridge labelled `In development`; not production-launched.
 - Big Game Playbook: early concept.
 - The Clubhouse: concept.
 

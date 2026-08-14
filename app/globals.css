@@ -17,6 +17,8 @@
   --pink-soft: #ffd0dc;
   --purple: #7a3cff;
   --purple-soft: #e5d8ff;
+  --orange: #fa7021;
+  --orange-soft: #ffd8c2;
   --white: #fffaf5;
   --border: 2px solid var(--ink);
   --shadow-small: 4px 4px 0 var(--ink);
@@ -585,10 +587,11 @@ img {
 .module-option--purple {
   --module-colour: var(--purple);
   --module-soft: var(--purple-soft);
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(120px, 0.85fr);
-  align-items: center;
-  grid-column: 1 / -1;
+}
+
+.module-option--orange {
+  --module-colour: var(--orange);
+  --module-soft: var(--orange-soft);
 }
 
 .module-option:hover,
@@ -712,6 +715,10 @@ img {
 
 .module-preview--purple {
   --module-colour: var(--purple);
+}
+
+.module-preview--orange {
+  --module-colour: var(--orange);
 }
 
 .module-preview__topline {
@@ -1171,14 +1178,9 @@ img {
   }
 
   .module-selector {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     border-right: 0;
     border-bottom: 3px solid var(--ink);
-  }
-
-  .module-option--purple {
-    display: flex;
-    grid-column: auto;
   }
 
   .module-option {
@@ -1293,12 +1295,6 @@ img {
   .module-selector {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     padding: 0.7rem;
-  }
-
-  .module-option--purple {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(120px, 0.85fr);
-    grid-column: 1 / -1;
   }
 
   .module-option {

@@ -92,7 +92,7 @@ export function ModuleBay() {
               src={previewImage}
               alt={previewAlt}
               width={1280}
-              height={loadState === "ready" ? 653 : 960}
+              height={loadState === "ready" ? selected.imageHeight ?? 653 : 960}
               sizes="(max-width: 900px) 94vw, 58vw"
               priority
               className={`module-preview__image module-preview__image--${loadState}${
