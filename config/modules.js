@@ -34,13 +34,15 @@ export const modules = [
     id: "tuesday-type",
     shortCode: "MB-01 TYPE",
     name: "Tuesday Type",
-    status: "In development",
-    statusTone: "development",
+    status: "Private beta",
+    statusTone: "live",
     accent: "blue",
     cartridgeImage: "/assets/cartridges/tuesday-type-cartridge-v1.webp",
     image: "/assets/console/mb01-console-tuesday-type-loaded-v1.webp",
     description:
       "Work out how you want to live and work, picture what a normal Tuesday could look like, and test whether it actually fits.",
+    action: "Open Tuesday Type",
+    href: "/tuesday-type",
     detail: "Work out how you want to live and work.",
   },
   {
