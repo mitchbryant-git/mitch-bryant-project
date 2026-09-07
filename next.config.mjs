@@ -10,6 +10,12 @@ const growthLabOrigin =
     ? 'http://127.0.0.1:3400'
     : 'https://all-thats-next-growth-lab.vercel.app');
 
+const tuesdayTypeOrigin =
+  process.env.TUESDAY_TYPE_ORIGIN ||
+  (process.env.NODE_ENV === 'development'
+    ? 'http://127.0.0.1:3002'
+    : 'https://tuesday-type-platform.vercel.app');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
@@ -29,6 +35,14 @@ const nextConfig = {
       {
         source: '/growth-lab/:path*',
         destination: `${growthLabOrigin}/growth-lab/:path*`,
+      },
+      {
+        source: '/tuesday-type',
+        destination: `${tuesdayTypeOrigin}/tuesday-type`,
+      },
+      {
+        source: '/tuesday-type/:path*',
+        destination: `${tuesdayTypeOrigin}/tuesday-type/:path*`,
       },
       {
         source: '/hecs-debt-calculator-static/:path*',
