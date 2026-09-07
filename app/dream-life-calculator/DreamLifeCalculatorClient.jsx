@@ -857,12 +857,12 @@ export default function DreamLifeCalculatorClient() {
   };
 
   const shareSummary = async () => {
-    const summary = `My dream life estimate: ${formatCurrency(displayedLifeCost)}/${frequencyShort(
+    const summary = `My number estimate: ${formatCurrency(displayedLifeCost)}/${frequencyShort(
       displayFrequency,
     )}. Estimated gross income target: ${formatCurrency(income.gross)}/year.`;
     try {
       if (navigator.share) {
-        await navigator.share({ title: "My Dream Life", text: summary });
+        await navigator.share({ title: "My Number", text: summary });
         setShareNotice("Shared");
       } else {
         await navigator.clipboard.writeText(summary);
@@ -884,7 +884,7 @@ export default function DreamLifeCalculatorClient() {
         <Link className={styles.brand} href="/">
           <span className={styles.brandMark}>MB.</span>
           <span className={styles.brandCopy}>
-            <strong>Dream Life Calculator</strong>
+            <strong>Your Number</strong>
             <small>MB-01 // Lifestyle module</small>
           </span>
         </Link>
@@ -905,10 +905,10 @@ export default function DreamLifeCalculatorClient() {
       <main className={styles.main}>
         <section className={styles.hero}>
           <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>Dream Life module ready</p>
+            <p className={styles.eyebrow}>Your Number module ready</p>
             <h1>
               Design your life.
-              <span>Know the cost.</span>
+              <span>Know your number.</span>
             </h1>
             <p className={styles.heroLead}>
               Most people pick a career first and hope the lifestyle works out. Flip it. Build the life you
@@ -916,7 +916,7 @@ export default function DreamLifeCalculatorClient() {
             </p>
             <div className={styles.heroActions}>
               <a className={styles.primaryButton} href="#dream-planner">
-                Build my life number <TrendingUp size={16} />
+                Know my number <TrendingUp size={16} />
               </a>
               <button className={styles.secondaryButton} onClick={() => setShowHelp(true)} type="button">
                 How it works
@@ -932,15 +932,15 @@ export default function DreamLifeCalculatorClient() {
           <div className={styles.heroVisual}>
             <div className={styles.consoleFrame}>
               <div className={styles.consoleFrameTop}>
-                <span>MB-01 // Dream Life</span>
+                <span>MB-01 // Your Number</span>
                 <span>Module loaded</span>
               </div>
               <Image
                 className={styles.consoleImage}
-                src="/assets/console/mb01-console-dream-life-loaded-v1.webp"
-                alt="Dream Life Calculator cartridge loaded into the MB-01 Life Console"
+                src="/assets/console/mb01-console-your-number-loaded-v1.jpg"
+                alt="Your Number cartridge loaded into the MB-01 Life Console"
                 width={1280}
-                height={653}
+                height={960}
                 priority
                 sizes="(max-width: 900px) 94vw, 56vw"
               />
@@ -1167,7 +1167,7 @@ export default function DreamLifeCalculatorClient() {
 
             <aside className={styles.resultsRail} aria-live="polite">
               <section className={`${styles.resultCard} ${styles.lifeNumberCard}`}>
-                <p className={styles.microLabel}>Your life number</p>
+                <p className={styles.microLabel}>Your number</p>
                 <AnimatedCurrency
                   value={displayedLifeCost}
                   className={styles.bigNumber}
@@ -1375,7 +1375,7 @@ export default function DreamLifeCalculatorClient() {
       </main>
 
       <footer className={styles.footer}>
-        <span>MB-01 // Dream Life Calculator // Planning estimate only</span>
+        <span>MB-01 // Your Number // Planning estimate only</span>
         <span>
           Built by <Link href="/">All That&apos;s Next</Link>
         </span>
@@ -1395,11 +1395,11 @@ export default function DreamLifeCalculatorClient() {
             </button>
             <div className={styles.modalHeader}>
               <p className={styles.sectionKicker}>Share centre</p>
-              <h2 id="share-title">Your life number</h2>
+              <h2 id="share-title">Your number</h2>
             </div>
             <div className={styles.shareCard}>
               <div className={styles.shareCardTop}>
-                <span className={styles.microLabel}>My Dream Life</span>
+                <span className={styles.microLabel}>My Number</span>
                 <span className={styles.microLabel}>MB-01</span>
               </div>
               <span className={styles.shareCardValue}>
@@ -1469,7 +1469,7 @@ export default function DreamLifeCalculatorClient() {
                   number: "2",
                   color: COLOURS.mint,
                   title: "Watch the number move",
-                  text: "Your weekly, monthly or yearly life number updates instantly and saves on this device.",
+                  text: "Your weekly, monthly or yearly number updates instantly and saves on this device.",
                 },
                 {
                   number: "3",

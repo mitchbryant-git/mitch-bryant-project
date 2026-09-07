@@ -9,7 +9,7 @@
 1. Navigation and brand lockup.
 2. Empty MB-01 console hero with the locked question `School ends. Then what?`.
 3. Honest module library with loaded-console previews.
-4. Dream Life Calculator presented as the live purple cartridge.
+4. Your Number presented as the live electric-purple cartridge.
 5. Three-step Life-First Method explanation.
 6. Why All That’s Next brand story.
 7. Mitch Bryant founder story and promise.
@@ -24,7 +24,7 @@ Later work can add insertion, slot illumination, boot animation and sound after 
 ## Current route boundaries
 
 - The homepage receives the full Life Console front-door language.
-- The Dream Life Calculator remains operational while its data and visual migration are handled separately.
+- Your Number remains operational at the legacy `/dream-life-calculator` route while its product naming and artwork are kept current.
 - The baby-shower page remains isolated from the brand system.
 
 ## Source structure
@@ -52,7 +52,7 @@ public/
 2. Responsive review and visual polish.
 3. Accessible module insertion and launch ritual.
 4. All That’s Next identity, metadata and release hardening.
-5. Dream Life Calculator evidence audit and redesign.
+5. Your Number evidence audit and future redesign.
 
 ## Non-negotiables
 

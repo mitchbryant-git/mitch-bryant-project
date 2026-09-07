@@ -1,9 +1,10 @@
 import DreamLifeCalculatorClient from './DreamLifeCalculatorClient';
 
 export const metadata = {
-  title: "Dream Life Calculator | All That’s Next",
-  description: 'Build the lifestyle you want, estimate what it could cost, and explore the income that might support it using current Australian planning settings.',
+  title: "Your Number | All That’s Next",
+  description: 'Design the lifestyle you want, work out what it could cost, and explore the income that might support it using current Australian planning settings.',
   keywords: [
+    'your number calculator',
     'dream life calculator',
     'lifestyle cost calculator',
     'what salary do I need',
@@ -13,26 +14,26 @@ export const metadata = {
     "All That’s Next",
   ],
   openGraph: {
-    title: "Dream Life Calculator | All That’s Next",
-    description: 'Build the lifestyle you want, estimate what it could cost, and explore the income that might support it.',
+    title: "Your Number | All That’s Next",
+    description: 'Design the lifestyle you want, work out what it could cost, and explore the income that might support it.',
     url: 'https://allthatsnext.com/dream-life-calculator',
     siteName: "All That’s Next",
     locale: 'en_AU',
     type: 'website',
     images: [
       {
-        url: '/assets/console/mb01-console-dream-life-loaded-v1.webp',
+        url: '/assets/console/mb01-console-your-number-loaded-v1.jpg',
         width: 1280,
-        height: 653,
-        alt: 'The MB-01 Life Console with the Dream Life Calculator module loaded',
+        height: 960,
+        alt: 'The MB-01 Life Console with the Your Number module loaded',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Dream Life Calculator | All That’s Next",
-    description: 'Build the lifestyle you want, estimate what it could cost, and explore the income that might support it.',
-    images: ['/assets/console/mb01-console-dream-life-loaded-v1.webp'],
+    title: "Your Number | All That’s Next",
+    description: 'Design the lifestyle you want, work out what it could cost, and explore the income that might support it.',
+    images: ['/assets/console/mb01-console-your-number-loaded-v1.jpg'],
   },
   alternates: {
     canonical: 'https://allthatsnext.com/dream-life-calculator',

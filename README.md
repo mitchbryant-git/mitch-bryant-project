@@ -11,12 +11,12 @@ The ecosystem front door for All That’s Next: practical tools that help young 
 - Canonical console masters: `C:\Users\mitch\Code\mitch-brand-system\assets\console\masters`
 - Canonical ATN logo master: `C:\Users\mitch\Code\mitch-brand-system\assets\brand\masters\all-thats-next-logo-system-master-v1.png`
 
-The domain switch is complete. `mitchbryant.com` and `www.allthatsnext.com` redirect to the canonical apex domain. The repository and Vercel project remain unchanged. The current branch contains the All That’s Next in-code rebrand while preserving the Life Console, Dream Life Calculator and isolated baby-shower route.
+The domain switch is complete. `mitchbryant.com` and `www.allthatsnext.com` redirect to the canonical apex domain. The repository and Vercel project remain unchanged. The current branch contains the All That’s Next in-code rebrand while preserving the Life Console, Your Number and isolated baby-shower route.
 
 ## Routes
 
 - `/`: Life Console brand hub and module library.
-- `/dream-life-calculator`: live lifestyle costing utility. Its financial rules require a separate annual evidence audit.
+- `/dream-life-calculator`: live Your Number lifestyle costing utility. The route is retained as a compatibility URL while the product name is now Your Number. Its financial rules require a separate annual evidence audit.
 - `/hecs-debt-calculator`: live HECS and HELP debt calculator, mounted from its standalone repository through Next.js Multi-Zones.
 - `/hecs-debt-calculator/<guide-slug>`: calculator education and search guide pages.
 - `/baby-shower`: isolated personal event route. Do not fold it into the brand design system.
@@ -25,7 +25,7 @@ The domain switch is complete. `mitchbryant.com` and `www.allthatsnext.com` redi
 ## Product truth
 
 - HECS Debt Calculator: live at `allthatsnext.com/hecs-debt-calculator`; the legacy `helploancalculator.com` domain permanently redirects to it.
-- Dream Life Calculator: live as the purple Life Console cartridge.
+- Your Number: live as the electric-purple Life Console cartridge.
 - Tuesday Type: in development, not deployed or payment-tested.
 - Growth Lab: functional V1 prototype, shown as an orange cartridge labelled `In development`; not production-launched.
 - Big Game Playbook: early concept.
@@ -45,7 +45,7 @@ Never perform a fake loading ritual for a product that cannot launch.
 - Instrument Sans for body copy and interface text.
 - IBM Plex Mono for equipment labels and system readouts.
 
-Gold, gradients, glassmorphism and generic neon creator styling are excluded. Purple is reserved for the Dream Life Calculator module rather than the umbrella brand.
+Gold, gradients, glassmorphism and generic neon creator styling are excluded. Purple is reserved for the Your Number module rather than the umbrella brand.
 
 See [DESIGN-GUIDE.md](./DESIGN-GUIDE.md) for implementation rules.
 

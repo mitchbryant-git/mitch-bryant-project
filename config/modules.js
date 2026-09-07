@@ -2,17 +2,18 @@ export const modules = [
   {
     id: "dream-life",
     shortCode: "MB-01 LIFE",
-    name: "Dream Life Calculator",
+    name: "Your Number",
     status: "Live now",
     statusTone: "live",
     accent: "purple",
-    cartridgeImage: "/assets/cartridges/dream-life-calculator-cartridge-v1.webp",
-    image: "/assets/console/mb01-console-dream-life-loaded-v1.webp",
+    cartridgeImage: "/assets/cartridges/your-number-cartridge-v1.jpg",
+    image: "/assets/console/mb01-console-your-number-loaded-v1.jpg",
+    imageHeight: 960,
     description:
-      "Build the life you actually want, see what it could cost each year, and work out the income that might make it possible.",
+      "Design the life you want, price it honestly, and see the number that could make it possible.",
     action: "Launch calculator",
     href: "/dream-life-calculator",
-    detail: "Build your dream life. Know the cost.",
+    detail: "Design your life. Know your number.",
   },
   {
     id: "help",
