@@ -2,6 +2,38 @@ import { modules } from "@/config/modules";
 import Image from "next/image";
 import { ModuleBay } from "@/components/homepage/ModuleBay";
 
+const homepageTitle = "All That’s Next | Life Design Tools for Ages 16–19";
+const homepageDescription =
+  "School ends. Your future is more than a job title. Explore who you want to become, what your ideal life could cost and how to start building it.";
+const homepageShareImage = "/assets/console/mb01-console-empty-three-quarter-v1.webp";
+
+export const metadata = {
+  title: homepageTitle,
+  description: homepageDescription,
+  openGraph: {
+    title: homepageTitle,
+    description: homepageDescription,
+    url: "/",
+    siteName: "All That's Next",
+    locale: "en_AU",
+    type: "website",
+    images: [
+      {
+        url: homepageShareImage,
+        width: 1280,
+        height: 653,
+        alt: "The All That's Next MB-01 Life Console",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: homepageTitle,
+    description: homepageDescription,
+    images: [homepageShareImage],
+  },
+};
+
 const colourBars = ["blue", "mint", "pink", "yellow"];
 
 function ColourBars({ compact = false }) {
