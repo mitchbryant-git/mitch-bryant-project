@@ -24,7 +24,7 @@ Later work can add insertion, slot illumination, boot animation and sound after 
 ## Current route boundaries
 
 - The homepage receives the full Life Console front-door language.
-- Your Number remains operational at the legacy `/dream-life-calculator` route while its product naming and artwork are kept current.
+- Your Number uses `/your-number`; the legacy `/dream-life-calculator` route permanently redirects with query parameters preserved.
 - The baby-shower page remains isolated from the brand system.
 
 ## Source structure
@@ -34,7 +34,7 @@ app/
   page.jsx
   layout.tsx
   globals.css
-  dream-life-calculator/
+  your-number/
   baby-shower/
 components/
   homepage/

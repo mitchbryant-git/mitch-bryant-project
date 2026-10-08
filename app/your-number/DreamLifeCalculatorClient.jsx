@@ -913,8 +913,8 @@ export default function DreamLifeCalculatorClient() {
               <a className={styles.primaryButton} href="#dream-planner">
                 Know my number <TrendingUp size={16} />
               </a>
-              <button className={styles.secondaryButton} onClick={() => setShowHelp(true)} type="button">
-                How it works
+              <button className={`${styles.secondaryButton} ${styles.heroHelpButton}`} onClick={() => setShowHelp(true)} type="button">
+                How it works <span aria-hidden="true">?</span>
               </button>
             </div>
           </div>
