@@ -18,6 +18,13 @@ const tuesdayTypeOrigin =
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [{
+      source: '/dream-life-calculator',
+      destination: '/your-number',
+      permanent: true,
+    }];
+  },
   async rewrites() {
     return [
       {

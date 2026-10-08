@@ -16,7 +16,7 @@ export const metadata = {
   openGraph: {
     title: "Your Number | All That’s Next",
     description: 'Design the lifestyle you want, work out what it could cost, and explore the income that might support it.',
-    url: 'https://allthatsnext.com/dream-life-calculator',
+    url: 'https://allthatsnext.com/your-number',
     siteName: "All That’s Next",
     locale: 'en_AU',
     type: 'website',
@@ -36,7 +36,7 @@ export const metadata = {
     images: ['/assets/console/mb01-console-your-number-loaded-v1.jpg'],
   },
   alternates: {
-    canonical: 'https://allthatsnext.com/dream-life-calculator',
+    canonical: 'https://allthatsnext.com/your-number',
   },
 };
 

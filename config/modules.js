@@ -12,7 +12,7 @@ export const modules = [
     description:
       "Design the life you want, price it honestly, and see the number that could make it possible.",
     action: "Launch calculator",
-    href: "/dream-life-calculator",
+    href: "/your-number",
     detail: "Design your life. Know your number.",
   },
   {

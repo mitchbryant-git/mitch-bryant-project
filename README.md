@@ -16,7 +16,7 @@ The domain switch is complete. `mitchbryant.com` and `www.allthatsnext.com` redi
 ## Routes
 
 - `/`: Life Console brand hub and module library.
-- `/dream-life-calculator`: live Your Number lifestyle costing utility. The route is retained as a compatibility URL while the product name is now Your Number. Its financial rules require a separate annual evidence audit.
+- `/your-number`: canonical Your Number lifestyle costing utility. `/dream-life-calculator` permanently redirects here, retaining query parameters. Existing saved-device data remains compatible. Its financial rules require a separate annual evidence audit.
 - `/hecs-debt-calculator`: live HECS and HELP debt calculator, mounted from its standalone repository through Next.js Multi-Zones.
 - `/hecs-debt-calculator/<guide-slug>`: calculator education and search guide pages.
 - `/baby-shower`: isolated personal event route. Do not fold it into the brand design system.

@@ -23,7 +23,7 @@ export default function sitemap() {
             priority: 1,
         },
         {
-            url: 'https://allthatsnext.com/dream-life-calculator',
+            url: 'https://allthatsnext.com/your-number',
             lastModified: new Date(),
             changeFrequency: 'monthly',
             priority: 0.8,
