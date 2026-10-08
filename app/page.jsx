@@ -1,3 +1,4 @@
+import { modules } from "@/config/modules";
 import Image from "next/image";
 import { ModuleBay } from "@/components/homepage/ModuleBay";
 
@@ -210,6 +211,11 @@ export default function Home() {
             className="brand-lockup__image brand-lockup__image--footer"
           />
         </div>
+        <nav className="site-footer__links" aria-label="Public modules">
+          {modules.filter((module) => module.href).map((module) => (
+            <a key={module.id} href={module.href}>{module.name}</a>
+          ))}
+        </nav>
         <div className="site-footer__links">
           <a href="https://www.tiktok.com/@itsmitchbryant">TikTok</a>
           <a href="https://www.instagram.com/itsmitchbryant">Instagram</a>

@@ -10,7 +10,6 @@ export default function sitemap() {
         '/help-borrowing-limit',
     ].map((path) => ({
         url: `https://allthatsnext.com/hecs-debt-calculator${path}`,
-        lastModified: new Date(),
         changeFrequency: path ? 'monthly' : 'weekly',
         priority: path ? 0.7 : 0.9,
     }));
@@ -18,16 +17,17 @@ export default function sitemap() {
     return [
         {
             url: 'https://allthatsnext.com',
-            lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 1,
         },
         {
             url: 'https://allthatsnext.com/your-number',
-            lastModified: new Date(),
             changeFrequency: 'monthly',
             priority: 0.8,
         },
         ...calculatorRoutes,
+        ...['/tuesday-type', '/tuesday-type/types', '/growth-lab'].map((path) => ({
+            url: `https://allthatsnext.com${path}`,
+        })),
     ]
 }
