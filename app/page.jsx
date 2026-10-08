@@ -10,6 +10,9 @@ const homepageShareImage = "/assets/console/mb01-console-empty-three-quarter-v1.
 export const metadata = {
   title: homepageTitle,
   description: homepageDescription,
+  verification: {
+    other: { "msvalidate.01": "A93A08FECAE7AD48131CA518090D0CF9" },
+  },
   openGraph: {
     title: homepageTitle,
     description: homepageDescription,
