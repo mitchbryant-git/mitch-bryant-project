@@ -17,7 +17,6 @@ import {
   Home,
   Info,
   Lightbulb,
-  LockKeyhole,
   PartyPopper,
   PawPrint,
   PiggyBank,
@@ -882,11 +881,7 @@ export default function DreamLifeCalculatorClient() {
 
       <header className={styles.toolbar}>
         <Link className={styles.brand} href="/">
-          <span className={styles.brandMark}>MB.</span>
-          <span className={styles.brandCopy}>
-            <strong>Your Number</strong>
-            <small>MB-01 // Lifestyle module</small>
-          </span>
+          <Image className={styles.atnLockup} src="/assets/brand/all-thats-next-lockup-web-v1.png" alt="All That's Next" width={424} height={88} priority />
         </Link>
 
         <div className={styles.toolbarActions}>
@@ -904,8 +899,8 @@ export default function DreamLifeCalculatorClient() {
 
       <main className={styles.main}>
         <section className={styles.hero}>
+          <div className={styles.heroStripes} aria-hidden="true"><span /><span /><span /><span /></div>
           <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>Your Number module ready</p>
             <h1>
               Design your life.
               <span>Know your number.</span>
@@ -922,19 +917,10 @@ export default function DreamLifeCalculatorClient() {
                 How it works
               </button>
             </div>
-            <div className={styles.heroTrust}>
-              <span className={styles.trustChip}><CheckCircle2 size={13} /> {TAX_YEAR} settings</span>
-              <span className={styles.trustChip}><LockKeyhole size={13} /> Saved on this device</span>
-              <span className={styles.trustChip}><Sparkles size={13} /> Free planning tool</span>
-            </div>
           </div>
 
           <div className={styles.heroVisual}>
             <div className={styles.consoleFrame}>
-              <div className={styles.consoleFrameTop}>
-                <span>MB-01 // Your Number</span>
-                <span>Module loaded</span>
-              </div>
               <Image
                 className={styles.consoleImage}
                 src="/assets/console/mb01-console-your-number-loaded-v1.jpg"
@@ -942,7 +928,7 @@ export default function DreamLifeCalculatorClient() {
                 width={1280}
                 height={960}
                 priority
-                sizes="(max-width: 900px) 94vw, 56vw"
+                sizes="(max-width: 800px) 108vw, (max-width: 1050px) 75vw, 64vw"
               />
             </div>
           </div>
@@ -950,7 +936,6 @@ export default function DreamLifeCalculatorClient() {
 
         <section className={styles.workspace} id="dream-planner" style={{ "--section-colour": COLOURS.purple }}>
           <div className={styles.sectionHeader}>
-            <span className={styles.sectionNumber}>01</span>
             <div>
               <p className={styles.sectionKicker}>Build the lifestyle</p>
               <h2 className={styles.sectionTitle}>What does your life cost?</h2>
@@ -973,7 +958,7 @@ export default function DreamLifeCalculatorClient() {
                 </span>
               </div>
 
-              {categories.map((category, categoryIndex) => {
+              {categories.map((category) => {
                 const Icon = ICONS[category.icon] || Gem;
                 const categoryYearly = totals.byCategory[category.id] || 0;
                 const isCustom = category.id.startsWith("custom-");
@@ -1011,7 +996,7 @@ export default function DreamLifeCalculatorClient() {
                           />
                         ) : (
                           <span className={styles.categoryTitle}>
-                            {String(categoryIndex + 1).padStart(2, "0")} · {category.label}
+                            {category.label}
                           </span>
                         )}
                         <Tip prompts={category.prompts} color={category.color} />
@@ -1208,7 +1193,6 @@ export default function DreamLifeCalculatorClient() {
           style={{ "--section-colour": COLOURS.mint }}
         >
           <div className={styles.sectionHeader}>
-            <span className={styles.sectionNumber}>02</span>
             <div>
               <p className={styles.sectionKicker}>Reverse engineer the money</p>
               <h2 className={styles.sectionTitle}>What might you need to earn?</h2>
@@ -1324,8 +1308,7 @@ export default function DreamLifeCalculatorClient() {
             style={{ "--section-colour": COLOURS.blue }}
           >
             <div className={styles.sectionHeader}>
-              <span className={styles.sectionNumber}>03</span>
-              <div>
+            <div>
                 <p className={styles.sectionKicker}>See the trade-offs</p>
                 <h2 className={styles.sectionTitle}>Where does the money go?</h2>
               </div>
