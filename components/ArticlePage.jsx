@@ -7,13 +7,17 @@ function InlineCopy({ text, primaryAction = false }) {
   const parts = text.split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*)/g);
   return parts.map((part, index) => {
     const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-    if (link) return <a key={index} href={link[2]} className={primaryAction ? 'button button--ink' : undefined}>{link[1]}</a>;
+    if (link) {
+      const tone = link[2].includes('/tuesday-type') ? 'blue' : link[2].includes('/your-number') ? 'purple' : link[2].includes('/growth-lab') ? 'orange' : link[2].includes('/hecs-debt-calculator') ? 'mint' : null;
+      return <a key={index} href={link[2]} className={primaryAction ? styles.primaryAction : tone ? `${styles.moduleLink} ${styles[tone]}` : undefined}>{link[1]}</a>;
+    }
     if (part.startsWith('**')) return <strong key={index}>{part.slice(2, -2)}</strong>;
     return part;
   });
 }
 
 export function ArticlePage({ article }) {
+  const isAbout = article.slug === 'about';
   const url = `https://allthatsnext.com/${article.slug}`;
   const schema = {
     '@context': 'https://schema.org', '@type': article.slug === 'about' ? 'AboutPage' : 'WebPage',
@@ -32,11 +36,30 @@ export function ArticlePage({ article }) {
       <p className={styles.label}>{article.label}</p>
       <h1>{article.blocks[0].heading}</h1>
       <div className={styles.rail} aria-hidden="true"><i /><i /><i /><i /></div>
-      <article>
-        {article.blocks.map((block, index) => <section className={styles.section} key={block.heading}>
-          {index > 0 && <h2>{block.heading}</h2>}
-          {block.paragraphs.map((text, paragraph) => <p key={paragraph}><InlineCopy text={text} primaryAction={index === article.blocks.length - 1 && /^\[[^\]]+\]\([^)]+\)$/.test(text)} /></p>)}
-        </section>)}
+      <article className={styles.article}>
+        {article.blocks.map((block, index) => {
+          const isLast = index === article.blocks.length - 1;
+          const isStory = isAbout && index === 1;
+          const isMethod = isAbout && index === 2;
+          const tone = !isAbout && index > 0 && !isLast ? ['blue', 'purple', 'orange'][index - 1] : null;
+          return <section className={`${styles.section} ${index === 0 ? styles.intro : ''} ${isStory ? styles.story : ''} ${isMethod ? styles.method : ''} ${isLast ? styles.nextMove : ''} ${tone ? `${styles.step} ${styles[tone]}` : ''}`} key={block.heading}>
+            {index > 0 && <div className={styles.sectionHeading}>
+              <h2>{block.heading}</h2>
+            </div>}
+            {isStory && block.pullQuote && <p className={styles.storyLead}>
+              {block.pullQuote.map((line) => <span key={line}>{line}</span>)}
+            </p>}
+            <div className={isMethod ? styles.methodGrid : styles.sectionBody}>
+              {block.paragraphs.map((text, paragraph) => {
+                const methodTone = isMethod && paragraph < 3 ? ['blue', 'purple', 'orange'][paragraph] : null;
+                return methodTone ? <div key={paragraph} className={`${styles.methodCard} ${styles[methodTone]}`}>
+                  <h3>{['Design', 'Price', 'Build'][paragraph]}</h3>
+                  <p><InlineCopy text={text.replace(/^\*\*[^*]+\*\*\s*/, '')} /></p>
+                </div> : <p key={paragraph} className={text === "Prepared by All That's Next" ? styles.byline : undefined}><InlineCopy text={text} primaryAction={isLast && /^\[[^\]]+\]\([^)]+\)$/.test(text)} /></p>;
+              })}
+            </div>
+          </section>;
+        })}
       </article>
     </main>
     <footer className={styles.footer}><span>All That&apos;s Next</span><Link href="/#modules">Explore the tools</Link><Link href="/about">About</Link><Link href="/life-after-school">Life after school</Link><a href="mailto:hello@mitchbryant.com">Contact Mitch</a></footer>

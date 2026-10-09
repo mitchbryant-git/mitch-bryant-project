@@ -4,9 +4,8 @@ const article = {
   "label": "About All That’s Next",
   "blocks": [
     {
-      "heading": "Build a life you want to live",
+      "heading": "School Ends. Then What?",
       "paragraphs": [
-        "School ends. The questions get bigger.",
         "What should you study? Which job should you choose? How much do you need to earn?",
         "Start with you. The days you want. The people around you. The freedom, work and experiences you want to make room for.",
         "All That's Next helps you turn that picture into choices you can actually test."
@@ -14,11 +13,22 @@ const article = {
     },
     {
       "heading": "Why I built this",
+      "pullQuote": ["Not knowing what you want at 17 isn’t expensive.", "Pretending you know can be."],
       "paragraphs": [
-        "I'm Mitch Bryant, the founder of All That's Next.",
-        "I chose the sensible degree and became a tax accountant. From the outside, the path looked right. From the inside, it wasn't the life I wanted.",
-        "I changed direction and rebuilt. Now I'm making the tools I wish I had at 16, before years and money were tied to someone else's idea of success.",
-        "You get to choose what you're building towards. My job is to help you see the options and the trade-offs clearly enough to start."
+        "Hi, I’m Mitch.",
+        "At 17, everyone kept asking me what I wanted to do. I had no idea.",
+        "I was good at maths. People said accounting was stable. Stable sounded sensible.",
+        "So I studied Commerce, took on the massive debt that came with it, and landed a job as a tax accountant.",
+        "I hated it.",
+        "I dreaded every Monday. I watched the clock all day. I felt stuck in a life I’d never actually chosen.",
+        "Three years in, I quit and started again at the bottom, in sales. Today I sell software to some of the biggest companies in the world, and I love it.",
+        "Same guy. Different Tuesday.",
+        "Here’s what gets me. I spent years working towards that first job and not one minute finding out what a normal Tuesday in it would feel like. If I had, I’d have known it wasn’t for me, and I could have skipped the debt and the wasted years.",
+        "Choosing accounting wasn’t the mistake. Choosing blind was.",
+        "That’s why I’m building All That’s Next. The tools I wish someone had handed me at 17.",
+        "Picture the days you actually want. Put real numbers behind them. Test-drive a path before you sign up for it.",
+        "I’m not here to tell you what to be. If you leave knowing one thing school never taught you, I’ve done my job.",
+        "You don’t need certainty. You need evidence."
       ]
     },
     {
