@@ -95,6 +95,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               "@context": "https://schema.org",
               "@graph": [
                 {
+                  "@type": "Person",
+                  "@id": "https://allthatsnext.com/#mitch-bryant",
+                  name: "Mitch Bryant",
+                  url: "https://allthatsnext.com/about",
+                  sameAs: [
+                    "https://www.tiktok.com/@itsmitchbryant",
+                    "https://www.instagram.com/itsmitchbryant",
+                  ],
+                },
+                {
                   "@type": "Organization",
                   "@id": "https://allthatsnext.com/#organization",
                   name: "All That’s Next",
@@ -102,14 +112,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                     "Practical tools that help young people approach the future with greater clarity, agency and optimism.",
                   url: "https://allthatsnext.com",
                   logo: "https://allthatsnext.com/icon-512.png",
-                  founder: {
-                    "@type": "Person",
-                    name: "Mitch Bryant",
-                  },
-                  sameAs: [
-                    "https://www.tiktok.com/@itsmitchbryant",
-                    "https://www.instagram.com/itsmitchbryant",
-                  ],
+                  founder: { "@id": "https://allthatsnext.com/#mitch-bryant" },
                 },
                 {
                   "@type": "WebSite",
