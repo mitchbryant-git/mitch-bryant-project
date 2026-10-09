@@ -4,7 +4,7 @@ const article = {
   "label": "About All That’s Next",
   "blocks": [
     {
-      "heading": "Build a life you want to live",
+      "heading": "School Ends. Then What?",
       "paragraphs": [
         "School ends. The questions get bigger.",
         "What should you study? Which job should you choose? How much do you need to earn?",
@@ -15,10 +15,12 @@ const article = {
     {
       "heading": "Why I built this",
       "paragraphs": [
-        "I'm Mitch Bryant, the founder of All That's Next.",
-        "I chose the sensible degree and became a tax accountant. From the outside, the path looked right. From the inside, it wasn't the life I wanted.",
-        "I changed direction and rebuilt. Now I'm making the tools I wish I had at 16, before years and money were tied to someone else's idea of success.",
-        "You get to choose what you're building towards. My job is to help you see the options and the trade-offs clearly enough to start."
+        "Not knowing what you want at 17 isn't expensive. Pretending you know can be.",
+        "I'm Mitch. When school was finishing, I had no idea what I wanted to do. People told me accounting was stable. It sounded sensible.",
+        "So I studied Commerce at Bond, took on the debt and became a tax accountant. I gave it three years, then changed careers and moved into sales.",
+        "My mistake wasn't choosing accounting. It was making a massive commitment to a life I hadn't taken the time to understand.",
+        "That's why I'm building All That's Next: the tools I wish I'd had at 17. Picture the days you want. Put numbers behind them. Try something before you make the big commitment.",
+        "You don't need certainty. You need evidence."
       ]
     },
     {
