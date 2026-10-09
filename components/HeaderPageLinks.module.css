@@ -1,0 +1,8 @@
+.root { position: relative; justify-self: end; flex-shrink: 0; }
+.trigger { display: flex; min-width: 92px; min-height: 44px; align-items: center; justify-content: center; padding: 0; border: 0; background: transparent; color: var(--ink); cursor: pointer; }
+.trigger:focus-visible, .panel a:focus-visible { outline: 3px solid var(--ink); outline-offset: 5px; }
+.root .panel { display: block; position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; width: 220px; padding: 8px; background: var(--cream-light); border: var(--border); border-radius: var(--radius-small); box-shadow: var(--shadow-small); }
+.root .panel[hidden] { display: none; }
+.panel a { display: flex; align-items: center; min-height: 44px; padding: 10px 12px; font-family: var(--font-instrument-sans), Arial, sans-serif; font-size: 16px; font-weight: 700; line-height: 1.4; text-decoration: none; }
+.panel a:hover, .panel a:focus-visible { background: var(--cream); }
+.panel a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }

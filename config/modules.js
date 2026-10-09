@@ -35,7 +35,7 @@ export const modules = [
     id: "tuesday-type",
     shortCode: "MB-01 TYPE",
     name: "Tuesday Type",
-    status: "Private beta",
+    status: "Free beta",
     statusTone: "live",
     accent: "blue",
     cartridgeImage: "/assets/cartridges/tuesday-type-cartridge-v1.webp",

@@ -41,6 +41,19 @@ export function ModuleBay() {
               <button
                 type="button"
                 role="tab"
+                tabIndex={active ? 0 : -1}
+                onKeyDown={(event) => {
+                  const steps = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+                  let nextIndex;
+                  if (event.key === "Home") nextIndex = 0;
+                  else if (event.key === "End") nextIndex = modules.length - 1;
+                  else if (event.key in steps) nextIndex = (index + steps[event.key] + modules.length) % modules.length;
+                  else return;
+                  event.preventDefault();
+                  const nextModule = modules[nextIndex];
+                  setSelectedId(nextModule.id);
+                  document.getElementById(`module-tab-${nextModule.id}`)?.focus();
+                }}
                 aria-selected={active}
                 aria-controls="module-preview"
                 id={`module-tab-${module.id}`}
