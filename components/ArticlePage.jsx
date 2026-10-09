@@ -46,13 +46,16 @@ export function ArticlePage({ article }) {
             {index > 0 && <div className={styles.sectionHeading}>
               <h2>{block.heading}</h2>
             </div>}
+            {isStory && block.pullQuote && <p className={styles.storyLead}>
+              {block.pullQuote.map((line) => <span key={line}>{line}</span>)}
+            </p>}
             <div className={isMethod ? styles.methodGrid : styles.sectionBody}>
               {block.paragraphs.map((text, paragraph) => {
                 const methodTone = isMethod && paragraph < 3 ? ['blue', 'purple', 'orange'][paragraph] : null;
                 return methodTone ? <div key={paragraph} className={`${styles.methodCard} ${styles[methodTone]}`}>
                   <h3>{['Design', 'Price', 'Build'][paragraph]}</h3>
                   <p><InlineCopy text={text.replace(/^\*\*[^*]+\*\*\s*/, '')} /></p>
-                </div> : <p key={paragraph} className={isStory && paragraph === 0 ? styles.storyLead : text === "Prepared by All That's Next" ? styles.byline : undefined}><InlineCopy text={text} primaryAction={isLast && /^\[[^\]]+\]\([^)]+\)$/.test(text)} /></p>;
+                </div> : <p key={paragraph} className={text === "Prepared by All That's Next" ? styles.byline : undefined}><InlineCopy text={text} primaryAction={isLast && /^\[[^\]]+\]\([^)]+\)$/.test(text)} /></p>;
               })}
             </div>
           </section>;

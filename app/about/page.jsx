@@ -13,13 +13,22 @@ const article = {
     },
     {
       "heading": "Why I built this",
+      "pullQuote": ["Not knowing what you want at 17 isn’t expensive.", "Pretending you know can be."],
       "paragraphs": [
-        "Not knowing what you want at 17 isn't expensive. Pretending you know can be.",
-        "I'm Mitch. When school was finishing, I had no idea what I wanted to do. People told me accounting was stable. It sounded sensible.",
-        "So I studied Commerce at Bond, took on the debt and became a tax accountant. I gave it three years, then changed careers and moved into sales.",
-        "My mistake wasn't choosing accounting. It was making a massive commitment to a life I hadn't taken the time to understand.",
-        "That's why I'm building All That's Next: the tools I wish I'd had at 17. Picture the days you want. Put numbers behind them. Try something before you make the big commitment.",
-        "You don't need certainty. You need evidence."
+        "Hi, I’m Mitch.",
+        "At 17, everyone kept asking me what I wanted to do. I had no idea.",
+        "I was good at maths. People said accounting was stable. Stable sounded sensible.",
+        "So I studied Commerce, took on the massive debt that came with it, and landed a job as a tax accountant.",
+        "I hated it.",
+        "I dreaded every Monday. I watched the clock all day. I felt stuck in a life I’d never actually chosen.",
+        "Three years in, I quit and started again at the bottom, in sales. Today I sell software to some of the biggest companies in the world, and I love it.",
+        "Same guy. Different Tuesday.",
+        "Here’s what gets me. I spent years working towards that first job and not one minute finding out what a normal Tuesday in it would feel like. If I had, I’d have known it wasn’t for me, and I could have skipped the debt and the wasted years.",
+        "Choosing accounting wasn’t the mistake. Choosing blind was.",
+        "That’s why I’m building All That’s Next. The tools I wish someone had handed me at 17.",
+        "Picture the days you actually want. Put real numbers behind them. Test-drive a path before you sign up for it.",
+        "I’m not here to tell you what to be. If you leave knowing one thing school never taught you, I’ve done my job.",
+        "You don’t need certainty. You need evidence."
       ]
     },
     {
