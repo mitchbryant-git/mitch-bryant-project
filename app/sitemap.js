@@ -26,7 +26,7 @@ export default function sitemap() {
             priority: 0.8,
         },
         ...calculatorRoutes,
-        ...['/tuesday-type', '/tuesday-type/types', '/growth-lab'].map((path) => ({
+        ...['/about', '/life-after-school', '/tuesday-type', '/tuesday-type/types', '/growth-lab'].map((path) => ({
             url: `https://allthatsnext.com${path}`,
         })),
     ]

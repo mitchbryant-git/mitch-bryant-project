@@ -1,8 +1,8 @@
 import DreamLifeCalculatorClient from './DreamLifeCalculatorClient';
 
 export const metadata = {
-  title: "Your Number | All That’s Next",
-  description: 'Design the lifestyle you want, work out what it could cost, and explore the income that might support it using current Australian planning settings.',
+  title: "Your Number | Lifestyle Cost Calculator",
+  description: "Picture your ideal life. Price it. See what you need to earn. This is YOUR Number.",
   keywords: [
     'your number calculator',
     'dream life calculator',
@@ -14,8 +14,8 @@ export const metadata = {
     "All That’s Next",
   ],
   openGraph: {
-    title: "Your Number | All That’s Next",
-    description: 'Design the lifestyle you want, work out what it could cost, and explore the income that might support it.',
+    title: "Your Number | Lifestyle Cost Calculator",
+    description: "Picture your ideal life. Price it. See what you need to earn. This is YOUR Number.",
     url: 'https://allthatsnext.com/your-number',
     siteName: "All That’s Next",
     locale: 'en_AU',
@@ -31,8 +31,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Your Number | All That’s Next",
-    description: 'Design the lifestyle you want, work out what it could cost, and explore the income that might support it.',
+    title: "Your Number | Lifestyle Cost Calculator",
+    description: "Picture your ideal life. Price it. See what you need to earn. This is YOUR Number.",
     images: ['/assets/console/mb01-console-your-number-loaded-v1.jpg'],
   },
   alternates: {

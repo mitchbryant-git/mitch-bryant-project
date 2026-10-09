@@ -971,16 +971,6 @@ export default function DreamLifeCalculatorClient() {
                   >
                     <div
                       className={styles.categoryTrigger}
-                      role="button"
-                      tabIndex={0}
-                      aria-expanded={category.expanded}
-                      onClick={() => toggleCategory(category.id)}
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter" || event.key === " ") {
-                          event.preventDefault();
-                          toggleCategory(category.id);
-                        }
-                      }}
                     >
                       <span className={styles.categoryIcon} aria-hidden="true">
                         <Icon size={19} />
@@ -1001,15 +991,17 @@ export default function DreamLifeCalculatorClient() {
                         )}
                         <Tip prompts={category.prompts} color={category.color} />
                       </span>
-                      <span className={styles.categoryTotal}>
+                      <button type="button" className={styles.categoryToggle} aria-expanded={category.expanded} aria-controls={`category-body-${category.id}`} aria-label={`Toggle ${category.label}`} onClick={() => toggleCategory(category.id)}>
+                <span className={styles.categoryTotal}>
                         {formatCurrency(yearToDisplay(categoryYearly, displayFrequency))}/
                         {frequencyShort(displayFrequency)}
                       </span>
                       {category.expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                </button>
                     </div>
 
                     {category.expanded ? (
-                      <div className={styles.categoryBody}>
+                      <div className={styles.categoryBody} id={`category-body-${category.id}`}>
                         {category.items.length === 0 ? (
                           <EmptyState
                             color={category.color}

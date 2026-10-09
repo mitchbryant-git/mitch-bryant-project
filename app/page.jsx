@@ -1,10 +1,11 @@
 import { modules } from "@/config/modules";
 import Image from "next/image";
 import { ModuleBay } from "@/components/homepage/ModuleBay";
+import { HeaderPageLinks } from "@/components/HeaderPageLinks";
 
-const homepageTitle = "All That’s Next | Life Design Tools for Ages 16–19";
+const homepageTitle = "All That’s Next | Life Design for Ages 16–19";
 const homepageDescription =
-  "School ends. Your future is more than a job title. Explore who you want to become, what your ideal life could cost and how to start building it.";
+  "School ends. Then what? Your future is more than a job title. Explore who you want to become, decide your ideal life, and start building it.";
 const homepageShareImage = "/assets/console/mb01-console-empty-three-quarter-v1.webp";
 
 export const metadata = {
@@ -36,18 +37,6 @@ export const metadata = {
     images: [homepageShareImage],
   },
 };
-
-const colourBars = ["blue", "mint", "pink", "yellow"];
-
-function ColourBars({ compact = false }) {
-  return (
-    <span className={`colour-bars${compact ? " colour-bars--compact" : ""}`} aria-hidden="true">
-      {colourBars.map((colour) => (
-        <span key={colour} className={`colour-bar colour-bar--${colour}`} />
-      ))}
-    </span>
-  );
-}
 
 export default function Home() {
   return (
@@ -82,7 +71,7 @@ export default function Home() {
           <a href="#why">Why ATN</a>
         </nav>
 
-        <ColourBars compact />
+        <HeaderPageLinks />
       </header>
 
       <main id="main-content">
@@ -247,6 +236,8 @@ export default function Home() {
           />
         </div>
         <nav className="site-footer__links" aria-label="Public modules">
+          <a href="/about">About</a>
+          <a href="/life-after-school">Life after school</a>
           {modules.filter((module) => module.href).map((module) => (
             <a key={module.id} href={module.href}>{module.name}</a>
           ))}

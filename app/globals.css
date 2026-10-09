@@ -1083,7 +1083,8 @@ img {
 
 @media (max-width: 900px) {
   .site-header {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
+    column-gap: 12px;
   }
 
   .site-header > .colour-bars {

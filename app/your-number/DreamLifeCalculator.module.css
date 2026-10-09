@@ -1319,3 +1319,9 @@
   transform: translate(2px, 2px);
   box-shadow: none;
 }
+
+/* Keep category help/edit controls beside the native disclosure button. */
+.categoryTrigger { grid-template-columns: auto minmax(0, 1fr) auto; }
+.categoryToggle { display: flex; align-items: center; gap: .75rem; padding: .25rem; border: 0; background: transparent; color: inherit; cursor: pointer; }
+.categoryToggle:focus-visible { outline: 3px solid var(--dl-ink); outline-offset: 3px; border-radius: 4px; }
+@media (max-width: 600px) { .categoryToggle { grid-column: 3; grid-row: 1 / span 2; flex-wrap: wrap; justify-content: flex-end; } }
