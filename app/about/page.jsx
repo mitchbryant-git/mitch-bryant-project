@@ -6,7 +6,6 @@ const article = {
     {
       "heading": "School Ends. Then What?",
       "paragraphs": [
-        "School ends. The questions get bigger.",
         "What should you study? Which job should you choose? How much do you need to earn?",
         "Start with you. The days you want. The people around you. The freedom, work and experiences you want to make room for.",
         "All That's Next helps you turn that picture into choices you can actually test."

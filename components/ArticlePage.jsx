@@ -44,7 +44,6 @@ export function ArticlePage({ article }) {
           const tone = !isAbout && index > 0 && !isLast ? ['blue', 'purple', 'orange'][index - 1] : null;
           return <section className={`${styles.section} ${index === 0 ? styles.intro : ''} ${isStory ? styles.story : ''} ${isMethod ? styles.method : ''} ${isLast ? styles.nextMove : ''} ${tone ? `${styles.step} ${styles[tone]}` : ''}`} key={block.heading}>
             {index > 0 && <div className={styles.sectionHeading}>
-              {tone && <span className={styles.stepNumber} aria-hidden="true">0{index}</span>}
               <h2>{block.heading}</h2>
             </div>}
             <div className={isMethod ? styles.methodGrid : styles.sectionBody}>
