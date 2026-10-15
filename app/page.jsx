@@ -1,7 +1,7 @@
-import { modules } from "@/config/modules";
 import Image from "next/image";
 import { ModuleBay } from "@/components/homepage/ModuleBay";
 import { WhyATN } from "@/components/homepage/WhyATN";
+import { ClosingCTA, SiteFooter } from "@/components/homepage/SiteEnding";
 import { HeaderPageLinks } from "@/components/HeaderPageLinks";
 import styles from "./HomepageHero.module.css";
 
@@ -135,42 +135,10 @@ export default function Home() {
 
         <WhyATN />
 
-        <section className="final-callout">
-          <div>
-            <p className="equipment-label equipment-label--dark">System ready</p>
-            <h2>You don&apos;t need to have your whole life figured out.</h2>
-            <p>You just need the tools to start designing all that&apos;s next.</p>
-          </div>
-          <a className="button button--ink" href="#modules">
-            Open the module bay <span aria-hidden="true">↑</span>
-          </a>
-        </section>
+        <ClosingCTA />
       </main>
 
-      <footer className="site-footer">
-        <div className="brand-lockup brand-lockup--footer">
-          <Image
-            src="/assets/brand/all-thats-next-lockup-web-v1.png"
-            alt="All That’s Next"
-            width={1651}
-            height={324}
-            className="brand-lockup__image brand-lockup__image--footer"
-          />
-        </div>
-        <nav className="site-footer__links" aria-label="Public modules">
-          <a href="/about">About</a>
-          <a href="/life-after-school">Life after school</a>
-          {modules.filter((module) => module.href).map((module) => (
-            <a key={module.id} href={module.href}>{module.name}</a>
-          ))}
-        </nav>
-        <div className="site-footer__links">
-          <a href="https://www.tiktok.com/@itsmitchbryant">TikTok</a>
-          <a href="https://www.instagram.com/itsmitchbryant">Instagram</a>
-          <a href="mailto:hello@mitchbryant.com">Email Mitch</a>
-        </div>
-        <p>© {new Date().getFullYear()} All That&apos;s Next</p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
