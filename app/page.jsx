@@ -2,6 +2,7 @@ import { modules } from "@/config/modules";
 import Image from "next/image";
 import { ModuleBay } from "@/components/homepage/ModuleBay";
 import { HeaderPageLinks } from "@/components/HeaderPageLinks";
+import styles from "./HomepageHero.module.css";
 
 const homepageTitle = "All That’s Next | Life Design for Ages 16–19";
 const homepageDescription =
@@ -45,7 +46,7 @@ export default function Home() {
         Skip to content
       </a>
 
-      <header className="site-header">
+      <header className={`site-header ${styles.header}`}>
         <a className="brand-lockup" href="#top" aria-label="All That’s Next home">
           <Image
             src="/assets/brand/all-thats-next-lockup-web-v1.png"
@@ -75,56 +76,54 @@ export default function Home() {
       </header>
 
       <main id="main-content">
-        <section className="hero" id="top">
-          <div className="hero__intro">
-            <p className="equipment-label">All That&apos;s Next // Life Console</p>
-            <h1>
-              School ends.
-              <span>Then what?</span>
-            </h1>
-          </div>
-
-          <div className="hero__body">
-            <p className="hero__lede">
-              Everyone asks what you want to be. Nobody asks how you want to live. Start there. We&apos;ll give
-              you the tools to shape all that&apos;s next.
-            </p>
-            <div className="hero__actions">
-              <a className="button button--primary" href="#modules">
-                Choose your next move <span aria-hidden="true">↓</span>
-              </a>
-              <a className="text-link text-link--light" href="#why">
-                Why All That&apos;s Next <span aria-hidden="true">→</span>
-              </a>
+        <section className={styles.hero} id="top">
+          <div className={styles.layout}>
+            <div className={styles.copy}>
+              <div className={styles.intro}>
+                <p className={styles.eyebrow}>Your life. Your next move.</p>
+                <h1>School ends.<br /><span>Then what?</span></h1>
+              </div>
+              <div className={styles.supportingCopy}>
+                <p className={styles.statement}>
+                  Everyone asks what you want to be.<br />
+                  Nobody asks how you want to live.
+                </p>
+                <p className={styles.support}>
+                  Start there.<br />Find your direction.<br />Make a move.
+                </p>
+              </div>
+              <div className={styles.actions}>
+                <a className={styles.primary} href="#modules">
+                  Choose your next move <span aria-hidden="true">&#8595;</span>
+                </a>
+                <a className={styles.founderLink} href="#founder">
+                  Why All That&apos;s Next <span aria-hidden="true">&#8599;</span>
+                </a>
+              </div>
             </div>
-          </div>
-
-          <div className="hero__showcase">
-            <div className="hero__path" aria-label="How the Life Console works">
-              <span>
-                <strong>01</strong>
-                Pick a focus
-              </span>
-              <span>
-                <strong>02</strong>
-                Load a module
-              </span>
-              <span>
-                <strong>03</strong>
-                Make a move
-              </span>
-            </div>
-
-            <div className="hero__visual">
-              <div className="hero__console-frame">
+            <div className={styles.showcase}>
+              <div className={styles.journey} aria-label="How the Life Console works">
+                {[
+                  ["blue", "Pick a focus"],
+                  ["mint", "Load a module"],
+                  ["pink", "Make a move"],
+                  ["yellow", "Learn. Go again."],
+                ].map(([colour, label]) => (
+                  <div key={colour}>
+                    <span className={styles.marker} style={{ backgroundColor: `var(--${colour})` }} aria-hidden="true" />
+                    <p>{label}</p>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.console}>
                 <Image
                   src="/assets/console/mb01-console-empty-front-v1.webp"
+                  unoptimized
                   alt="Front view of the cream MB-01 Life Console ready for a module"
                   width={1280}
                   height={653}
                   priority
-                  sizes="(max-width: 820px) 94vw, 48vw"
-                  className="hero__console-image"
+                  sizes="(max-width: 999px) 94vw, (max-width: 1600px) 60vw, 860px"
                 />
               </div>
             </div>
@@ -193,7 +192,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="founder-section">
+        <section className="founder-section" id="founder">
           <div>
             <p className="equipment-label equipment-label--dark">Built by Mitch Bryant</p>
             <h2>Tools I wish I had before the sensible path became my path.</h2>
