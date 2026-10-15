@@ -1,6 +1,7 @@
 import { modules } from "@/config/modules";
 import Image from "next/image";
 import { ModuleBay } from "@/components/homepage/ModuleBay";
+import { WhyATN } from "@/components/homepage/WhyATN";
 import { HeaderPageLinks } from "@/components/HeaderPageLinks";
 import styles from "./HomepageHero.module.css";
 
@@ -132,85 +133,7 @@ export default function Home() {
 
         <ModuleBay />
 
-        <section className="method-section" id="method">
-          <div className="section-intro section-intro--wide">
-            <p className="equipment-label equipment-label--dark">The All That&apos;s Next approach</p>
-            <h2>Don&apos;t pick a career and inherit the life that comes with it.</h2>
-            <p>Design the life first. Then reverse engineer the career and money needed to fund it.</p>
-          </div>
-
-          <div className="method-grid">
-            <article className="method-card method-card--blue">
-              <span className="method-card__number">01</span>
-              <p className="equipment-label equipment-label--dark">Design</p>
-              <h3>Picture an ordinary Tuesday you&apos;d actually want.</h3>
-              <p>Not a fantasy holiday. Your work, people, place, pace and freedom on a normal day.</p>
-            </article>
-            <article className="method-card method-card--yellow">
-              <span className="method-card__number">02</span>
-              <p className="equipment-label equipment-label--dark">Price</p>
-              <h3>Put real numbers behind the life.</h3>
-              <p>Understand the income, debt and trade-offs before a major decision locks them in.</p>
-            </article>
-            <article className="method-card method-card--mint">
-              <span className="method-card__number">03</span>
-              <p className="equipment-label equipment-label--dark">Build</p>
-              <h3>Choose the next move, not your entire life.</h3>
-              <p>Test a direction, learn what fits and keep moving with your eyes open.</p>
-            </article>
-          </div>
-        </section>
-
-        <section className="about-section" id="why">
-          <div className="about-section__statement">
-            <p className="equipment-label">Why All That&apos;s Next?</p>
-            <h2>The future is more than something you wait for.</h2>
-            <Image
-              src="/icon-512.png"
-              alt=""
-              width={512}
-              height={512}
-              className="about-section__signal"
-              aria-hidden="true"
-            />
-          </div>
-
-          <div className="about-section__story">
-            <p>
-              “All that&apos;s next” means everything still ahead: the choices you&apos;ll make, the experiences
-              you&apos;ll have, the person you&apos;ll become and the life you&apos;ll build.
-            </p>
-            <p>
-              But the future is not only something to wait for. It is something you can shape. Every module
-              tackles a different part of what comes next, from understanding yourself and pricing your
-              choices to planning a direction and taking the next useful step.
-            </p>
-            <p className="about-section__promise">
-              Different products, one purpose: helping you approach the unknown with greater clarity,
-              agency and optimism.
-            </p>
-          </div>
-        </section>
-
-        <section className="founder-section" id="founder">
-          <div>
-            <p className="equipment-label equipment-label--dark">Built by Mitch Bryant</p>
-            <h2>Tools I wish I had before the sensible path became my path.</h2>
-          </div>
-          <div className="founder-section__story">
-            <p>
-              I chose the sensible degree, became a tax accountant and followed the path I thought I was
-              supposed to want. From the outside, it looked right. From the inside, I knew it wasn&apos;t.
-            </p>
-            <p>
-              I eventually changed direction and rebuilt. All That&apos;s Next is where I&apos;m making the tools I
-              wish I had at 16, before years and money were tied to somebody else&apos;s version of success.
-            </p>
-            <p className="founder-section__promise">
-              I won&apos;t tell you who to become. I&apos;ll help you see the options clearly enough to choose.
-            </p>
-          </div>
-        </section>
+        <WhyATN />
 
         <section className="final-callout">
           <div>
