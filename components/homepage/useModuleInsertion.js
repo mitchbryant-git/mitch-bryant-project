@@ -2,16 +2,44 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import { moduleMotion } from "@/config/module-motion";
+import { moduleFraming } from "@/config/module-framing";
+import { SEAT_MS, WAKE_DELAY_MS, WAKE_MS } from "@/lib/cartridge-media.mjs";
 
-export function useModuleInsertion(dialog, art, status, seatSound, cancelSound) {
+export function useModuleInsertion(dialog, art, status, syncSound, cancelSound) {
   const decoded = useRef(new Set());
   const animations = useRef([]);
   const run = useRef(0);
-  const activeModule = useRef(null);
+  const fit = useCallback(() => {
+    const panel = dialog.current;
+    if (!panel?.open || !art.current) return;
+    const inserting = art.current.dataset.motionState === "inserting";
+    const unit = art.current.getBoundingClientRect().width / moduleFraming.stage.width;
+    const trim = inserting ? 0 : moduleFraming.settledTopTrim;
+    panel.dataset.previewLayout = inserting ? "inserting" : art.current.dataset.motionState === "loaded" ? "settled" : "static";
+    art.current.style.setProperty("--stage-unit", `${unit}px`);
+    art.current.style.setProperty("--stage-crop", trim);
+    art.current.style.height = `${(moduleFraming.stage.height - trim) * unit}px`;
+    if (!inserting) {
+      panel.style.setProperty("--descent-clearance", "0px");
+      art.current.parentElement.style.paddingTop = "0px";
+      return;
+    }
+    const box = art.current.getBoundingClientRect();
+    const currentPadding = parseFloat(getComputedStyle(art.current.parentElement).paddingTop) || 0;
+    const scale = box.width / moduleFraming.stage.width;
+    const left = box.left + moduleFraming.commonLeft * scale, right = box.left + moduleFraming.commonRight * scale;
+    let safeTop = panel.getBoundingClientRect().top + 12;
+    for (const control of panel.querySelectorAll("[data-viewer-controls] button")) {
+      const bounds = control.getBoundingClientRect();
+      if (right > bounds.left - 8 && left < bounds.right + 8) safeTop = Math.max(safeTop, bounds.bottom + 8);
+    }
+    const clearance = Math.max(0, Math.ceil(currentPadding + safeTop - (box.top + moduleFraming.commonStartTop * scale)));
+    if (panel.style.getPropertyValue("--descent-clearance") !== `${clearance}px`) panel.style.setProperty("--descent-clearance", `${clearance}px`);
+    art.current.parentElement.style.paddingTop = `${clearance}px`;
+  }, [art, dialog]);
   const stop = useCallback((reason = "still", preserveArmedSound = false) => {
     if (!preserveArmedSound) cancelSound();
     run.current++;
-    activeModule.current = null;
     animations.current.forEach((animation) => animation.cancel());
     animations.current = [];
     if (art.current) {
@@ -19,26 +47,12 @@ export function useModuleInsertion(dialog, art, status, seatSound, cancelSound) 
       art.current.querySelectorAll("[data-active-motion]").forEach((group) => { delete group.dataset.activeMotion; });
       art.current.dataset.motionState = reason;
     }
-    dialog.current?.style.removeProperty("--descent-clearance");
-  }, [art, dialog, cancelSound]);
-
-  const fit = useCallback(() => {
-    const config = moduleMotion[activeModule.current];
-    if (!config) return;
-    const panel = dialog.current;
-    panel.style.setProperty("--descent-clearance", "0px");
-    const box = art.current.getBoundingClientRect();
-    const scale = box.width / config.canvas.width;
-    const left = box.left + config.cartridge.x * scale, right = left + config.cartridge.width * scale;
-    let safeTop = panel.getBoundingClientRect().top + 12;
-    for (const control of panel.querySelectorAll("[data-viewer-controls] button")) {
-      const bounds = control.getBoundingClientRect();
-      if (right > bounds.left - 8 && left < bounds.right + 8) safeTop = Math.max(safeTop, bounds.bottom + 8);
+    if (dialog.current?.open) fit();
+    else {
+      dialog.current?.style.removeProperty("--descent-clearance");
+      if (art.current) art.current.parentElement.style.removeProperty("padding-top");
     }
-    const startY = config.cartridge.y - config.cartridge.travelY;
-    const clearance = Math.max(0, Math.ceil(safeTop - (box.top + startY * scale)));
-    panel.style.setProperty("--descent-clearance", `${clearance}px`);
-  }, [art, dialog]);
+  }, [art, dialog, cancelSound, fit]);
 
   useEffect(() => {
     let disposed = false;
@@ -60,7 +74,7 @@ export function useModuleInsertion(dialog, art, status, seatSound, cancelSound) 
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     reduced.addEventListener("change", () => { if (reduced.matches) stop("reduced-motion"); }, options);
     document.addEventListener("visibilitychange", () => { if (document.hidden) stop("hidden-fallback"); }, options);
-    window.addEventListener("resize", () => { if (dialog.current?.open && art.current?.hasAttribute("data-has-motion")) fit(); }, options);
+    window.addEventListener("resize", fit, options);
     return () => { disposed = true; readyModules.clear(); listeners.abort(); stop("closed"); };
   }, [art, dialog, fit, stop]);
 
@@ -72,26 +86,24 @@ export function useModuleInsertion(dialog, art, status, seatSound, cancelSound) 
     const config = moduleMotion[moduleId];
     if (!group || !config) return stop("asset-fallback");
     const id = run.current;
-    activeModule.current = moduleId;
     art.current.dataset.hasMotion = "";
     group.dataset.activeMotion = "";
-    fit();
     art.current.dataset.motionState = "inserting";
+    fit();
     try {
       const cartridge = group.querySelector('[data-console-layer="cartridge"]');
       const screen = group.querySelector('[data-console-layer="screen"]');
-      const insertion = cartridge.animate([{ transform: `translateY(${-100 * config.cartridge.travelY / config.canvas.height}%)` }, { transform: "translateY(0)" }], { duration: 840, easing: "cubic-bezier(.28,.72,.24,1)", fill: "both" });
-      const wake = screen.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 280, delay: 720, easing: "ease-out", fill: "both" });
+      const insertion = cartridge.animate([{ transform: `translateY(${-100 * config.cartridge.travelY / config.canvas.height}%)` }, { transform: "translateY(0)" }], { duration: SEAT_MS, easing: "cubic-bezier(.28,.72,.24,1)", fill: "both" });
+      const wake = screen.animate([{ opacity: 0 }, { opacity: 1 }], { duration: WAKE_MS, delay: WAKE_DELAY_MS, easing: "ease-out", fill: "both" });
       animations.current = [insertion, wake];
-      insertion.finished.then(() => {
-        if (id === run.current && dialog.current?.open) seatSound();
-      }).catch(() => {});
+      syncSound(insertion, wake);
       Promise.all(animations.current.map((animation) => animation.finished)).then(() => {
         if (id !== run.current || !dialog.current?.open) return;
         art.current.dataset.motionState = "loaded";
+        fit();
         status.current.textContent = `${moduleName} console preview ready.`;
       }).catch(() => {});
     } catch { stop("animation-fallback"); }
-  }, [art, dialog, fit, status, stop, seatSound]);
+  }, [art, dialog, fit, status, stop, syncSound]);
   return { start, stop };
 }

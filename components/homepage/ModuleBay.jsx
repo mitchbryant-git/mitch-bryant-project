@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { modules } from "@/config/modules";
 import { moduleMotion } from "@/config/module-motion";
+import { moduleFraming } from "@/config/module-framing";
 import { useModuleInsertion } from "./useModuleInsertion";
 import { useCartridgeSound } from "./useCartridgeSound";
 import styles from "./ModuleBay.module.css";
@@ -24,8 +25,9 @@ export function ModuleBay() {
   const art = useRef(null);
   const status = useRef(null);
   const sound = useCartridgeSound();
-  const { start: startInsertion, stop: stopInsertion } = useModuleInsertion(dialog, art, status, sound.seat, sound.cancel);
+  const { start: startInsertion, stop: stopInsertion } = useModuleInsertion(dialog, art, status, sound.sync, sound.cancel);
   const selected = presentation.find((module) => module.id === selectedId) ?? presentation[0];
+  const frame = moduleFraming.modules[selected.id];
 
   useEffect(() => {
     if (!selectedId) return;
@@ -83,6 +85,14 @@ export function ModuleBay() {
 
   return (
     <section className={styles.modules} id="modules" aria-labelledby="module-heading">
+      <svg width="0" height="0" className={styles.clipDefinitions} aria-hidden="true" focusable="false">
+        <defs>{Object.entries(moduleMotion).map(([id, config]) => (
+          <clipPath key={id} id={`module-internal-${id}`} clipPathUnits="objectBoundingBox">
+            <path d={config.occlusion.corridor} transform={`scale(${1 / config.canvas.width} ${1 / config.canvas.height})`} />
+            <path d={config.occlusion.screen} transform={`scale(${1 / config.canvas.width} ${1 / config.canvas.height})`} />
+          </clipPath>
+        ))}</defs>
+      </svg>
       <h2 className={styles.sectionLabel} id="module-heading">Choose your next move</h2>
       <div className={styles.grid}>
         {presentation.map((module) => (
@@ -131,15 +141,34 @@ export function ModuleBay() {
         }}
       >
         <div className={styles.viewerTop} data-viewer-controls>
-          <button ref={backButton} className={styles.backButton} type="button" onClick={closePreview}><span aria-hidden="true">&#8592;</span> Back to cartridges</button>
+          <button ref={backButton} className={styles.backButton} type="button" onClick={closePreview}><span aria-hidden="true">&#8592;</span> Back to Modules</button>
           <button className={styles.closeButton} type="button" aria-label="Close loaded console preview" onClick={closePreview}>&#215;</button>
         </div>
         <div className={styles.viewerBody}>
-          <div ref={art} className={styles.loadedArt} style={{ "--console-aspect": `${moduleMotion[selected.id]?.canvas.width ?? 1280} / ${moduleMotion[selected.id]?.canvas.height ?? selected.imageHeight ?? 653}` }}>
-            <Image id="loaded-image" src={selected.image} alt={`${selected.name} cartridge loaded into the original MB-01 Life Console`} width={1280} height={selected.imageHeight ?? 653} unoptimized />
-            {Object.entries(moduleMotion).map(([moduleId, config]) => <div key={moduleId} className={styles.consoleMotion} data-module-motion={moduleId} aria-hidden="true">
-              {Object.entries(config.layers).map(([layer, source]) => <Image key={layer} src={source} data-console-layer={layer} alt="" width={config.canvas.width} height={config.canvas.height} unoptimized draggable={false} loading="eager" />)}
-            </div>)}
+          <div ref={art} className={styles.loadedArt} data-module-stage>
+            <Image id="loaded-image" className={styles.loadedStill} src={moduleMotion[selected.id].fallback} alt={`${selected.name} cartridge loaded into the MB-01 Life Console`} width={1280} height={960} unoptimized />
+            <div className={styles.sourcePlane} data-source-plane style={{
+              width: `${frame.scale * 100}%`,
+              aspectRatio: `${frame.sourceCanvas.width} / ${frame.sourceCanvas.height}`,
+              left: `${frame.translateX / moduleFraming.stage.width * 100}%`,
+              top: `calc((${frame.translateY} - var(--stage-crop, 0)) * var(--stage-unit, 0px))`,
+              "--internal-clip": `url(#module-internal-${selected.id})`,
+            }}>
+              {Object.entries(moduleMotion).map(([moduleId, config]) => <div key={moduleId} className={styles.consoleMotion} data-module-motion={moduleId} aria-hidden="true">
+                {Object.entries(config.layers).map(([layer, source]) => {
+                  const generated = ["base", "foreground", "foregroundBack"].includes(layer);
+                  const transform = config.generatedBaseTransform;
+                  const image = <Image key={layer} src={source} data-console-layer={layer} alt="" width={generated ? 1448 : config.canvas.width} height={generated ? 1086 : config.canvas.height} unoptimized draggable={false} loading="eager" style={generated ? {
+                    inset: "auto",
+                    left: `${transform.x / config.canvas.width * 100}%`,
+                    top: `${transform.y / config.canvas.height * 100}%`,
+                    width: `${transform.scale * 100}%`,
+                    height: `${transform.height / config.canvas.height * transform.scale * 100}%`,
+                  } : undefined} />;
+                  return layer === "foreground" || layer === "foregroundBack" ? <div key={layer} className={styles.internalOcclusion}>{image}</div> : image;
+                })}
+              </div>)}
+            </div>
           </div>
           <div className={styles.loadedCopy}>
             <h3 id="loaded-question">{selected.question.join(" ")}</h3>
