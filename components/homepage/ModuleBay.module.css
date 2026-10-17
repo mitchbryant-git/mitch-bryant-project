@@ -278,8 +278,12 @@
   cursor: pointer
 }
 .backButton {
-  padding: 8px 4px
+  padding: 8px 4px;
+  appearance: none;
+  box-shadow: none
 }
+.dialog[data-input-modality="pointer"] .backButton:focus { outline: none; }
+.dialog[data-input-modality="keyboard"] .backButton:focus { outline: 3px solid var(--ink); outline-offset: 6px; }
 .closeButton {
   font-size: 28px;
   width: 44px;
@@ -442,9 +446,13 @@
 .loadedCopy .accessNote { grid-row: 4; margin: 0; padding-top: 18px; font-size: 14px; line-height: 22px; }
 .loadedCopy .openButton { grid-row: 6; margin: 0; align-self: start; }
 @media (min-width: 801px) and (max-width: 1100px) { .loadedCopy { grid-template-rows: 126px 20px 80px 62px 28px 76px; } }
-@media (max-width: 800px) { .loadedCopy { grid-template-rows: 61px 20px 75px 40px 28px 58px; } }
-@media (min-width: 701px) and (max-width: 800px) { .loadedCopy { grid-template-rows: 68px 20px 75px 40px 28px 58px; } }
-@media (max-width: 360px) { .loadedCopy { grid-template-rows: 92px 20px 100px 62px 28px 58px; } }
+@media (max-width: 800px) {
+  .loadedCopy { display: flex; flex-direction: column; }
+  .loadedCopy h3 { margin-bottom: 16px; }
+  .loadedCopy .accessNote { padding-top: 12px; }
+  .loadedCopy .openButton { margin-top: 24px; }
+  .dialog { padding-bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
+}
 @media (prefers-reduced-motion: reduce) {
   .artStage img, .selectButton, .openButton { transition: none !important; }
   .card[data-scroll-state="pending"] { transform: none; }

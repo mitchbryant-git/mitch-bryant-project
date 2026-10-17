@@ -22,6 +22,7 @@ export function ModuleBay() {
   const backButton = useRef(null);
   const originButton = useRef(null);
   const opening = useRef(false);
+  const pointerOpening = useRef(false);
   const art = useRef(null);
   const status = useRef(null);
   const sound = useCartridgeSound();
@@ -34,6 +35,7 @@ export function ModuleBay() {
     const panel = dialog.current;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    panel.dataset.inputModality = pointerOpening.current ? "pointer" : "keyboard";
     if (!panel.open) panel.showModal();
     panel.scrollTop = 0;
     backButton.current?.focus({ preventScroll: true });
@@ -49,6 +51,7 @@ export function ModuleBay() {
   function selectModule(module, event) {
     if (opening.current || dialog.current.open) return;
     opening.current = true;
+    pointerOpening.current = event.detail > 0;
     originButton.current = event.currentTarget;
     sound.arm(event.nativeEvent);
     setSelectedId(module.id);
@@ -70,6 +73,9 @@ export function ModuleBay() {
   }
 
   function keepFocusInside(event) {
+    if (["Tab", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+      dialog.current.dataset.inputModality = "keyboard";
+    }
     if (event.key !== "Tab") return;
     const controls = [...dialog.current.querySelectorAll("button:not([disabled]),a[href]")];
     const first = controls[0];
@@ -134,6 +140,7 @@ export function ModuleBay() {
         onClose={returnToCartridges}
         onCancel={(event) => { event.preventDefault(); closePreview(); }}
         onKeyDown={keepFocusInside}
+        onPointerDown={() => { dialog.current.dataset.inputModality = "pointer"; }}
         onClick={(event) => {
           if (event.target !== event.currentTarget) return;
           const bounds = event.currentTarget.getBoundingClientRect();
