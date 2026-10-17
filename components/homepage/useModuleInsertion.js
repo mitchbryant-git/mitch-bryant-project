@@ -80,8 +80,8 @@ export function useModuleInsertion(dialog, art, status, seatSound, cancelSound) 
     try {
       const cartridge = group.querySelector('[data-console-layer="cartridge"]');
       const screen = group.querySelector('[data-console-layer="screen"]');
-      const insertion = cartridge.animate([{ transform: `translateY(${-100 * config.cartridge.travelY / config.canvas.height}%)` }, { transform: "translateY(0)" }], { duration: 420, easing: "cubic-bezier(.28,.72,.24,1)", fill: "both" });
-      const wake = screen.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 140, delay: 360, easing: "ease-out", fill: "both" });
+      const insertion = cartridge.animate([{ transform: `translateY(${-100 * config.cartridge.travelY / config.canvas.height}%)` }, { transform: "translateY(0)" }], { duration: 840, easing: "cubic-bezier(.28,.72,.24,1)", fill: "both" });
+      const wake = screen.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 280, delay: 720, easing: "ease-out", fill: "both" });
       animations.current = [insertion, wake];
       insertion.finished.then(() => {
         if (id === run.current && dialog.current?.open) seatSound();

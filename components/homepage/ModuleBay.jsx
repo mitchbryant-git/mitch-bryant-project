@@ -132,7 +132,6 @@ export function ModuleBay() {
       >
         <div className={styles.viewerTop} data-viewer-controls>
           <button ref={backButton} className={styles.backButton} type="button" onClick={closePreview}><span aria-hidden="true">&#8592;</span> Back to cartridges</button>
-          <button className={styles.soundButton} type="button" data-sound-toggle aria-label="Cartridge sound" aria-pressed={sound.enabled} onClick={sound.toggle}>Sound {sound.enabled ? "on" : "off"}</button>
           <button className={styles.closeButton} type="button" aria-label="Close loaded console preview" onClick={closePreview}>&#215;</button>
         </div>
         <div className={styles.viewerBody}>

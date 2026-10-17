@@ -1,39 +1,30 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { cartridgeClickSamples } from "@/lib/cartridge-click.mjs";
 
-const preferenceKey = "atn-cartridge-sound";
-
 export function useCartridgeSound() {
-  const [enabled, setEnabled] = useState(true);
-  const allowed = useRef(true);
   const context = useRef(null);
   const buffer = useRef(null);
   const source = useRef(null);
+  const warmup = useRef(null);
   const armed = useRef(false);
 
   const cancel = useCallback(() => {
     armed.current = false;
-    if (source.current) {
-      try { source.current.stop(); } catch {}
-      source.current.disconnect();
-      source.current = null;
+    for (const ref of [source, warmup]) {
+      if (!ref.current) continue;
+      try { ref.current.stop(); } catch {}
+      ref.current.disconnect();
+      ref.current = null;
     }
   }, []);
 
   useEffect(() => {
-    function readPreference() {
-      try {
-        allowed.current = localStorage.getItem(preferenceKey) !== "off";
-        setEnabled(allowed.current);
-        if (!allowed.current) cancel();
-      } catch { /* Storage can be unavailable in private or restricted browsers. */ }
-    }
-    readPreference();
+    // Retire the old toggle without letting an old saved mute suppress the click.
+    try { localStorage.removeItem("atn-cartridge-sound"); } catch {}
     const listeners = new AbortController();
     const options = { signal: listeners.signal };
-    window.addEventListener("storage", readPreference, options);
     for (const event of ["pagehide", "popstate", "hashchange", "blur"]) window.addEventListener(event, cancel, options);
     document.addEventListener("visibilitychange", () => { if (document.hidden) cancel(); }, options);
     return () => {
@@ -48,7 +39,7 @@ export function useCartridgeSound() {
   // Called synchronously inside the real click/keyboard activation, never an effect.
   const arm = useCallback((event) => {
     cancel();
-    if (!event.isTrusted || !allowed.current || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!event.isTrusted || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (!AudioContext) return;
@@ -56,11 +47,19 @@ export function useCartridgeSound() {
         context.current = new AudioContext({ latencyHint: "interactive" });
         const samples = cartridgeClickSamples(context.current.sampleRate);
         buffer.current = context.current.createBuffer(1, samples.length, context.current.sampleRate);
-        buffer.current.copyToChannel(samples, 0);
+        buffer.current.getChannelData(0).set(samples);
       }
       armed.current = true;
       // A denied or slow resume is silent. It must never delay or replay the click.
       if (context.current.state !== "running") context.current.resume().catch(() => {});
+      // Start the Web Audio path while this trusted activation is still on-stack.
+      // One zero-valued sample is inaudible; it does not override OS audio policy.
+      const unlock = context.current.createBufferSource();
+      unlock.buffer = context.current.createBuffer(1, 1, context.current.sampleRate);
+      unlock.connect(context.current.destination);
+      warmup.current = unlock;
+      unlock.onended = () => { unlock.disconnect(); if (warmup.current === unlock) warmup.current = null; };
+      unlock.start();
     } catch { armed.current = false; }
   }, [cancel]);
 
@@ -68,7 +67,7 @@ export function useCartridgeSound() {
     const wasArmed = armed.current;
     armed.current = false;
     const audio = context.current;
-    if (!wasArmed || !allowed.current || document.hidden || audio?.state !== "running" || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!wasArmed || document.hidden || audio?.state !== "running" || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     try {
       const click = audio.createBufferSource();
       click.buffer = buffer.current;
@@ -79,12 +78,5 @@ export function useCartridgeSound() {
     } catch { cancel(); }
   }, [cancel]);
 
-  const toggle = useCallback(() => {
-    allowed.current = !allowed.current;
-    setEnabled(allowed.current);
-    cancel();
-    try { localStorage.setItem(preferenceKey, allowed.current ? "on" : "off"); } catch {}
-  }, [cancel]);
-
-  return { enabled, toggle, arm, seat, cancel };
+  return { arm, seat, cancel };
 }
