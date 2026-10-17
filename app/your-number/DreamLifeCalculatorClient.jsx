@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import YourNumberConsole from "./YourNumberConsole";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -898,8 +899,9 @@ export default function DreamLifeCalculatorClient() {
       </header>
 
       <main className={styles.main}>
-        <section className={styles.hero}>
-          <div className={styles.heroStripes} aria-hidden="true"><span /><span /><span /><span /></div>
+        <section className={`${styles.hero} ${styles.heroDepth}`}>
+          <div className={styles.heroTopBand} aria-hidden="true"><div className={styles.heroStripes}><span /><span /><span /><span /></div></div>
+          <div className={styles.heroBody}>
           <div className={styles.heroCopy}>
             <h1>
               Design your life.
@@ -920,17 +922,8 @@ export default function DreamLifeCalculatorClient() {
           </div>
 
           <div className={styles.heroVisual}>
-            <div className={styles.consoleFrame}>
-              <Image
-                className={styles.consoleImage}
-                src="/assets/console/mb01-console-your-number-loaded-v1.jpg"
-                alt="Your Number cartridge loaded into the MB-01 Life Console"
-                width={1280}
-                height={960}
-                priority
-                sizes="(max-width: 800px) 108vw, (max-width: 1050px) 75vw, 64vw"
-              />
-            </div>
+            <YourNumberConsole />
+          </div>
           </div>
         </section>
 
