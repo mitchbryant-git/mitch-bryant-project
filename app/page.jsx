@@ -3,6 +3,8 @@ import { ModuleBay } from "@/components/homepage/ModuleBay";
 import { WhyATN } from "@/components/homepage/WhyATN";
 import { ClosingCTA, SiteFooter } from "@/components/homepage/SiteEnding";
 import { HeaderPageLinks } from "@/components/HeaderPageLinks";
+import { HeroConsole } from "@/components/homepage/HeroConsole";
+import { HomepageScrollMotion } from "@/components/homepage/HomepageScrollMotion";
 import styles from "./HomepageHero.module.css";
 
 const homepageTitle = "All That’s Next | Life Design for Ages 16–19";
@@ -116,17 +118,7 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <div className={styles.console}>
-                <Image
-                  src="/assets/console/mb01-console-empty-front-v1.webp"
-                  unoptimized
-                  alt="Front view of the cream MB-01 Life Console ready for a module"
-                  width={1280}
-                  height={653}
-                  priority
-                  sizes="(max-width: 999px) 94vw, (max-width: 1600px) 60vw, 860px"
-                />
-              </div>
+              <HeroConsole className={styles.console} />
             </div>
           </div>
         </section>
@@ -139,6 +131,7 @@ export default function Home() {
       </main>
 
       <SiteFooter />
+      <HomepageScrollMotion />
     </div>
   );
 }

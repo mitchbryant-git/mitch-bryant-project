@@ -15,12 +15,12 @@ export function WhyATN() {
           <h3>Your future is more<br /> than a job title.</h3>
           <p>You’re choosing how you’ll spend your days, what matters to you and who you want to become. You deserve a way to explore that before committing years to a path.</p>
         </div>
-        <div className={styles.approach} id="method" aria-labelledby="approach-heading">
+        <div className={styles.approach} id="method" aria-labelledby="approach-heading" data-scroll-approach>
           <h3 id="approach-heading">Start with the life.<br /> Work backwards.</h3>
           <div className={styles.principles}>
-            <article className={styles.picture}><span className={styles.marker} aria-hidden="true" /><h4>Picture it.</h4><p>What would a great ordinary Tuesday look like for you?</p></article>
-            <article className={styles.price}><span className={styles.marker} aria-hidden="true" /><h4>Price it.</h4><p>What would that life cost, and what could support it?</p></article>
-            <article className={styles.test}><span className={styles.marker} aria-hidden="true" /><h4>Test it.</h4><p>Try a direction in real life. Use what you learn to choose your next move.</p></article>
+            <article className={styles.picture}><span className={styles.connectorSegment} data-connector-segment aria-hidden="true"><span /></span><span className={styles.marker} data-approach-marker aria-hidden="true" /><h4>Picture it.</h4><p>What would a great ordinary Tuesday look like for you?</p></article>
+            <article className={styles.price}><span className={styles.connectorSegment} data-connector-segment aria-hidden="true"><span /></span><span className={styles.marker} data-approach-marker aria-hidden="true" /><h4>Price it.</h4><p>What would that life cost, and what could support it?</p></article>
+            <article className={styles.test}><span className={styles.connectorSegment} data-connector-segment aria-hidden="true"><span /></span><span className={styles.marker} data-approach-marker aria-hidden="true" /><h4>Test it.</h4><p>Try a direction in real life. Use what you learn to choose your next move.</p></article>
           </div>
         </div>
         <div className={styles.personalNote}>

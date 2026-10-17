@@ -1,0 +1,12 @@
+.frame { position: relative; }
+.frame[data-hero-console] > img { aspect-ratio: 1280 / 653; mask-image: url('/assets/motion/hero/mb01-v2-review-mask.svg'); }
+.scene { position: absolute; inset: 0; visibility: hidden; pointer-events: none; mask: url('/assets/motion/hero/mb01-v2-review-mask.svg') 0 0 / 100% 100% no-repeat; }
+.frame[data-depth-active] > img { visibility: hidden; }
+.frame[data-depth-active] .scene { visibility: visible; }
+.background, .device { position: absolute; inset: 0; width: 100%; height: 100%; }
+.device { transform-origin: 50% 50%; will-change: transform; }
+.background svg, .device svg { width: 100%; height: 100%; display: block; }
+@media (max-width: 999px), (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .frame[data-depth-active] > img { visibility: visible; }
+  .frame .scene { visibility: hidden; }
+}

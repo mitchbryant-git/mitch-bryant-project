@@ -414,6 +414,29 @@
 }
 
 .dialog { margin: auto; }
+.soundButton { margin-left: auto; flex-shrink: 0; min-height: 44px; padding: 8px; border: 1px solid #cdbfb5; border-radius: 9px; background: transparent; color: var(--ink); font: 600 13px var(--font-instrument-sans),sans-serif; cursor: pointer; }
+.closeButton { flex-shrink: 0; }
+@media (max-width: 400px) { .viewerTop { gap: 8px; } .backButton { min-width: 0; font-size: 12px; gap: 5px; text-align: left; } .soundButton { font-size: 12px; padding: 6px; } }
+.card[data-scroll-state="pending"] { transform: translateY(10px); }
+.card:focus-within { transform: none !important; }
+.dialog[open] { animation: none; }
+.loadedArt { position: relative; overflow: visible; width: 100%; }
+.loadedArt > img { position: relative; border-radius: 18px; }
+.viewerBody { padding-top: var(--descent-clearance, 0px); }
+.consoleMotion { position: absolute; inset: 0; pointer-events: none; visibility: hidden; }
+.consoleMotion img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.consoleMotion img:not([data-console-layer="cartridge"]) { border-radius: 18px; }
+.loadedArt[data-has-motion] .consoleMotion[data-active-motion] { visibility: visible; }
+.loadedArt[data-has-motion] { aspect-ratio: var(--console-aspect); }
+.loadedArt[data-has-motion] > img { visibility: hidden; position: absolute; inset: 0; }
+.consoleMotion [data-console-layer="base"] { z-index: 0; }
+.consoleMotion [data-console-layer="cartridge"] { z-index: 1; }
+.consoleMotion [data-console-layer="foreground"] { z-index: 2; }
+.consoleMotion [data-console-layer="screen"] { z-index: 3; }
+.status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) {
   .artStage img, .selectButton, .openButton { transition: none !important; }
+  .card[data-scroll-state="pending"] { transform: none; }
+  .consoleMotion { display: none; }
+  .loadedArt[data-has-motion] > img { visibility: visible; }
 }
