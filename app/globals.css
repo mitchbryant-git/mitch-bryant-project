@@ -1416,3 +1416,13 @@ img {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Approved logo-only refresh. Existing navigation keeps its live grid. */
+.site-header .brand-lockup__image--wide { width: 212px; height: auto; }
+@media (max-width: 620px) {
+  .site-header .brand-lockup { min-height: 46px; }
+  .site-header .brand-lockup__image--wide { display: block; width: 140px; height: auto; }
+}
+@media (max-width: 350px) {
+  .site-header .brand-lockup__image--wide { width: 120px; }
+}

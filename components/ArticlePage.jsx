@@ -1,3 +1,4 @@
+import { ATN_LOGO } from '@/config/brand';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './ArticlePage.module.css';
@@ -29,7 +30,7 @@ export function ArticlePage({ article }) {
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }} />
     <a className="skip-link" href="#article-content">Skip to content</a>
     <header className={styles.header}>
-      <Link href="/" aria-label="All That's Next home"><Image src="/assets/brand/all-thats-next-lockup-web-v1.png" alt="All That's Next" width={1651} height={324} className={styles.logo} priority /></Link>
+      <Link href="/" aria-label="All That's Next home"><Image src={ATN_LOGO} unoptimized alt="All That's Next" width={1651} height={324} className={styles.logo} priority /></Link>
       <div className={styles.headerActions}><nav aria-label="Primary navigation"><Link href="/#modules">Tools</Link></nav><HeaderPageLinks currentPage={article.slug} /></div>
     </header>
     <main id="article-content" className={styles.main}>

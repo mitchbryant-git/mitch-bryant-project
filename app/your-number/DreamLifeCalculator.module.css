@@ -1404,3 +1404,7 @@
 @media(max-width:480px) { .heroDepth .heroCopy { min-height:29rem; } }
 @media(max-width:359px) { .heroDepth .heroCopy { min-height:31.25rem; } }
 @media(prefers-reduced-motion:reduce) { .depthConsole { transform:none!important; will-change:auto; } }
+
+/* Logo-only sizing; the existing action group and grid remain unchanged. */
+@media (max-width: 680px) { .atnLockup { width: 140px; } }
+@media (max-width: 370px) { .atnLockup { width: 132px; } }

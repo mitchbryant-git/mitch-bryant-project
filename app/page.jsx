@@ -1,3 +1,4 @@
+import { ATN_LOGO } from '@/config/brand';
 import Image from "next/image";
 import { ModuleBay } from "@/components/homepage/ModuleBay";
 import { WhyATN } from "@/components/homepage/WhyATN";
@@ -53,20 +54,12 @@ export default function Home() {
       <header className={`site-header ${styles.header}`}>
         <a className="brand-lockup" href="#top" aria-label="All That’s Next home">
           <Image
-            src="/assets/brand/all-thats-next-lockup-web-v1.png"
+            src={ATN_LOGO} unoptimized
             alt="All That’s Next"
             width={1651}
             height={324}
             priority
             className="brand-lockup__image brand-lockup__image--wide"
-          />
-          <Image
-            src="/icon-512.png"
-            alt=""
-            width={512}
-            height={512}
-            priority
-            className="brand-lockup__image brand-lockup__image--mark"
           />
         </a>
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { ATN_LOGO } from '@/config/brand';
+
 import Image from "next/image";
 import YourNumberConsole from "./YourNumberConsole";
 import Link from "next/link";
@@ -882,7 +884,7 @@ export default function DreamLifeCalculatorClient() {
 
       <header className={styles.toolbar}>
         <Link className={styles.brand} href="/">
-          <Image className={styles.atnLockup} src="/assets/brand/all-thats-next-lockup-web-v1.png" alt="All That's Next" width={424} height={88} priority />
+          <Image className={styles.atnLockup} src={ATN_LOGO} unoptimized alt="All That's Next" width={1651} height={324} priority />
         </Link>
 
         <div className={styles.toolbarActions}>

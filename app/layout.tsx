@@ -72,9 +72,9 @@ export const metadata: Metadata = {
     images: ["/assets/console/atn-empty-three-quarter-social-atn-lettering-v3.png"],
   },
   icons: {
-    icon: "/favicon-atn-cream-v1.png",
-    shortcut: "/favicon-atn-cream-v1.png",
-    apple: "/apple-touch-icon.png",
+    icon: "/assets/brand/atn-light-cream-48-v2.png",
+    shortcut: "/assets/brand/atn-light-cream-48-v2.png",
+    apple: "/assets/brand/atn-light-cream-180-v2.png",
   },
   manifest: "/manifest.webmanifest",
 };
@@ -111,7 +111,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                   description:
                     "Practical tools that help young people approach the future with greater clarity, agency and optimism.",
                   url: "https://allthatsnext.com",
-                  logo: "https://allthatsnext.com/icon-512.png",
+                  logo: "https://allthatsnext.com/assets/brand/atn-light-cream-512-v2.png",
                   founder: { "@id": "https://allthatsnext.com/#mitch-bryant" },
                 },
                 {
