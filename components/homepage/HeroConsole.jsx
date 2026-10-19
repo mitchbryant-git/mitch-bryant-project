@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import styles from "./HeroConsole.module.css";
 
-const source = "/assets/motion/hero/front-console-atn-lettering-v3.png";
+const source = "/assets/motion/hero/front-console-atn-lettering-v4.png";
 const plateSource = "/assets/motion/hero/clean-plate.png";
 const contour = "M 139 20 L 1132 20 C 1201 20 1236 60 1238 118 L 1240 507 C 1240 570 1201 608 1136 608 L 136 608 C 71 608 35 574 35 510 L 35 118 C 35 58 74 20 139 20 Z";
 

@@ -965,6 +965,14 @@ export default function DreamLifeCalculatorClient() {
                     <div
                       className={styles.categoryTrigger}
                     >
+                      <button
+                        type="button"
+                        className={styles.categoryToggle}
+                        aria-expanded={category.expanded}
+                        aria-controls={`category-body-${category.id}`}
+                        aria-label={`Toggle ${category.label}`}
+                        onClick={() => toggleCategory(category.id)}
+                      />
                       <span className={styles.categoryIcon} aria-hidden="true">
                         <Icon size={19} />
                       </span>
@@ -984,13 +992,13 @@ export default function DreamLifeCalculatorClient() {
                         )}
                         <Tip prompts={category.prompts} color={category.color} />
                       </span>
-                      <button type="button" className={styles.categoryToggle} aria-expanded={category.expanded} aria-controls={`category-body-${category.id}`} aria-label={`Toggle ${category.label}`} onClick={() => toggleCategory(category.id)}>
-                <span className={styles.categoryTotal}>
-                        {formatCurrency(yearToDisplay(categoryYearly, displayFrequency))}/
-                        {frequencyShort(displayFrequency)}
+                      <span className={styles.categoryAmount}>
+                        <span className={styles.categoryTotal}>
+                          {formatCurrency(yearToDisplay(categoryYearly, displayFrequency))}/
+                          {frequencyShort(displayFrequency)}
+                        </span>
+                        {category.expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                       </span>
-                      {category.expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                </button>
                     </div>
 
                     {category.expanded ? (

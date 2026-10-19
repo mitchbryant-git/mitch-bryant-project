@@ -10,7 +10,8 @@ import styles from "./HomepageHero.module.css";
 const homepageTitle = "All That’s Next | Life Design for Ages 16–19";
 const homepageDescription =
   "School ends. Then what? Your future is more than a job title. Explore who you want to become, decide your ideal life, and start building it.";
-const homepageShareImage = "/assets/console/atn-empty-three-quarter-social-atn-lettering-v3.png";
+const homepageShareTitle = "School ends. Then what?";
+const homepageShareImage = "/assets/console/homepage-front-console-four-steps-v2.png";
 
 export const metadata = {
   title: homepageTitle,
@@ -19,7 +20,7 @@ export const metadata = {
     other: { "msvalidate.01": "A93A08FECAE7AD48131CA518090D0CF9" },
   },
   openGraph: {
-    title: homepageTitle,
+    title: homepageShareTitle,
     description: homepageDescription,
     url: "/",
     siteName: "All That's Next",
@@ -28,15 +29,15 @@ export const metadata = {
     images: [
       {
         url: homepageShareImage,
-        width: 1280,
-        height: 653,
-        alt: "The All That's Next ATN-01 Life Console",
+        width: 1200,
+        height: 630,
+        alt: "The ATN-01 Life Console with four steps: Pick a focus, Load a module, Make a move, Learn. Go again.",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: homepageTitle,
+    title: homepageShareTitle,
     description: homepageDescription,
     images: [homepageShareImage],
   },

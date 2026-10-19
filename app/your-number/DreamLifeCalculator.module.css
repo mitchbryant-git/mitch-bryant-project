@@ -1320,11 +1320,56 @@
   box-shadow: none;
 }
 
-/* Keep category help/edit controls beside the native disclosure button. */
-.categoryTrigger { grid-template-columns: auto minmax(0, 1fr) auto; }
-.categoryToggle { display: flex; align-items: center; gap: .75rem; padding: .25rem; border: 0; background: transparent; color: inherit; cursor: pointer; }
-.categoryToggle:focus-visible { outline: 3px solid var(--dl-ink); outline-offset: 3px; border-radius: 4px; }
-@media (max-width: 600px) { .categoryToggle { grid-column: 3; grid-row: 1 / span 2; flex-wrap: wrap; justify-content: flex-end; } }
+/* A native button covers the header; help and rename remain independent controls. */
+.categoryTrigger {
+  position: relative;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.categoryToggle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.categoryToggle:focus-visible {
+  outline: 3px solid var(--dl-ink);
+  outline-offset: -5px;
+  border-radius: 12px;
+}
+
+.categoryAmount {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem;
+  pointer-events: none;
+}
+
+.categoryTitleRow {
+  pointer-events: none;
+}
+
+.categoryTitleRow .tipButton,
+.customCategoryName {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 600px) {
+  .categoryAmount {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
 
 /* Approved shared product header frame. Existing action rules remain intact. */
 .hero.heroDepth { display:block; width:100%; min-height:0; margin:0; padding:0; border:0; border-bottom:2px solid var(--dl-ink); border-radius:0; background:#111713; overflow:visible; }
