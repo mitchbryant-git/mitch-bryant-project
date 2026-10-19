@@ -53,6 +53,6 @@ const article = {
     "description": "Picture your Ideal Tuesday, find what your life could cost and try one small move before your next big decision."
   }
 };
-const shareImage = 'https://allthatsnext.com/assets/console/mb01-console-empty-three-quarter-v1.webp';
-export const metadata = { ...article.metadata, alternates: { canonical: '/life-after-school' }, openGraph: { ...article.metadata, url: '/life-after-school', siteName: "All That's Next", locale: 'en_AU', type: 'website', images: [{ url: shareImage, width: 1280, height: 653, alt: "The All That's Next MB-01 Life Console" }] }, twitter: { ...article.metadata, card: 'summary_large_image', images: [shareImage] } };
+const shareImage = 'https://allthatsnext.com/assets/console/atn-empty-three-quarter-social-atn-lettering-v3.png';
+export const metadata = { ...article.metadata, alternates: { canonical: '/life-after-school' }, openGraph: { ...article.metadata, url: '/life-after-school', siteName: "All That's Next", locale: 'en_AU', type: 'website', images: [{ url: shareImage, width: 1280, height: 653, alt: "The All That's Next ATN-01 Life Console" }] }, twitter: { ...article.metadata, card: 'summary_large_image', images: [shareImage] } };
 export default function Page() { return <ArticlePage article={article} />; }

@@ -58,10 +58,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/assets/console/mb01-console-empty-three-quarter-v1.webp",
+        url: "/assets/console/atn-empty-three-quarter-social-atn-lettering-v3.png",
         width: 1280,
         height: 653,
-        alt: "The All That's Next MB-01 Life Console",
+        alt: "The All That's Next ATN-01 Life Console",
       },
     ],
   },
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "School ends. Then what? | All That’s Next",
     description: "Practical tools to help you start shaping all that's next.",
-    images: ["/assets/console/mb01-console-empty-three-quarter-v1.webp"],
+    images: ["/assets/console/atn-empty-three-quarter-social-atn-lettering-v3.png"],
   },
   icons: {
     icon: "/favicon-atn-cream-v1.png",

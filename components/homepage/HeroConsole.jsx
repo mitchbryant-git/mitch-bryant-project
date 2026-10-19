@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import styles from "./HeroConsole.module.css";
 
-const source = "/assets/motion/hero/mb01-front-on-v2.png";
+const source = "/assets/motion/hero/front-console-atn-lettering-v3.png";
 const plateSource = "/assets/motion/hero/clean-plate.png";
 const contour = "M 139 20 L 1132 20 C 1201 20 1236 60 1238 118 L 1240 507 C 1240 570 1201 608 1136 608 L 136 608 C 71 608 35 574 35 510 L 35 118 C 35 58 74 20 139 20 Z";
 
@@ -80,7 +80,7 @@ export function HeroConsole({ className }) {
 
   return (
     <div ref={frame} className={`${className} ${styles.frame}`} data-hero-console>
-      <Image src={source} unoptimized alt="Front view of the cream MB-01 Life Console ready for a module" width={1280} height={653} priority sizes="(max-width: 999px) 94vw, (max-width: 1600px) 60vw, 860px" />
+      <Image src={source} unoptimized alt="Front view of the cream ATN-01 Life Console ready for a module" width={1280} height={653} priority sizes="(max-width: 999px) 94vw, (max-width: 1600px) 60vw, 860px" />
       {prepared && <div className={styles.scene} aria-hidden="true">
         <div className={styles.background}>
           <svg viewBox="0 0 1280 653" xmlns="http://www.w3.org/2000/svg">

@@ -61,6 +61,6 @@ const article = {
     "description": "Meet Mitch and see how All That's Next helps you design your life, understand the costs and take your next step."
   }
 };
-const shareImage = 'https://allthatsnext.com/assets/console/mb01-console-empty-three-quarter-v1.webp';
-export const metadata = { ...article.metadata, alternates: { canonical: '/about' }, openGraph: { ...article.metadata, url: '/about', siteName: "All That's Next", locale: 'en_AU', type: 'website', images: [{ url: shareImage, width: 1280, height: 653, alt: "The All That's Next MB-01 Life Console" }] }, twitter: { ...article.metadata, card: 'summary_large_image', images: [shareImage] } };
+const shareImage = 'https://allthatsnext.com/assets/console/atn-empty-three-quarter-social-atn-lettering-v3.png';
+export const metadata = { ...article.metadata, alternates: { canonical: '/about' }, openGraph: { ...article.metadata, url: '/about', siteName: "All That's Next", locale: 'en_AU', type: 'website', images: [{ url: shareImage, width: 1280, height: 653, alt: "The All That's Next ATN-01 Life Console" }] }, twitter: { ...article.metadata, card: 'summary_large_image', images: [shareImage] } };
 export default function Page() { return <ArticlePage article={article} />; }

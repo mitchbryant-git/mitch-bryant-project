@@ -16,9 +16,9 @@ export default function YourNumberConsole() {
   return (
     <div className={styles.depthStage}>
       <Image ref={imageRef} className={styles.depthConsole}
-        src="/assets/console/your-number-header/your-number-console.svg"
-        data-fallback="/assets/console/your-number-header/your-number-console-static.png"
-        alt="Your Number cartridge loaded into the MB-01 Life Console"
+        src="/assets/console/your-number-header/your-number-console-atn-lettering-v3.svg"
+        data-fallback="/assets/console/your-number-header/your-number-console-atn-lettering-v3-static.png"
+        alt="Your Number cartridge loaded into the ATN-01 Life Console"
         width={1280} height={960} priority unoptimized draggable={false} />
     </div>
   );

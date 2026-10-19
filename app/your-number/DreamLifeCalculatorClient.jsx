@@ -1343,7 +1343,7 @@ export default function DreamLifeCalculatorClient() {
       </main>
 
       <footer className={styles.footer}>
-        <span>MB-01 // Your Number // Planning estimate only</span>
+        <span>ATN-01 // Your Number // Planning estimate only</span>
         <span>
           Built by <Link href="/">All That&apos;s Next</Link>
         </span>
@@ -1368,7 +1368,7 @@ export default function DreamLifeCalculatorClient() {
             <div className={styles.shareCard}>
               <div className={styles.shareCardTop}>
                 <span className={styles.microLabel}>My Number</span>
-                <span className={styles.microLabel}>MB-01</span>
+                <span className={styles.microLabel}>ATN-01</span>
               </div>
               <span className={styles.shareCardValue}>
                 {formatCurrency(displayedLifeCost)}

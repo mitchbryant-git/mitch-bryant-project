@@ -22,10 +22,10 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: '/assets/console/mb01-console-your-number-loaded-v1.jpg',
+        url: '/assets/console/your-number-loaded-social-atn-lettering-v3.png',
         width: 1280,
         height: 960,
-        alt: 'The MB-01 Life Console with the Your Number module loaded',
+        alt: 'The ATN-01 Life Console with the Your Number module loaded',
       },
     ],
   },
@@ -33,7 +33,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: "Your Number | Lifestyle Cost Calculator",
     description: "Picture your ideal life. Price it. See what you need to earn. This is YOUR Number.",
-    images: ['/assets/console/mb01-console-your-number-loaded-v1.jpg'],
+    images: ['/assets/console/your-number-loaded-social-atn-lettering-v3.png'],
   },
   alternates: {
     canonical: 'https://allthatsnext.com/your-number',

@@ -153,7 +153,7 @@ export function ModuleBay() {
         </div>
         <div className={styles.viewerBody}>
           <div ref={art} className={styles.loadedArt} data-module-stage>
-            <Image id="loaded-image" className={styles.loadedStill} src={moduleMotion[selected.id].fallback} alt={`${selected.name} cartridge loaded into the MB-01 Life Console`} width={1280} height={960} unoptimized />
+            <Image id="loaded-image" className={styles.loadedStill} src={moduleMotion[selected.id].fallback} alt={`${selected.name} cartridge loaded into the ATN-01 Life Console`} width={1280} height={960} unoptimized />
             <div className={styles.sourcePlane} data-source-plane style={{
               width: `${frame.scale * 100}%`,
               aspectRatio: `${frame.sourceCanvas.width} / ${frame.sourceCanvas.height}`,
