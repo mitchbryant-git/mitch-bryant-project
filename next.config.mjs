@@ -1,4 +1,4 @@
-const bigGamePlaybookOrigin = process.env.BIG_GAME_PLAYBOOK_ORIGIN || (process.env.VERCEL_ENV === 'preview' ? 'https://all-thats-next-big-game-playbook-2mapksshk.vercel.app' : 'https://all-thats-next-big-game-playbook.vercel.app');
+const bigGamePlaybookOrigin = process.env.BIG_GAME_PLAYBOOK_ORIGIN || (process.env.VERCEL_ENV === 'preview' ? 'https://all-thats-next-big-game-playbook-9j3w68gs7.vercel.app' : 'https://all-thats-next-big-game-playbook.vercel.app');
 
 const calculatorOrigin =
   process.env.HECS_CALCULATOR_ORIGIN ||

@@ -113,7 +113,7 @@ Root owns / and its homepage module assets. Child owns /big-game-playbook, desce
 
 Sales-to-private navigation remains /big-game-playbook/app. Legacy section paths redirect307 to /app#section in child. Next default trailing slash canonicalisation remains308. Query strings pass through rewrites and redirects. Private entry retains Cache-Control:no-store and X-Robots-Tag:noindex,nofollow. Existing browser relative assets resolve to /big-game-playbook/* through its base href. Existing auth/cookie contracts stay at same public origin and backend; no account/session writes are performed. Authenticated save/login must be owner-tested separately.
 
-Both projects retain existing SSO protection. A protected child preview may reject cross-project rewrites; no security bypass or Trusted Sources change is authorized here. Production root must not be released before child production supports sales plus /app. Git automatic deployment is disabled in preview branch files only; no production project or domain settings changed. Guards verify repo slug, linked project and VERCEL_PROJECT_ID for root/child.
+Both projects retain existing SSO protection. Owner Chrome session verified the root homepage and root /big-game-playbook sales page through existing Vercel login. Unauthenticated callers encounter SSO as expected; no access-setting change is needed for owner comparison. Production root must not be released before child production supports sales plus /app. Git automatic deployment is disabled in preview branch files only; no production project or domain settings changed. Guards verify repo slug, linked project and VERCEL_PROJECT_ID for root/child.
 
 ## Verification receipt and remaining blocker
 
@@ -126,10 +126,21 @@ Local root-to-child HTTP checks: sales, private app, CSS, app.mjs and Your Numbe
 
 Root Vercel Git link independently verified to mitch-bryant-project, repo ID1157611690, production branch main. The issue was cross-repository deployment provenance, not the configured Git link. Automatic Git deployment disabled in both new preview branch files. Existing production branch/config untouched.
 
-BLOCKED hosted full comparison: authenticated CLI request to the root preview's /big-game-playbook still returns302 to child Vercel SSO. Root preview itself is available to authorized Vercel users, but child protection blocks the cross-project rewrite. Do not disable SSO. A separately approved narrowly scoped root-preview to child-preview Trusted Sources/proxy authentication arrangement is needed; implementation must use a server-side token with no secret in URLs or source. Existing private APIs remain on Growth Lab as before. Authenticated login/save and cookie return flow have not been exercised because this audit performs no account or data writes.
+Owner browser verification supersedes the earlier CLI access diagnosis: the existing Chrome Vercel login opens root preview homepage and /big-game-playbook successfully while staying on the root preview origin. No new credentials, protection exception or Trusted Sources change is needed. Existing private APIs remain on Growth Lab as before. Authenticated login/save and cookie return flow have not been exercised because this audit performs no account or data writes.
 
 CLI access check unexpectedly generated one root automation bypass token at timestamp1792669014918. It was immediately revoked by exact creation timestamp/scope, and absence verified. SSO remains all_except_custom_domains; production still dpl_7L5ac5zUMiix5dV113EfqewKrdyp. No bypass remains from this operation. Do not use vercel curl here without inspecting its automatic token-generation behavior.
 
 Initial API preview attempt rejected literal target preview; approval review then rejected omitted target as ambiguous. Official Vercel API reference establishes omitted target=preview and null response=preview; retry with that new evidence was approved and both deployments returned null. https://vercel.com/docs/rest-api/deployments/create-a-new-deployment
 
-No production deployment, promotion, domain assignment, main push, Supabase mutation, paid AI call or unreleased app/artwork import occurred. The protected cross-project preview is incomplete pending the access decision above. Before any eventual production release, child production must first gain the reviewed sales+/app route contract; current child production still serves only the private app at its product root.
+No production deployment, promotion, domain assignment, main push, Supabase mutation, paid AI call or unreleased app/artwork import occurred. Owner preview comparison is accessible through the existing Vercel browser login. Before any eventual production release, child production must first gain the reviewed sales+/app route contract; current child production still serves only the private app at its product root.
+
+
+## Consumer parity repair (preview only)
+
+Child branch182becd restores pinned pg8.23.1 and exposes the released worker as a Next Node route at /api/internal/consume with force-dynamic and maxDuration60. New files: app/api/internal/consume/route.js, server/next-consumer-route.mjs, tests/consumer-preview.test.mjs, CONSUMER-PREVIEW-PARITY.md. Original production consumer, configuration, role/capability checks, diagnostics and all server security sources remain unchanged from a8fe0a3. No new runtime credentials or settings.
+
+Six synthetic tests pass, including fake-pool/offline-adapter completion and rejection/body-bound/configuration checks. Local emitted route GET503 consumer_disabled with no-store. Build trace includes pg and the consumer function. Preview environment has no runtime/database bindings; production-only key metadata inspected without decryption. No live capability or private job dispatched. Authenticated login/save and live worker integration remain deliberately untested.
+
+Repaired child preview: https://all-thats-next-big-game-playbook-9j3w68gs7.vercel.app (dpl_D9UCAWir8hfefEKxPL98pSHnmEQg). Root preview config now pins this immutable repaired child, rather than596c83e. Root homepage code and exact live visual assets are unchanged.
+
+Production consumer unauthenticated GET independently verified404 consumer_route_not_found with no-store (read-only, no capability). Local functions-config-manifest explicitly records /api/internal/consume maxDuration60. Root and child lint/build pass after repair; existing image warnings only.
