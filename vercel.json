@@ -1,1 +1,7 @@
-{"git":{"deploymentEnabled":false}}
+{
+  "git": {
+    "deploymentEnabled": {
+      "codex/restore-atn-source-preview": false
+    }
+  }
+}
