@@ -144,3 +144,15 @@ Six synthetic tests pass, including fake-pool/offline-adapter completion and rej
 Repaired child preview: https://all-thats-next-big-game-playbook-9j3w68gs7.vercel.app (dpl_D9UCAWir8hfefEKxPL98pSHnmEQg). Root preview config now pins this immutable repaired child, rather than596c83e. Root homepage code and exact live visual assets are unchanged.
 
 Production consumer unauthenticated GET independently verified404 consumer_route_not_found with no-store (read-only, no capability). Local functions-config-manifest explicitly records /api/internal/consume maxDuration60. Root and child lint/build pass after repair; existing image warnings only.
+
+## Approved migration-only production release,22October2026
+
+Owner changed the stopping condition: release repository ownership/routing now, explicitly defer synthetic QA login/save/reload/logout and real authored offline worker checks until tomorrow because account recovery is unavailable. This supersedes earlier preview-only/no-production status statements for the release operation; it does not claim those functional tests passed. No Supabase auth reset, secret/security change, SQL, newer280-test enhancements,77-file product follow-up, image or animation is included.
+
+Both vercel.json files now use exact preview-branch deployment exclusions, preserving normal main automatic deployments. Root production BIG_GAME_PLAYBOOK_ORIGIN actual value verified as https://all-thats-next-big-game-playbook.vercel.app. Root main ancestry/diff checks pass; local checkout remains on codex/restore-atn-source-preview.
+
+Fresh pre-release rollback points, verified live: root dpl_7L5ac5zUMiix5dV113EfqewKrdyp /94a6ff9f3ba87bf3dfbdcfd633cf051edfe3f722; child dpl_Da1NkJJrfDxHwe8sBEV9pZecRrDS /a8fe0a3605f05ec91573cf21fe9edb29d54643d2. Child is released first from beae614 in its own project; old root compatibility must pass immediately before root main push. If child breaks old root, roll child back and leave root unchanged. After both releases, roll root back first then child if required.
+
+Current old root API namespace directly targets Growth Lab, not BGP. Source/effective origin and public HTTP config corroborate this: root/config200 matches GL/config200; BGP old production same config404. Candidate preserves this existing API backend. Exact old-root source built against new child plus signed-out synthetic API backend;25 compatibility cases passed again immediately pre-release. Covers private GET/HEAD cache/robots, JS/CSS/logo bytes, queries, nested API guards, local-only PUT/POST rejection,405methods,403origin,308trailing slash and eight307legacy redirects. No live private job was dispatched. Production smoke uses GET/HEAD only.
+
+Production deployment and final alias results are recorded in the separate task release receipt after completion, rather than claiming success in advance. Retained production bindings BGP_RUNTIME_ENABLED and BGP_CONSUMER_DATABASE_URL are not changed or copied into previews.
