@@ -8,13 +8,14 @@ import { moduleFraming } from "@/config/module-framing";
 import { useModuleInsertion } from "./useModuleInsertion";
 import { useCartridgeSound } from "./useCartridgeSound";
 import { BigGamePlaybookSection } from "./BigGamePlaybookSection";
+import { AnimatedCartridge } from "./AnimatedCartridge";
 import styles from "./ModuleBay.module.css";
 
 const presentation = [
-  { id: "tuesday-type", colour: "blue", question: ["What kind of life", "feels like me?"], description: ["Picture your ideal days. Discover your natural edge", "and find a direction to test."], action: "Find my direction", open: "Open Tuesday Type", width: 1200, height: 900 },
-  { id: "dream-life", colour: "purple", question: ["What could", "my life cost?"], description: ["Build the life you want. See what it could cost", "and the income that could support it."], action: "Work out my number", open: "Open Your Number", width: 1280, height: 960 },
+  { id: "tuesday-type", colour: "blue", question: ["What kind of life", "feels like me?"], description: ["Picture your ideal days. Discover your natural edge", "and find a direction to test."], action: "Find my direction", open: "Open Tuesday Type", width: 1208, height: 1302 },
+  { id: "dream-life", colour: "purple", question: ["What could", "my life cost?"], description: ["Build the life you want. See what it could cost", "and the income that could support it."], action: "Work out my number", open: "Open Your Number", width: 1208, height: 1302 },
   { id: "help", colour: "mint", question: ["When could", "my debt be gone?"], description: ["See how income and life changes could shift", "your HECS repayment date."], action: "Explore my repayments", open: "Open HECS Debt Calculator", width: 1187, height: 1280 },
-  { id: "growth-lab", colour: "orange", question: ["How do I turn a plan", "into progress?"], description: ["Choose one useful move today.", "Build evidence that you’re moving forward."], action: "Invited? Open your lab", open: "Sign in to Growth Lab", width: 1280, height: 853 },
+  { id: "growth-lab", colour: "orange", question: ["How do I turn a plan", "into progress?"], description: ["Choose one useful move today.", "Build evidence that you’re moving forward."], action: "Invited? Open your lab", open: "Sign in to Growth Lab", width: 1208, height: 1302 },
   { id: "big-game", colour: "yellow", question: ["The life you want.", "A plan to build it."], description: ["Your life. Your choices. Your next move.", "Connect your whole life with a practical plan."], action: "Explore the Playbook", open: "Open Big Game Playbook", width: 1200, height: 900 },
 ].map((item) => ({ ...modules.find((module) => module.id === item.id), ...item }));
 
@@ -114,7 +115,7 @@ export function ModuleBay() {
             data-scroll-card
           >
             <div className={styles.artStage} data-module={module.id}>
-              <Image src={module.cartridgeImage} alt={`Original ${module.name} cartridge`} width={module.width} height={module.height} unoptimized className={styles.cartridge} />
+              <AnimatedCartridge src={module.cartridgeImage} motion={module.cartridgeMotion} alt={`Original ${module.name} cartridge`} width={module.width} height={module.height} />
             </div>
             <div className={styles.copy}>
               <h3>{module.question[0]}<br />{module.question[1]}</h3>

@@ -6,7 +6,8 @@ export const modules = [
     status: "Live now",
     statusTone: "live",
     accent: "purple",
-    cartridgeImage: "/assets/cartridges/standalone-your-number-atn-lettering-v3.png",
+    cartridgeImage: "/assets/cartridges/your-number-cartridge-atn-standard-v1.webp",
+    cartridgeMotion: "/assets/cartridges/motion/your-number-label-motion-v1.json",
     image: "/assets/console/your-number-loaded-social-atn-lettering-v3.png",
     imageHeight: 960,
     description:
@@ -22,7 +23,8 @@ export const modules = [
     status: "Live now",
     statusTone: "live",
     accent: "mint",
-    cartridgeImage: "/assets/cartridges/standalone-hecs-debt-calculator-atn-lettering-v3.png",
+    cartridgeImage: "/assets/cartridges/hecs-debt-calculator-cartridge-atn-standard-v1.webp",
+    cartridgeMotion: "/assets/cartridges/motion/hecs-debt-calculator-label-motion-v1.json",
     cartridgeFit: "contain",
     image: "/assets/console/hecs-loaded-social-atn-lettering-v3.png",
     description:
@@ -38,7 +40,8 @@ export const modules = [
     status: "Free beta",
     statusTone: "live",
     accent: "blue",
-    cartridgeImage: "/assets/cartridges/standalone-tuesday-type-atn-lettering-v3.png",
+    cartridgeImage: "/assets/cartridges/tuesday-type-cartridge-atn-standard-v1.webp",
+    cartridgeMotion: "/assets/cartridges/motion/tuesday-type-label-motion-v1.json",
     image: "/assets/console/tuesday-type-loaded-social-atn-lettering-v3.png",
     description:
       "Work out how you want to live and work, picture what a normal Tuesday could look like, and test whether it actually fits.",
@@ -53,7 +56,8 @@ export const modules = [
     status: "Private beta",
     statusTone: "live",
     accent: "orange",
-    cartridgeImage: "/assets/cartridges/standalone-growth-lab-atn-lettering-v3.png",
+    cartridgeImage: "/assets/cartridges/growth-lab-cartridge-atn-standard-v1.webp",
+    cartridgeMotion: "/assets/cartridges/motion/growth-lab-label-motion-v1.json",
     image: "/assets/console/growth-lab-loaded-social-atn-lettering-v3.png",
     imageHeight: 960,
     description:

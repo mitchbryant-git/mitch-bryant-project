@@ -29,29 +29,49 @@
   isolation: isolate;
   overflow: hidden
 }
-.artStage img {
-  display: block;
+/* Standard cartridge photos share one framing; heights keep each cartridge at its approved size. */
+.cartridgeArt {
+  --art-h: 500px;
   position: absolute;
   left: 50%;
   top: 50%;
-  height: 500px;
-  width: auto;
-  max-width: none;
+  height: var(--art-h);
+  width: calc(var(--art-h) * var(--art-ratio, 1));
   transform: translate(-50%,-50%);
   mask-image: radial-gradient(ellipse 54% 67% at 50% 50%,#000 70%,transparent 100%);
   mask-size: 100% 100%
 }
-.artStage[data-module="tuesday-type"] img {
-  height: 505px
+.cartridgeArt img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none
 }
-.artStage[data-module="dream-life"] img {
-  height: 474px
+/* Label motion sits over the label region and only shows once its first frame is drawn. */
+.labelMotion {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease
 }
-.artStage[data-module="help"] img {
-  height: 512px
+.cartridgeArt[data-motion="on"] .labelMotion {
+  opacity: 1
 }
-.artStage[data-module="growth-lab"] img {
-  height: 494px
+.artStage[data-module="tuesday-type"] .cartridgeArt {
+  --art-h: 511px
+}
+.artStage[data-module="dream-life"] .cartridgeArt {
+  --art-h: 508px
+}
+.artStage[data-module="help"] .cartridgeArt {
+  --art-h: 512px
+}
+.artStage[data-module="growth-lab"] .cartridgeArt {
+  --art-h: 502px
 }
 .copy {
   padding: 8px 38px 30px
@@ -112,17 +132,17 @@
   .artStage {
     height: 350px
   }
-  .artStage[data-module="tuesday-type"] img {
-    height: 418px
+  .artStage[data-module="tuesday-type"] .cartridgeArt {
+    --art-h: 423px
   }
-  .artStage[data-module="dream-life"] img {
-    height: 392px
+  .artStage[data-module="dream-life"] .cartridgeArt {
+    --art-h: 420px
   }
-  .artStage[data-module="help"] img {
-    height: 424px
+  .artStage[data-module="help"] .cartridgeArt {
+    --art-h: 424px
   }
-  .artStage[data-module="growth-lab"] img {
-    height: 409px
+  .artStage[data-module="growth-lab"] .cartridgeArt {
+    --art-h: 416px
   }
   .copy {
     padding: 6px 24px 26px
@@ -144,17 +164,17 @@
   .artStage {
     height: 310px
   }
-  .artStage[data-module="tuesday-type"] img {
-    height: 370px
+  .artStage[data-module="tuesday-type"] .cartridgeArt {
+    --art-h: 374px
   }
-  .artStage[data-module="dream-life"] img {
-    height: 347px
+  .artStage[data-module="dream-life"] .cartridgeArt {
+    --art-h: 372px
   }
-  .artStage[data-module="help"] img {
-    height: 375px
+  .artStage[data-module="help"] .cartridgeArt {
+    --art-h: 375px
   }
-  .artStage[data-module="growth-lab"] img {
-    height: 362px
+  .artStage[data-module="growth-lab"] .cartridgeArt {
+    --art-h: 368px
   }
   .copy {
     padding-left: 20px;
@@ -235,10 +255,10 @@
 .copy {
   padding-bottom: 36px
 }
-.artStage img {
+.cartridgeArt {
   transition: transform 160ms ease
 }
-.selecting .artStage img {
+.selecting .cartridgeArt {
   transform: translate(-50%,calc(-50% - 10px)) scale(1.025)
 }
 .dialog {
@@ -390,13 +410,13 @@
   }
 }
 @media(prefers-reduced-motion:reduce) {
-  .artStage img,.selectButton,.openButton {
+  .cartridgeArt,.selectButton,.openButton {
     transition: none
   }
   .dialog[open] {
     animation: none
   }
-  .selecting .artStage img {
+  .selecting .cartridgeArt {
     transform: translate(-50%,-50%)
   }
   .selectButton:hover,.openButton:hover {
@@ -409,8 +429,7 @@
 .copy p {
   line-height: 1.5
 }
-.artStage img {
-  height: 500px;
+.cartridgeArt img {
   max-width: none
 }
 .lightText {
@@ -454,7 +473,8 @@
   .dialog { padding-bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .artStage img, .selectButton, .openButton { transition: none !important; }
+  .cartridgeArt, .selectButton, .openButton { transition: none !important; }
+  .labelMotion { display: none; }
   .card[data-scroll-state="pending"] { transform: none; }
   .consoleMotion { display: none; }
   .loadedArt[data-has-motion] .loadedStill { visibility: visible; }
