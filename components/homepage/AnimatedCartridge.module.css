@@ -1,0 +1,24 @@
+/* The frame is positioned and sized by the caller's class; this only covers its contents. */
+.frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none
+}
+/* Label motion sits over the label region and only shows once its first frame is drawn. */
+.motion {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease
+}
+.frame[data-motion="on"] .motion {
+  opacity: 1
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion { display: none; }
+}

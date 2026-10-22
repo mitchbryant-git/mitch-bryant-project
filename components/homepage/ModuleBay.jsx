@@ -96,7 +96,7 @@ export function ModuleBay() {
 
   return (
     <section className={styles.modules} id="modules" aria-labelledby="module-heading">
-      <BigGamePlaybookSection artwork="/assets/bgp-homepage-background-art-atn.png" onOpen={(event) => selectModule(presentation.find((item) => item.id === "big-game"), event)} />
+      <BigGamePlaybookSection onOpen={(event) => selectModule(presentation.find((item) => item.id === "big-game"), event)} />
       <svg width="0" height="0" className={styles.clipDefinitions} aria-hidden="true" focusable="false">
         <defs>{Object.entries(moduleMotion).filter(([,config])=>config.enabled!==false).map(([id, config]) => (
           <clipPath key={id} id={`module-internal-${id}`} clipPathUnits="objectBoundingBox">
@@ -115,7 +115,7 @@ export function ModuleBay() {
             data-scroll-card
           >
             <div className={styles.artStage} data-module={module.id}>
-              <AnimatedCartridge src={module.cartridgeImage} motion={module.cartridgeMotion} alt={`Original ${module.name} cartridge`} width={module.width} height={module.height} />
+              <AnimatedCartridge className={styles.cartridgeArt} src={module.cartridgeImage} motion={module.cartridgeMotion} alt={`Original ${module.name} cartridge`} width={module.width} height={module.height} />
             </div>
             <div className={styles.copy}>
               <h3>{module.question[0]}<br />{module.question[1]}</h3>

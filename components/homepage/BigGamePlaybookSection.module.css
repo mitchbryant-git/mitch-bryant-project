@@ -1,17 +1,117 @@
 .section{position:relative;margin:0 0 64px;color:var(--ink);isolation:isolate}
-.scene{position:relative;min-height:570px;aspect-ratio:1586/992;display:flex;align-items:center;border:1px solid #cdbfb5;border-radius:24px;background:#f7f0e5;overflow:hidden;box-shadow:6px 6px 0 #e8d8d0}
-.artwork{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
-.copy{position:relative;z-index:1;width:43%;padding:40px 42px 44px}
+
+/* Desktop: copy on the left, the example playbook and the cartridge on the right. */
+.scene{
+  position:relative;display:grid;
+  grid-template-columns:minmax(0,.95fr) minmax(0,1.25fr);
+  grid-template-rows:1fr auto;
+  grid-template-areas:"top visual" "cta visual";
+  column-gap:28px;
+  padding:44px 40px 44px 42px;
+  border:1px solid #cdbfb5;border-radius:24px;overflow:hidden;
+  background-color:#f7f0e5;
+  background-image:radial-gradient(circle,#e6d8c8 1px,transparent 1.4px);
+  background-size:18px 18px;
+  box-shadow:6px 6px 0 #e8d8d0
+}
+.top{grid-area:top;align-self:end;max-width:560px}
+.cta{grid-area:cta;align-self:start}
+.visual{grid-area:visual;position:relative;min-height:590px}
+
 .bars{display:flex;gap:5px;margin:0 0 26px;transform:skewX(-24deg);width:max-content}
 .bars span{display:block;width:38px;height:12px;background:#0068d8}.bars span:nth-child(2){background:#08d8b8}.bars span:nth-child(3){background:#f84878}.bars span:nth-child(4){background:#f8d018}
 .product{font:400 12px/1.4 var(--font-archivo-black),Arial,sans-serif;letter-spacing:.07em;text-transform:uppercase;margin:0 0 24px}
-.copy h3{font:800 clamp(36px,4.2vw,62px)/1.02 var(--font-anybody),Arial,sans-serif;letter-spacing:-.045em;margin:0 0 24px}
-.copy>p{font-size:17px;line-height:1.6;max-width:340px;margin:0 0 26px}
+.top h3{font:800 clamp(34px,3.8vw,56px)/1.02 var(--font-anybody),Arial,sans-serif;letter-spacing:-.045em;margin:0 0 24px;text-wrap:balance}
+.top>p{font-size:17px;line-height:1.6;max-width:430px;margin:0 0 30px}
 .button{min-height:52px;display:inline-flex;align-items:center;justify-content:center;gap:20px;padding:14px 20px;border:2px solid #111411;border-radius:10px;background:#f8d018;color:#111411;box-shadow:4px 4px 0 #0068d8;font:400 12px/1.4 var(--font-archivo-black),Arial,sans-serif;text-transform:uppercase;letter-spacing:.035em;cursor:pointer;transition:transform 140ms ease,box-shadow 140ms ease}
 .button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 #0068d8}.button:active{transform:translate(2px,2px);box-shadow:none}.button:focus-visible{outline:3px solid #0068d8;outline-offset:5px}
-.copy>.access{font-size:12px;line-height:1.5;margin-top:20px;margin-bottom:0}
-.missingArt{position:absolute;left:53%;right:30px;top:60px;bottom:60px;border:2px dashed #8d897d;border-radius:18px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:30px;background:#fffaf0;color:#514e43}
-.missingArt strong{font:700 24px/1.1 var(--font-anybody),Arial,sans-serif}.missingArt p{font-size:15px;line-height:1.6;margin:14px 0 0}
-@media(max-width:800px){.scene{min-height:0;aspect-ratio:auto;display:flex;flex-direction:column}.artwork{position:relative;inset:auto;order:0;aspect-ratio:4/3;height:auto;object-fit:cover;object-position:80% center}.copy{width:100%;order:1;padding:32px 26px}.copy h3{font-size:clamp(35px,8.5vw,56px)}.copy>p{max-width:520px}.missingArt{position:relative;inset:auto;order:0;min-height:200px;margin:24px 24px 0}.bars{margin-bottom:22px}.bars span{width:30px;height:10px}}
-@media(max-width:480px){.section{margin-bottom:42px}.scene{border-radius:18px}.copy{padding:28px 20px 32px}.button{width:100%;font-size:11px;gap:12px}.missingArt{margin:20px 20px 0;min-height:180px;padding:22px}.copy h3{font-size:37px}}
+.access{font-size:12px;line-height:1.5;margin:20px 0 0}
+
+/* The example playbook board */
+.board{
+  position:absolute;left:0;top:0;width:64%;
+  margin:0;padding:16px 16px 18px;
+  container-type:inline-size;
+  background:#fffaf5;border:2px solid var(--ink);border-radius:18px;
+  box-shadow:5px 5px 0 var(--ink)
+}
+.boardHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 2px 14px;white-space:nowrap;font:400 11px/1.3 var(--font-archivo-black),Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.boardTag{padding:4px 8px;border:1.5px solid var(--ink);border-radius:999px;background:#fff0a3;font-size:10px}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.step{position:relative;min-width:0;padding:13px 13px 14px;border:1.5px solid #d9c8b8;border-radius:12px;background:#f8f1eb}
+.stepNo{display:inline-block;margin:0 0 9px;padding:3px 7px;border:1.5px solid var(--ink);border-radius:7px;background:#f8d018;font:400 11px/1.2 var(--font-archivo-black),Arial,sans-serif;letter-spacing:.04em}
+.step h4{font:750 17px/1.15 var(--font-anybody),Arial,sans-serif;letter-spacing:-.02em;margin:0 0 5px}
+.step>p{font-size:13px;line-height:1.4;color:#45493f;margin:0 0 11px}
+
+.thumbs{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.thumbs img:first-child{grid-column:span 2;aspect-ratio:2/1}
+.thumbs img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:6px;border:1px solid #d9c8b8}
+
+.chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:5px}
+.chips li{padding:4px 8px;border:1.5px solid var(--ink);border-radius:999px;background:#ffd0dc;font-size:12px;line-height:1.2;font-weight:600}
+
+.meters{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.meters li{display:grid;grid-template-columns:44px 1fr;align-items:center;gap:8px;font-size:12px;font-weight:600}
+.meters i{position:relative;display:block;height:9px;border:1.5px solid var(--ink);border-radius:999px;background:#fffaf5;overflow:hidden}
+.meters i::after{content:"";position:absolute;inset:0;background:var(--mint);transform-origin:left;transform:scaleX(var(--v))}
+
+.moves{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.moves li{position:relative;padding-left:22px;font-size:12.5px;line-height:1.3;font-weight:600}
+.moves li::before{content:"";position:absolute;left:0;top:1px;width:13px;height:13px;border:1.5px solid var(--ink);border-radius:4px;background:#fffaf5}
+.moves li[data-done]::after{content:"";position:absolute;left:4px;top:3.5px;width:4px;height:7px;border:solid var(--ink);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.moves li[data-done]::before{background:var(--mint)}
+
+.srOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Plays once when the board scrolls into view (only set by script, never with reduced motion). */
+.board[data-anim="ready"] .meters i::after{transform:scaleX(0)}
+.board[data-anim="ready"] .moves li[data-done]::before{background:#fffaf5}
+.board[data-anim="ready"] .moves li[data-done]::after{opacity:0;transform:rotate(45deg) scale(.4)}
+.board[data-anim="play"] .meters i::after{transition:transform 900ms cubic-bezier(.2,.75,.3,1) var(--d,0ms)}
+.board[data-anim="play"] .moves li[data-done]::before{transition:background-color 160ms ease var(--d,0ms)}
+.board[data-anim="play"] .moves li[data-done]::after{transition:opacity 160ms ease var(--d,0ms),transform 260ms cubic-bezier(.3,1.6,.5,1) var(--d,0ms)}
+
+/* The cartridge stands in front of the board's lower right corner. */
+.cartridge{position:absolute;right:0;bottom:-26px;width:40%;aspect-ratio:var(--art-ratio);z-index:2}
+
+@container (min-width:640px){
+  .steps{grid-template-columns:repeat(4,1fr)}
+}
+
+/* Tablet: the words beside the cartridge, the playbook across the full width below. */
+@media(max-width:1100px){
+  .scene{grid-template-columns:minmax(0,1fr) minmax(0,34%);grid-template-rows:none;grid-template-areas:"top cart" "board board" "cta cta";padding:40px 36px 40px}
+  .visual{display:contents}
+  .cartridge{grid-area:cart;position:relative;right:auto;bottom:auto;align-self:center;justify-self:center;width:min(100%,250px);margin:0 0 6px}
+  .top{align-self:center;padding:0}
+  .board{grid-area:board;position:relative;left:auto;top:auto;width:auto;margin:30px 0 0}
+  .cta{padding:30px 0 0}
+}
+/* Phone: one column, the cartridge first, then the words, the playbook and the button. */
+@media(max-width:700px){
+  .scene{grid-template-columns:1fr;grid-template-areas:"cart" "top" "board" "cta";padding:0 0 34px}
+  .cartridge{width:min(50%,230px);margin:28px 0 8px}
+  .top{max-width:none;padding:6px 26px 0}
+  .board{margin:4px 22px 0}
+  .cta{padding:28px 26px 0}
+}
+@media(max-width:480px){
+  .section{margin-bottom:42px}
+  .scene{border-radius:18px;padding-bottom:30px}
+  .cartridge{width:min(52%,210px);margin-top:24px}
+  .top{padding:4px 20px 0}
+  .top h3{font-size:min(36px,9.4vw)}
+  .top>p{font-size:16px;margin-bottom:24px}
+  .board{margin:0 14px;padding:12px 12px 14px;border-radius:16px;box-shadow:4px 4px 0 var(--ink)}
+  .steps{gap:8px}
+  .step{padding:10px 10px 12px}
+  .step h4{font-size:15px}
+  .step>p{font-size:12.5px;margin-bottom:9px}
+  .chips li{font-size:11.5px;padding:3px 7px}
+  .meters li{grid-template-columns:40px 1fr;font-size:11.5px}
+  .moves li{font-size:12px}
+  .cta{padding:26px 20px 0}
+  .button{width:100%;font-size:11px;gap:12px}
+}
+@media(max-width:400px){.boardTag{display:none}}
 @media(prefers-reduced-motion:reduce){.button{transition:none}}

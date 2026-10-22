@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import styles from "./ModuleBay.module.css";
+import styles from "./AnimatedCartridge.module.css";
 
 // The label art runs at 12 frames a second, like a sprite.
 const STEP = 1000 / 12;
@@ -39,7 +39,8 @@ const percent = (part, whole) => `${(part / whole) * 100}%`;
 // Enhancement only: the photo is the complete cartridge. When motion is allowed and the card is
 // near the screen, a canvas over the label region plays the label art. The canvas copies its
 // background from the photo itself, so its edges always match.
-export function AnimatedCartridge({ src, motion, width, height, alt }) {
+// `className` must position and size the frame (the canvas is placed inside it).
+export function AnimatedCartridge({ src, motion, width, height, alt, className = "", loading }) {
   const box = useRef(null);
   const photo = useRef(null);
   const canvas = useRef(null);
@@ -179,9 +180,9 @@ export function AnimatedCartridge({ src, motion, width, height, alt }) {
   }, [motion]);
 
   return (
-    <div ref={box} className={styles.cartridgeArt} style={{ "--art-ratio": width / height }}>
-      <Image ref={photo} src={src} alt={alt} width={width} height={height} unoptimized />
-      {motion ? <canvas ref={canvas} className={styles.labelMotion} aria-hidden="true" /> : null}
+    <div ref={box} className={`${styles.frame} ${className}`} style={{ "--art-ratio": width / height }}>
+      <Image ref={photo} src={src} alt={alt} width={width} height={height} unoptimized loading={loading} />
+      {motion ? <canvas ref={canvas} className={styles.motion} aria-hidden="true" /> : null}
     </div>
   );
 }
