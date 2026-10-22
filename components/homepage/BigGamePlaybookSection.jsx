@@ -15,15 +15,15 @@ const CARTRIDGE = {
 // The playbook picture. Swapping the image means updating its file, size, alt text and the tag
 // positions below (percent of the picture, measured from its top left corner).
 const PICTURE = {
-  src: "/assets/bgp-section/playbook-interim-v1.webp",
-  width: 1200,
-  height: 1200,
-  alt: "A playbook brought to life: friends sharing a long lunch, someone building at a workbench, and a train trip along the coast",
+  src: "/assets/bgp-section/playbook-brought-to-life-v1.webp",
+  width: 1254,
+  height: 1254,
+  alt: "An open playbook with three photos: friends laughing over lunch on a terrace above the sea, a young woman shaping clay in a bright studio, and a young man with a notebook smiling out of a train window at the coast",
 };
 const STEPS = [
-  { text: "The life I actually want", x: 3, y: 3.5, w: 90 },
-  { text: "Who I need to become", x: 2.6, y: 61.4, w: 45 },
-  { text: "How I’ll get there", x: 52.2, y: 61.4, w: 45 },
+  { text: "The life I actually want", x: 15, y: 12.1, w: 60 },
+  { text: "Who I need to become", x: 9.3, y: 51, w: 39 },
+  { text: "How I’ll get there", x: 52.8, y: 51.5, w: 39 },
 ];
 
 export function BigGamePlaybookSection({ onOpen }) {
@@ -50,6 +50,7 @@ export function BigGamePlaybookSection({ onOpen }) {
   return (
     <section className={styles.section} aria-labelledby="bgp-product-title" data-bgp-review-section>
       <div className={styles.scene}>
+        <h2 id="bgp-product-title" className={styles.head}><span className={styles.srOnly}>Big Game Playbook. </span>The life you want.<br />A plan to build it.</h2>
         <AnimatedCartridge
           className={styles.cartridge}
           src={CARTRIDGE.src}
@@ -58,10 +59,7 @@ export function BigGamePlaybookSection({ onOpen }) {
           height={CARTRIDGE.height}
           alt="The Big Game Playbook cartridge"
         />
-        <div className={styles.copy}>
-          <h2 id="bgp-product-title"><span className={styles.srOnly}>Big Game Playbook. </span>The life you want.<br />A plan to build it.</h2>
-          <p>Explore the life you truly want, find out what it takes and who you’ll need to become, then start moving in the right direction.</p>
-        </div>
+        <p className={styles.lede}>Explore the life you truly want, find out what it takes and who you’ll need to become, then start moving in the right direction.</p>
         <figure ref={picture} className={styles.picture}>
           <Image src={PICTURE.src} alt={PICTURE.alt} width={PICTURE.width} height={PICTURE.height} unoptimized />
           <ol className={styles.tags}>
