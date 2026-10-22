@@ -1,5 +1,38 @@
 // Approved imagegen exterior; original registered cartridge/screen; internal occlusion only.
 export const moduleMotion = {
+  "big-game": {
+  "canvas": {
+    "width": 1280,
+    "height": 653
+  },
+  "cartridge": {
+    "x": 514,
+    "y": 12,
+    "width": 230,
+    "height": 363,
+    "travelY": 285
+  },
+  "layers": {
+    "base": "/assets/motion/tuesday-type/tuesday-type-base-atn-lettering-v3.png",
+    "cartridge": "/assets/motion/big-game/native-camera-v2/cartridge.png",
+    "foreground": "/assets/motion/tuesday-type/tuesday-type-base-atn-lettering-v3.png",
+    "foregroundBack": "/assets/motion/tuesday-type/tuesday-type-base-atn-lettering-v3.png",
+    "screen": "/assets/motion/big-game/native-camera-v2/screen.png"
+  },
+  "fallback": "/assets/motion/big-game/native-camera-v2/settled.png",
+  "occlusion": {
+    "corridor": "M485 117 L498 121 L751 146 L775 145 L775 400 L485 400 Z",
+    "screen": "M404 189 L814 232 Q825 234 823 250 L806 490 Q804 502 791 500 L383 449 Q374 448 375 435 L390 207 Q392 189 404 189 Z"
+  },
+  "generatedBaseTransform": {
+    "file": "tuesday-type-padded-candidate.png",
+    "scale": 0.8528115240972844,
+    "x": 74.44334302230622,
+    "y": -22.30027307612228,
+    "height": 960
+  },
+  "enabled": true
+},
   "tuesday-type": {
     "canvas": {
       "width": 1280,

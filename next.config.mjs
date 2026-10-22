@@ -1,3 +1,5 @@
+const bigGamePlaybookOrigin = process.env.BIG_GAME_PLAYBOOK_ORIGIN || (process.env.VERCEL_ENV === 'preview' ? 'https://all-thats-next-big-game-playbook-2mapksshk.vercel.app' : 'https://all-thats-next-big-game-playbook.vercel.app');
+
 const calculatorOrigin =
   process.env.HECS_CALCULATOR_ORIGIN ||
   (process.env.NODE_ENV === 'development'
@@ -27,6 +29,7 @@ const nextConfig = {
   },
   async rewrites() {
     return [
+      ...['/big-game-playbook', '/big-game-playbook/:path*', '/big-game-playbook-static/:path*', '/assets/bgp-entry/:path*', '/assets/whole-life-menu-v1/:path*'].map(source => ({ source, destination: `${bigGamePlaybookOrigin}${source}` })),
       {
         source: '/growth-lab-static/:path*',
         destination: `${growthLabOrigin}/growth-lab-static/:path*`,

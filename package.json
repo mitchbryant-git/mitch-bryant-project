@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint app components config lib --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint app components config lib --ext .js,.jsx,.ts,.tsx",
+    "prebuild": "node scripts/verify-deployment-target.mjs"
   },
   "dependencies": {
     "@next/third-parties": "^15.1.6",

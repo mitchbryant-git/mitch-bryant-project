@@ -45,3 +45,7 @@ Do not change domain assignments, redirects or DNS unless Mitch explicitly asks.
 - Inspect the browser tab icon and a social link preview.
 
 The footer temporarily retains `hello@mitchbryant.com` as Mitch’s contact address. Replace it only after an All That’s Next mailbox or forwarding address is confirmed.
+
+## Source migration preview, 22 October 2026
+
+The publishing instructions above describe production and do not authorize release. Current migration is PREVIEW ONLY on codex/restore-atn-source-preview. Root homepage source belongs here. The separate BGP project serves the public page and private application through namespaced rewrites. BIG_GAME_PLAYBOOK_ORIGIN may pin a reviewed child preview during comparison. Do not release the root until the child production supports both the sales page and /big-game-playbook/app; the current child production supports the private app only at the product root. Do not disable deployment protection to connect previews.

@@ -13,6 +13,28 @@ export const moduleFraming = {
   "commonRight": 782.7260940032415,
   "settledTopTrim": 80,
   "modules": {
+    "big-game": {
+  "liveKey": "big-game",
+  "bounds": {
+    "left": 169,
+    "right": 1106,
+    "bottom": 648
+  },
+  "sourceCanvas": {
+    "width": 1280,
+    "height": 653
+  },
+  "scale": 1.216648879402348,
+  "translateX": -129.61366061899682,
+  "translateY": 99.61152614727848,
+  "registeredCartridge": {
+    "x": 495.74386339381,
+    "y": 114.21131270010666,
+    "width": 279.82924226254005,
+    "height": 441.64354322305235,
+    "travelY": 346.74493062966917
+  }
+},
     "tuesday-type": {
       "liveKey": "tuesday-type",
       "bounds": {

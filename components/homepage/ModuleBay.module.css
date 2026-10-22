@@ -460,3 +460,5 @@
   .loadedArt[data-has-motion] .loadedStill { visibility: visible; }
   .dialog[data-preview-layout="settled"] .viewerBody, .dialog[data-preview-layout="settled"] .loadedArt, .dialog[data-preview-layout="settled"] .sourcePlane { transition: none; }
 }
+
+.dialog:has([data-preview-module="big-game"]) .loadedCopy { display:flex; flex-direction:column; gap:16px; align-items:flex-start; }

@@ -12,6 +12,18 @@ export function useModuleInsertion(dialog, art, status, syncSound, cancelSound) 
   const fit = useCallback(() => {
     const panel = dialog.current;
     if (!panel?.open || !art.current) return;
+    const selectedMotion=moduleMotion[art.current.dataset.previewModule];
+    if(selectedMotion?.enabled===false){
+      const unit=art.current.getBoundingClientRect().width / selectedMotion.canvas.width;
+      panel.dataset.previewLayout="static";
+      art.current.style.setProperty("--stage-unit",`${unit}px`);
+      art.current.style.setProperty("--stage-crop","0");
+      art.current.style.height=`${selectedMotion.canvas.height*unit}px`;
+      const clearance=art.current.dataset.motionState==="inserting"?285*unit:0;
+      panel.style.setProperty("--descent-clearance",`${clearance}px`);
+      art.current.parentElement.style.paddingTop=`${clearance}px`;
+      return;
+    }
     const inserting = art.current.dataset.motionState === "inserting";
     const unit = art.current.getBoundingClientRect().width / moduleFraming.stage.width;
     const trim = inserting ? 0 : moduleFraming.settledTopTrim;
@@ -80,6 +92,7 @@ export function useModuleInsertion(dialog, art, status, syncSound, cancelSound) 
 
   const start = useCallback((moduleId, moduleName) => {
     stop("starting", true);
+    if(moduleMotion[moduleId]?.enabled===false)return stop("asset-fallback");
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return stop("reduced-motion");
     if (!decoded.current.has(moduleId)) return stop("decoding-fallback");
     const group = [...art.current.querySelectorAll("[data-module-motion]")].find((element) => element.dataset.moduleMotion === moduleId);

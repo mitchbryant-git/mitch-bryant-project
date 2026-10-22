@@ -66,13 +66,14 @@ export const modules = [
     id: "big-game",
     shortCode: "ATN-01 GAME",
     name: "Big Game Playbook",
-    status: "In development",
-    statusTone: "development",
+    status: "Private preview",
+    statusTone: "live",
     accent: "yellow",
-    cartridgeImage: "/assets/cartridges/big-game-playbook-cartridge-v1.webp",
-    image: "/assets/console/big-game-playbook-local-console-atn-lettering-v3.png",
+    cartridgeImage: "/assets/cartridges/standalone-big-game-playbook-atn-v2.png",
+    image: "/assets/motion/big-game/native-camera-v2/settled.png",
     description:
       "Turn the life you want into a practical plan by connecting lifestyle, work, money and the next moves to start building it.",
+    href: "/big-game-playbook",
     detail: "Turn your future into a practical game plan.",
   },
   {

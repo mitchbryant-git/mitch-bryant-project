@@ -7,6 +7,7 @@ import { moduleMotion } from "@/config/module-motion";
 import { moduleFraming } from "@/config/module-framing";
 import { useModuleInsertion } from "./useModuleInsertion";
 import { useCartridgeSound } from "./useCartridgeSound";
+import { BigGamePlaybookSection } from "./BigGamePlaybookSection";
 import styles from "./ModuleBay.module.css";
 
 const presentation = [
@@ -14,6 +15,7 @@ const presentation = [
   { id: "dream-life", colour: "purple", question: ["What could", "my life cost?"], description: ["Build the life you want. See what it could cost", "and the income that could support it."], action: "Work out my number", open: "Open Your Number", width: 1280, height: 960 },
   { id: "help", colour: "mint", question: ["When could", "my debt be gone?"], description: ["See how income and life changes could shift", "your HECS repayment date."], action: "Explore my repayments", open: "Open HECS Debt Calculator", width: 1187, height: 1280 },
   { id: "growth-lab", colour: "orange", question: ["How do I turn a plan", "into progress?"], description: ["Choose one useful move today.", "Build evidence that you’re moving forward."], action: "Invited? Open your lab", open: "Sign in to Growth Lab", width: 1280, height: 853 },
+  { id: "big-game", colour: "yellow", question: ["The life you want.", "A plan to build it."], description: ["Your life. Your choices. Your next move.", "Connect your whole life with a practical plan."], action: "Explore the Playbook", open: "Open Big Game Playbook", width: 1200, height: 900 },
 ].map((item) => ({ ...modules.find((module) => module.id === item.id), ...item }));
 
 export function ModuleBay() {
@@ -23,6 +25,7 @@ export function ModuleBay() {
   const originButton = useRef(null);
   const opening = useRef(false);
   const pointerOpening = useRef(false);
+  const openedAt = useRef(0);
   const art = useRef(null);
   const status = useRef(null);
   const sound = useCartridgeSound();
@@ -51,6 +54,7 @@ export function ModuleBay() {
   function selectModule(module, event) {
     if (opening.current || dialog.current.open) return;
     opening.current = true;
+    openedAt.current = performance.now();
     pointerOpening.current = event.detail > 0;
     originButton.current = event.currentTarget;
     sound.arm(event.nativeEvent);
@@ -91,8 +95,9 @@ export function ModuleBay() {
 
   return (
     <section className={styles.modules} id="modules" aria-labelledby="module-heading">
+      <BigGamePlaybookSection artwork="/assets/bgp-homepage-background-art-atn.png" onOpen={(event) => selectModule(presentation.find((item) => item.id === "big-game"), event)} />
       <svg width="0" height="0" className={styles.clipDefinitions} aria-hidden="true" focusable="false">
-        <defs>{Object.entries(moduleMotion).map(([id, config]) => (
+        <defs>{Object.entries(moduleMotion).filter(([,config])=>config.enabled!==false).map(([id, config]) => (
           <clipPath key={id} id={`module-internal-${id}`} clipPathUnits="objectBoundingBox">
             <path d={config.occlusion.corridor} transform={`scale(${1 / config.canvas.width} ${1 / config.canvas.height})`} />
             <path d={config.occlusion.screen} transform={`scale(${1 / config.canvas.width} ${1 / config.canvas.height})`} />
@@ -101,7 +106,7 @@ export function ModuleBay() {
       </svg>
       <h2 className={styles.sectionLabel} id="module-heading">Choose your next move</h2>
       <div className={styles.grid}>
-        {presentation.map((module) => (
+        {presentation.filter((module)=>module.id!=="big-game").map((module) => (
           <article
             className={styles.card}
             style={{ "--accent": `var(--${module.colour})` }}
@@ -136,13 +141,16 @@ export function ModuleBay() {
         className={styles.dialog}
         style={{ "--accent": `var(--${selected.colour})` }}
         aria-labelledby="loaded-question"
-        aria-describedby={selected.id === "growth-lab" ? "loaded-description access-note" : "loaded-description"}
+        aria-describedby={["growth-lab","big-game"].includes(selected.id) ? "loaded-description access-note" : "loaded-description"}
         onClose={returnToCartridges}
         onCancel={(event) => { event.preventDefault(); closePreview(); }}
         onKeyDown={keepFocusInside}
         onPointerDown={() => { dialog.current.dataset.inputModality = "pointer"; }}
         onClick={(event) => {
           if (event.target !== event.currentTarget) return;
+          // A rapid second activation can land on the newly opened backdrop.
+          // Keep that same opening gesture from immediately dismissing BGP.
+          if (selected.id === "big-game" && performance.now() - openedAt.current < 350) return;
           const bounds = event.currentTarget.getBoundingClientRect();
           if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closePreview();
         }}
@@ -152,7 +160,7 @@ export function ModuleBay() {
           <button className={styles.closeButton} type="button" aria-label="Close loaded console preview" onClick={closePreview}>&#215;</button>
         </div>
         <div className={styles.viewerBody}>
-          <div ref={art} className={styles.loadedArt} data-module-stage>
+          <div ref={art} className={styles.loadedArt} data-module-stage data-preview-module={selected.id}>
             <Image id="loaded-image" className={styles.loadedStill} src={moduleMotion[selected.id].fallback} alt={`${selected.name} cartridge loaded into the ATN-01 Life Console`} width={1280} height={960} unoptimized />
             <div className={styles.sourcePlane} data-source-plane style={{
               width: `${frame.scale * 100}%`,
@@ -161,7 +169,7 @@ export function ModuleBay() {
               top: `calc((${frame.translateY} - var(--stage-crop, 0)) * var(--stage-unit, 0px))`,
               "--internal-clip": `url(#module-internal-${selected.id})`,
             }}>
-              {Object.entries(moduleMotion).map(([moduleId, config]) => <div key={moduleId} className={styles.consoleMotion} data-module-motion={moduleId} aria-hidden="true">
+              {Object.entries(moduleMotion).filter(([,config])=>config.enabled!==false).map(([moduleId, config]) => <div key={moduleId} className={styles.consoleMotion} data-module-motion={moduleId} aria-hidden="true">
                 {Object.entries(config.layers).map(([layer, source]) => {
                   const generated = ["base", "foreground", "foregroundBack"].includes(layer);
                   const transform = config.generatedBaseTransform;
@@ -180,7 +188,7 @@ export function ModuleBay() {
           <div className={styles.loadedCopy}>
             <h3 id="loaded-question">{selected.question.join(" ")}</h3>
             <p id="loaded-description">{selected.description.join(" ")}</p>
-            {selected.id === "growth-lab" ? <p id="access-note" className={styles.accessNote}>Private beta. Access is for invited accounts.</p> : null}
+            {selected.id === "growth-lab" ? <p id="access-note" className={styles.accessNote}>Private beta. Access is for invited accounts.</p> : selected.id === "big-game" ? <p id="access-note" className={styles.accessNote}>Private preview. Access is for invited ATN accounts.</p> : null}
             <a id="open-module" className={`${styles.openButton} ${selected.colour === "blue" || selected.colour === "purple" ? styles.lightText : ""}`} href={selected.href} target="_blank" rel="noopener noreferrer" onClick={sound.cancel}>{selected.open} <span aria-hidden="true">&#8599;</span></a>
           </div>
         </div>

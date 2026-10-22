@@ -56,3 +56,7 @@ npm run build
 ```
 
 Then review the homepage and Dream Life Calculator at mobile and desktop widths. Check the canonical URL, Open Graph site name, favicon, manifest, sitemap and robots output.
+
+## Source ownership and preview safety (2026-10-22)
+
+The root site must deploy only from mitchbryant-git/mitch-bryant-project to Vercel project prj_XXcJjMzyCQqU3jI4JJlNuubQ0DJM. Never deploy an assembled BGP checkout to this project. BGP repository/project owns /big-game-playbook and its private app; root owns the homepage BGP promotion and module bay. Preserve exact released assets for parity work. Run the deployment target guard before deploying. Preview branches must never be pushed to main or deployed with --prod, promoted, or assigned production aliases without a separate explicit release approval. Preview protection must stay enabled.
