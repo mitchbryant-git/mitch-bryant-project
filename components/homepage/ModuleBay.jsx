@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { BigGameInsertion } from "./BigGameInsertion";
 import { useEffect, useRef, useState } from "react";
 import { modules } from "@/config/modules";
 import { moduleMotion } from "@/config/module-motion";
@@ -44,7 +45,7 @@ export function ModuleBay() {
     panel.scrollTop = 0;
     backButton.current?.focus({ preventScroll: true });
     status.current.textContent = `${presentation.find((module) => module.id === selectedId).name} console preview selected.`;
-    startInsertion(selectedId, presentation.find((module) => module.id === selectedId).name);
+    if (selectedId !== "big-game") startInsertion(selectedId, presentation.find((module) => module.id === selectedId).name);
     return () => {
       stopInsertion("closed");
       document.body.style.overflow = previousOverflow;
@@ -162,6 +163,7 @@ export function ModuleBay() {
         </div>
         <div className={styles.viewerBody}>
           <div ref={art} className={styles.loadedArt} data-module-stage data-preview-module={selected.id}>
+            {selectedId === "big-game" ? <BigGameInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} /> : <>
             <Image id="loaded-image" className={styles.loadedStill} src={moduleMotion[selected.id].fallback} alt={`${selected.name} cartridge loaded into the ATN-01 Life Console`} width={1280} height={960} unoptimized />
             <div className={styles.sourcePlane} data-source-plane style={{
               width: `${frame.scale * 100}%`,
@@ -185,6 +187,7 @@ export function ModuleBay() {
                 })}
               </div>)}
             </div>
+            </>}
           </div>
           <div className={styles.loadedCopy}>
             <h3 id="loaded-question">{selected.question.join(" ")}</h3>
