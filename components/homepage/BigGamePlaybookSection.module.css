@@ -15,8 +15,9 @@
   box-shadow:0 12px 28px #11141124
 }
 .head{grid-area:head;position:relative;z-index:2;font:800 clamp(32px,3.4vw,50px)/1.04 var(--font-anybody),Arial,sans-serif;letter-spacing:-.045em;margin:0 0 30px;text-wrap:balance}
-/* "This is for you." in acid yellow: 12.4:1 on ink. */
-.accent{color:var(--yellow)}
+/* "This is for you." in acid yellow: 12.4:1 on ink, with a little air above it so the answer
+   lands after the question. */
+.accent{display:inline-block;margin-top:.22em;color:var(--yellow)}
 /* The hero: the BGP cartridge, upright, on the ink stage. */
 .hero{grid-area:cart;position:relative;align-self:center;margin-left:-6px}
 .cartridge{position:relative;width:100%;aspect-ratio:var(--art-ratio)}
