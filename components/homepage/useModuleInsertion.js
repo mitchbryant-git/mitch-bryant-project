@@ -12,12 +12,6 @@ export function useModuleInsertion(dialog, art, status, syncSound, cancelSound) 
   const fit = useCallback(() => {
     const panel = dialog.current;
     if (!panel?.open || !art.current) return;
-    if (["big-game", "tuesday-type"].includes(art.current.dataset.previewModule)) {
-      art.current.style.height = "auto";
-      art.current.parentElement.style.paddingTop = "0px";
-      panel.style.setProperty("--descent-clearance", "0px");
-      return;
-    }
     const selectedMotion=moduleMotion[art.current.dataset.previewModule];
     if(selectedMotion?.enabled===false){
       const unit=art.current.getBoundingClientRect().width / selectedMotion.canvas.width;
@@ -124,5 +118,5 @@ export function useModuleInsertion(dialog, art, status, syncSound, cancelSound) 
       }).catch(() => {});
     } catch { stop("animation-fallback"); }
   }, [art, dialog, fit, status, stop, syncSound]);
-  return { start, stop };
+  return { start, stop, fit };
 }

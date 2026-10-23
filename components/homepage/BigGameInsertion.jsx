@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import styles from "./ModuleBay.module.css";
 
 const root = "/assets/motion/big-game/approved-2026-10-23/";
 
-export function BigGameInsertion({ dialog, art, status, syncSound, cancelSound }) {
+export function BigGameInsertion({ dialog, art, status, syncSound, cancelSound, onLayout }) {
   const canvas = useRef(null);
   const [ready, setReady] = useState(false);
 
@@ -26,8 +27,8 @@ export function BigGameInsertion({ dialog, art, status, syncSound, cancelSound }
     const draw = (ms) => {
       const t = Math.max(0, Math.min(1, ms / 840));
       const eased = 1 - Math.pow(1 - t, 3);
-      context.clearRect(0, 0, 1280, 1180);
-      context.save(); context.scale(1280 / 1536, 1280 / 1536); context.translate(0, 300);
+      context.clearRect(0, 0, 1280, 960);
+      context.save(); context.translate(76 - 119 * 1140 / 1297, 888 - 1016 * 1140 / 1297); context.scale(1140 / 1297, 1140 / 1297);
       base();
       context.save(); context.translate(565, 93 - 300 * (1 - eased)); context.scale(.38, .38); context.drawImage(cartridge, 0, 0); context.restore();
       context.save(); context.beginPath(); context.moveTo(0, 220); context.lineTo(555, 278); context.lineTo(960, 323); context.lineTo(1536, 360); context.lineTo(1536, 1152); context.lineTo(0, 1152); context.closePath(); context.clip(); base(); context.restore();
@@ -40,6 +41,7 @@ export function BigGameInsertion({ dialog, art, status, syncSound, cancelSound }
       if (!disposed && consoleImage.complete && cartridge.complete) {
         draw(1000); surface.dataset.motionState = reason;
         art.current.dataset.motionState = reason;
+        onLayout();
         status.current.textContent = "Big Game Playbook console preview ready.";
       }
     };
@@ -47,7 +49,7 @@ export function BigGameInsertion({ dialog, art, status, syncSound, cancelSound }
       if (disposed || !dialog.current?.open) return;
       const ms = Number(clock.currentTime ?? 0);
       draw(ms);
-      if (ms >= 1000) { surface.dataset.motionState = "loaded"; art.current.dataset.motionState = "loaded"; status.current.textContent = "Big Game Playbook console preview ready."; }
+      if (ms >= 1000) { surface.dataset.motionState = "loaded"; art.current.dataset.motionState = "loaded"; onLayout(); status.current.textContent = "Big Game Playbook console preview ready."; }
       else frame = requestAnimationFrame(tick);
     };
     Promise.all([consoleImage.decode(), cartridge.decode()]).then(() => {
@@ -56,19 +58,19 @@ export function BigGameInsertion({ dialog, art, status, syncSound, cancelSound }
       if (reduced.matches || document.hidden || !dialog.current?.open) return settle(reduced.matches ? "reduced-motion" : "still");
       // The existing finite soundtrack drives this clock when playback is available.
       clock = surface.animate([{ opacity: 1 }, { opacity: 1 }], { duration: 1000, fill: "both" });
-      surface.dataset.motionState = "inserting"; art.current.dataset.motionState = "inserting";
+      surface.dataset.motionState = "inserting"; art.current.dataset.motionState = "inserting"; onLayout();
       syncSound(clock); frame = requestAnimationFrame(tick);
     }).catch(() => { cancelSound(); status.current.textContent = "Big Game Playbook console preview ready."; });
     reduced.addEventListener("change", () => { if (reduced.matches) settle("reduced-motion"); }, { signal: listeners.signal });
     document.addEventListener("visibilitychange", () => { if (document.hidden) settle("hidden-fallback"); }, { signal: listeners.signal });
     return () => { disposed = true; listeners.abort(); cancelAnimationFrame(frame); clock?.cancel(); cancelSound(); };
-  }, [art, cancelSound, dialog, status, syncSound]);
+  }, [art, cancelSound, dialog, status, syncSound, onLayout]);
 
   return <>
     {/* This unchanged source image remains a usable fallback if canvas or decoding fails. */}
     {/* eslint-disable-next-line @next/next/no-img-element */}
-    <img src={`${root}console.png`} alt="Big Game Playbook cartridge loaded into the ATN-01 Life Console" style={{ display: ready ? "none" : "block" }} />
-    <canvas ref={canvas} width={1280} height={1180} role="img" aria-label="Big Game Playbook cartridge loading into the ATN-01 Life Console" style={{ display: ready ? "block" : "none", width: "100%", height: "auto" }} />
+    <img src={`${root}console.png`} alt="Big Game Playbook cartridge loaded into the ATN-01 Life Console" style={{ position: "absolute", left: `${(76 - 119 * 1140 / 1297) / 1280 * 100}%`, top: "calc((-5.02699 - var(--stage-crop, 0)) * var(--stage-unit, 0px))", width: `${1536 * 1140 / 1297 / 1280 * 100}%`, display: ready ? "none" : "block" }} />
+    <canvas ref={canvas} width={1280} height={960} className={styles.loadingCanvas} role="img" aria-label="Big Game Playbook cartridge loading into the ATN-01 Life Console" style={{ position: "absolute", left: 0, top: "calc(-1 * var(--stage-crop, 0) * var(--stage-unit, 0px))", display: ready ? "block" : "none", width: "100%", height: "auto" }} />
   </>;
 }
 

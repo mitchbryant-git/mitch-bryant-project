@@ -32,7 +32,7 @@ export function ModuleBay() {
   const art = useRef(null);
   const status = useRef(null);
   const sound = useCartridgeSound();
-  const { start: startInsertion, stop: stopInsertion } = useModuleInsertion(dialog, art, status, sound.sync, sound.cancel);
+  const { start: startInsertion, stop: stopInsertion, fit: fitInsertion } = useModuleInsertion(dialog, art, status, sound.sync, sound.cancel);
   const selected = presentation.find((module) => module.id === selectedId) ?? presentation[0];
   const frame = moduleFraming.modules[selected.id];
 
@@ -164,7 +164,7 @@ export function ModuleBay() {
         </div>
         <div className={styles.viewerBody}>
           <div ref={art} className={styles.loadedArt} data-module-stage data-preview-module={selected.id}>
-            {selectedId === "big-game" ? <BigGameInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} /> : selectedId === "tuesday-type" ? <TuesdayTypeInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} /> : <>
+            {selectedId === "big-game" ? <BigGameInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} onLayout={fitInsertion} /> : selectedId === "tuesday-type" ? <TuesdayTypeInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} onLayout={fitInsertion} /> : <>
             <Image id="loaded-image" className={styles.loadedStill} src={moduleMotion[selected.id].fallback} alt={`${selected.name} cartridge loaded into the ATN-01 Life Console`} width={1280} height={960} unoptimized />
             <div className={styles.sourcePlane} data-source-plane style={{
               width: `${frame.scale * 100}%`,

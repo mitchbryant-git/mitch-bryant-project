@@ -460,4 +460,6 @@
 
 .dialog:has([data-preview-module="big-game"]) .loadedCopy { display:flex; flex-direction:column; gap:16px; align-items:flex-start; }
 
-.loadedArt[data-preview-module="big-game"], .loadedArt[data-preview-module="tuesday-type"] { aspect-ratio: 1280 / 1180; height: auto !important; background: #080909; }
+
+.dialog[data-preview-layout="settled"] .loadingCanvas { transition: top 160ms ease-out; }
+@media (prefers-reduced-motion: reduce) { .dialog[data-preview-layout="settled"] .loadingCanvas { transition: none; } }
