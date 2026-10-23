@@ -13,11 +13,13 @@ const CARTRIDGE = {
 };
 
 // The playbook picture. Swapping the image means updating its file, size, alt text and the tag
-// positions below (percent of the picture, measured from its top left corner).
+// positions below (percent of the picture, measured from its top left corner). On desktop the
+// picture fills the right of the card edge to edge; `zoom` crops into the desk around the book.
 const PICTURE = {
   src: "/assets/bgp-section/playbook-brought-to-life-v1.webp",
   width: 1254,
   height: 1254,
+  zoom: 1.04,
   alt: "An open playbook with three photos: friends laughing over lunch on a terrace above the sea, a young woman shaping clay in a bright studio, and a young man with a notebook smiling out of a train window at the coast",
 };
 const STEPS = [
@@ -59,21 +61,25 @@ export function BigGamePlaybookSection({ onOpen }) {
           height={CARTRIDGE.height}
           alt="The Big Game Playbook cartridge"
         />
-        <p className={styles.lede}>Explore the life you truly want, find out what it takes and who you’ll need to become, then start moving in the right direction.</p>
-        <figure ref={picture} className={styles.picture}>
-          <Image src={PICTURE.src} alt={PICTURE.alt} width={PICTURE.width} height={PICTURE.height} unoptimized />
-          <ol className={styles.tags}>
-            {STEPS.map((step, i) => (
-              <li key={step.text} style={{ "--x": `${step.x}%`, "--y": `${step.y}%`, "--w": `${step.w}%`, "--d": `${i * 180}ms` }}>
-                <span className={styles.tagNo} aria-hidden="true">{`0${i + 1}`}</span>
-                {step.text}
-              </li>
-            ))}
-          </ol>
+        <p className={styles.lede}>
+          <strong>No idea what you want to do with your life? That’s the best place to start.</strong>
+          Design the life you’d love, discover who you’ll need to become and what it really takes, then get a plan you can start on this week.
+        </p>
+        <figure ref={picture} className={styles.picture} style={{ "--pic-ratio": PICTURE.width / PICTURE.height, "--pic-zoom": PICTURE.zoom }}>
+          <div className={styles.pictureInner}>
+            <Image src={PICTURE.src} alt={PICTURE.alt} width={PICTURE.width} height={PICTURE.height} unoptimized />
+            <ol className={styles.tags}>
+              {STEPS.map((step, i) => (
+                <li key={step.text} style={{ "--x": `${step.x}%`, "--y": `${step.y}%`, "--w": `${step.w}%`, "--d": `${i * 180}ms` }}>
+                  <span className={styles.tagNo} aria-hidden="true">{`0${i + 1}`}</span>
+                  {step.text}
+                </li>
+              ))}
+            </ol>
+          </div>
         </figure>
         <div className={styles.cta}>
           <button type="button" className={styles.button} onClick={onOpen} aria-haspopup="dialog" aria-controls="loaded-module" data-bgp-open>Explore the Playbook <span aria-hidden="true">&#8594;</span></button>
-          <p className={styles.access}>Private preview. Access is for invited ATN accounts.</p>
           <noscript><a href="/big-game-playbook">Open Big Game Playbook private preview</a></noscript>
         </div>
       </div>
