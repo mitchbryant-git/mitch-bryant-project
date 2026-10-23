@@ -27,8 +27,8 @@ export function TuesdayTypeInsertion({ dialog, art, status, syncSound, cancelSou
     const draw = (ms) => {
       const t = Math.max(0, Math.min(1, ms / 840));
       const eased = 1 - Math.pow(1 - t, 3);
-      context.clearRect(0, 0, 1280, 960);
-      context.save(); context.translate(76 - 119 * 1140 / 1297, 888 - 1016 * 1140 / 1297); context.scale(1140 / 1297, 1140 / 1297);
+      context.clearRect(0, 0, 1280, 1152);
+      context.save(); context.translate(76 - 119 * 1140 / 1297, 192 + 888 - 1016 * 1140 / 1297); context.scale(1140 / 1297, 1140 / 1297);
       base();
       context.save(); context.translate(565, 93 - 300 * (1 - eased)); context.scale(.38, .38); context.drawImage(cartridge, 0, 0); context.restore();
       context.save(); context.beginPath(); context.moveTo(0, 220); context.lineTo(555, 278); context.lineTo(960, 323); context.lineTo(1536, 360); context.lineTo(1536, 1152); context.lineTo(0, 1152); context.closePath(); context.clip(); base(); context.restore();
@@ -70,7 +70,7 @@ export function TuesdayTypeInsertion({ dialog, art, status, syncSound, cancelSou
     {/* This unchanged source image remains a usable fallback if canvas or decoding fails. */}
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img src={`${root}console.png`} alt="Tuesday Type cartridge loaded into the ATN-01 Life Console" style={{ position: "absolute", left: `${(76 - 119 * 1140 / 1297) / 1280 * 100}%`, top: "calc((-5.02699 - var(--stage-crop, 0)) * var(--stage-unit, 0px))", width: `${1536 * 1140 / 1297 / 1280 * 100}%`, display: ready ? "none" : "block" }} />
-    <canvas ref={canvas} width={1280} height={960} className={styles.loadingCanvas} role="img" aria-label="Tuesday Type cartridge loading into the ATN-01 Life Console" style={{ position: "absolute", left: 0, top: "calc(-1 * var(--stage-crop, 0) * var(--stage-unit, 0px))", display: ready ? "block" : "none", width: "100%", height: "auto" }} />
+    <canvas ref={canvas} width={1280} height={1152} className={styles.loadingCanvas} role="img" aria-label="Tuesday Type cartridge loading into the ATN-01 Life Console" style={{ position: "absolute", left: 0, top: "calc((-192 - var(--stage-crop, 0)) * var(--stage-unit, 0px))", display: ready ? "block" : "none", width: "100%", height: "auto" }} />
   </>;
 }
 
