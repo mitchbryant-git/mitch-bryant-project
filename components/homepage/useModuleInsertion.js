@@ -12,7 +12,7 @@ export function useModuleInsertion(dialog, art, status, syncSound, cancelSound) 
   const fit = useCallback(() => {
     const panel = dialog.current;
     if (!panel?.open || !art.current) return;
-    if (art.current.dataset.previewModule === "big-game") {
+    if (["big-game", "tuesday-type"].includes(art.current.dataset.previewModule)) {
       art.current.style.height = "auto";
       art.current.parentElement.style.paddingTop = "0px";
       panel.style.setProperty("--descent-clearance", "0px");
