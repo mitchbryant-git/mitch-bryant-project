@@ -52,7 +52,7 @@ export function BigGamePlaybookSection({ onOpen }) {
   return (
     <section className={styles.section} aria-labelledby="bgp-product-title" data-bgp-review-section>
       <div className={styles.scene}>
-        <h2 id="bgp-product-title" className={styles.head}><span className={styles.srOnly}>Big Game Playbook. </span>The life you want.<br />A plan to build it.</h2>
+        <h2 id="bgp-product-title" className={styles.head}><span className={styles.srOnly}>Big Game Playbook. </span>No idea what you want to do with your life?<br />This is for you.</h2>
         <AnimatedCartridge
           className={styles.cartridge}
           src={CARTRIDGE.src}
@@ -61,10 +61,10 @@ export function BigGamePlaybookSection({ onOpen }) {
           height={CARTRIDGE.height}
           alt="The Big Game Playbook cartridge"
         />
-        <p className={styles.lede}>
-          <strong>No idea what you want to do with your life? That’s the best place to start.</strong>
-          Design the life you’d love, discover who you’ll need to become and what it really takes, then get a plan you can start on this week.
-        </p>
+        <div className={styles.lede}>
+          <p className={styles.sub}>The life you want.<br />A plan to build it.</p>
+          <p>Design the life you’d love, discover who you’ll need to become and what it really takes, then go and get it.</p>
+        </div>
         <figure ref={picture} className={styles.picture} style={{ "--pic-ratio": PICTURE.width / PICTURE.height, "--pic-zoom": PICTURE.zoom }}>
           <div className={styles.pictureInner}>
             <Image src={PICTURE.src} alt={PICTURE.alt} width={PICTURE.width} height={PICTURE.height} unoptimized />
