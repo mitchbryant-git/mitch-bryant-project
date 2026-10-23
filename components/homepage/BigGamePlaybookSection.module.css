@@ -37,7 +37,7 @@
 .pictureInner img{display:block;width:100%;height:100%}
 .tags{list-style:none;margin:0;padding:0}
 .tags li{
-  position:absolute;left:var(--x);top:var(--y);max-width:var(--w);
+  position:absolute;left:var(--x);top:var(--y,auto);bottom:var(--yb,auto);max-width:var(--w);
   display:flex;align-items:center;gap:8px;
   padding:6px 13px 6px 6px;
   background:#fffaf5;border:2px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--ink);
@@ -76,7 +76,6 @@
   .lede .sub{font-size:23px}
   /* Phones: one-line tags without numbers, so none of them cover a face. */
   .tags li{padding:4px 9px;box-shadow:2px 2px 0 var(--ink);border-width:1.5px;font-size:11px;white-space:nowrap;max-width:none}
-  .tags li:nth-child(2){left:4%}
   .tagNo{display:none}
   .cta{padding:26px 20px 0}
   .button{width:100%;font-size:11px;gap:12px}

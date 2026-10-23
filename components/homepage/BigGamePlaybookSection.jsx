@@ -16,16 +16,17 @@ const CARTRIDGE = {
 // positions below (percent of the picture, measured from its top left corner). On desktop the
 // picture fills the right of the card edge to edge; `zoom` crops into the desk around the book.
 const PICTURE = {
-  src: "/assets/bgp-section/playbook-brought-to-life-v1.webp",
+  src: "/assets/bgp-section/playbook-brought-to-life-v2.webp",
   width: 1254,
   height: 1254,
   zoom: 1.04,
-  alt: "An open playbook with three photos: friends laughing over lunch on a terrace above the sea, a young woman shaping clay in a bright studio, and a young man with a notebook smiling out of a train window at the coast",
+  alt: "An open playbook of photos: friends laughing over lunch on a terrace above the sea, relaxing at home, hiking the coast, a young man pitching his idea to an engaged team, and the same young man focused on his laptop in a city apartment",
 };
+// `y` places a tag from the top of the picture; `yb` places it from the bottom instead.
 const STEPS = [
-  { text: "The life I actually want", x: 15, y: 12.1, w: 60 },
-  { text: "Who I need to become", x: 9.3, y: 51, w: 39 },
-  { text: "How I’ll get there", x: 52.8, y: 51.5, w: 39 },
+  { text: "The life I actually want", x: 19.5, y: 11.4, w: 60 },
+  { text: "Who I need to become", x: 9.2, yb: 13.6, w: 39 },
+  { text: "How I’ll get there", x: 52.6, yb: 13.3, w: 39 },
 ];
 
 export function BigGamePlaybookSection({ onOpen }) {
@@ -70,7 +71,7 @@ export function BigGamePlaybookSection({ onOpen }) {
             <Image src={PICTURE.src} alt={PICTURE.alt} width={PICTURE.width} height={PICTURE.height} unoptimized />
             <ol className={styles.tags}>
               {STEPS.map((step, i) => (
-                <li key={step.text} style={{ "--x": `${step.x}%`, "--y": `${step.y}%`, "--w": `${step.w}%`, "--d": `${i * 180}ms` }}>
+                <li key={step.text} style={{ "--x": `${step.x}%`, "--w": `${step.w}%`, "--d": `${i * 180}ms`, ...(step.yb === undefined ? { "--y": `${step.y}%` } : { "--yb": `${step.yb}%` }) }}>
                   <span className={styles.tagNo} aria-hidden="true">{`0${i + 1}`}</span>
                   {step.text}
                 </li>
