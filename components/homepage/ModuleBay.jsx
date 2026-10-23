@@ -5,6 +5,7 @@ import { BigGameInsertion } from "./BigGameInsertion";
 import { TuesdayTypeInsertion } from "./TuesdayTypeInsertion";
 import { YourNumberInsertion } from "./YourNumberInsertion";
 import { HecsInsertion } from "./HecsInsertion";
+import { GrowthLabInsertion } from "./GrowthLabInsertion";
 import { useEffect, useRef, useState } from "react";
 import { modules } from "@/config/modules";
 import { moduleMotion } from "@/config/module-motion";
@@ -48,7 +49,7 @@ export function ModuleBay() {
     panel.scrollTop = 0;
     backButton.current?.focus({ preventScroll: true });
     status.current.textContent = `${presentation.find((module) => module.id === selectedId).name} console preview selected.`;
-    if (!["big-game", "tuesday-type", "dream-life", "help"].includes(selectedId)) startInsertion(selectedId, presentation.find((module) => module.id === selectedId).name);
+    if (!["big-game", "tuesday-type", "dream-life", "help", "growth-lab"].includes(selectedId)) startInsertion(selectedId, presentation.find((module) => module.id === selectedId).name);
     return () => {
       stopInsertion("closed");
       document.body.style.overflow = previousOverflow;
@@ -166,7 +167,7 @@ export function ModuleBay() {
         </div>
         <div className={styles.viewerBody}>
           <div ref={art} className={styles.loadedArt} data-module-stage data-preview-module={selected.id}>
-            {selectedId === "big-game" ? <BigGameInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} onLayout={fitInsertion} /> : selectedId === "tuesday-type" ? <TuesdayTypeInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} onLayout={fitInsertion} /> : selectedId === "dream-life" ? <YourNumberInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} onLayout={fitInsertion} /> : selectedId === "help" ? <HecsInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} onLayout={fitInsertion} /> : <>
+            {selectedId === "big-game" ? <BigGameInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} onLayout={fitInsertion} /> : selectedId === "tuesday-type" ? <TuesdayTypeInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} onLayout={fitInsertion} /> : selectedId === "dream-life" ? <YourNumberInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} onLayout={fitInsertion} /> : selectedId === "help" ? <HecsInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} onLayout={fitInsertion} /> : selectedId === "growth-lab" ? <GrowthLabInsertion dialog={dialog} art={art} status={status} syncSound={sound.sync} cancelSound={sound.cancel} onLayout={fitInsertion} /> : <>
             <Image id="loaded-image" className={styles.loadedStill} src={moduleMotion[selected.id].fallback} alt={`${selected.name} cartridge loaded into the ATN-01 Life Console`} width={1280} height={960} unoptimized />
             <div className={styles.sourcePlane} data-source-plane style={{
               width: `${frame.scale * 100}%`,
