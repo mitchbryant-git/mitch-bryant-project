@@ -32,8 +32,8 @@ const STEPS = [
 export function BigGamePlaybookSection({ onOpen }) {
   const scene = useRef(null);
 
-  // Enhancement only: everything renders in place. With motion allowed, the brand bars rise and
-  // the tags pop in one after another the first time the section comes into view.
+  // Enhancement only: everything renders in place. With motion allowed, the tags pop in one after
+  // another the first time the section comes into view.
   useEffect(() => {
     const el = scene.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
@@ -55,7 +55,6 @@ export function BigGamePlaybookSection({ onOpen }) {
       <div ref={scene} className={styles.scene}>
         <h2 id="bgp-product-title" className={styles.head}><span className={styles.srOnly}>Big Game Playbook. </span>No idea what you want to do with your life?<br /><span className={styles.accent}>This is for you.</span></h2>
         <div className={styles.hero}>
-          <div className={styles.flag} aria-hidden="true"><i /><i /><i /><i /></div>
           <AnimatedCartridge
             className={styles.cartridge}
             src={CARTRIDGE.src}

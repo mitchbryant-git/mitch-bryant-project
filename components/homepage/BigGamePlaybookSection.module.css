@@ -17,15 +17,9 @@
 .head{grid-area:head;position:relative;z-index:2;font:800 clamp(32px,3.4vw,50px)/1.04 var(--font-anybody),Arial,sans-serif;letter-spacing:-.045em;margin:0 0 30px;text-wrap:balance}
 /* "This is for you." in acid yellow: 12.4:1 on ink. */
 .accent{color:var(--yellow)}
-/* The hero: the BGP cartridge, tilted, standing in front of a giant version of the ATN logo bars
-   that rise from the bottom of the card. */
+/* The hero: the BGP cartridge, upright, on the ink stage. */
 .hero{grid-area:cart;position:relative;align-self:center;margin-left:-6px}
-.flag{position:absolute;z-index:0;left:50%;top:-7%;bottom:-120px;width:116%;display:flex;gap:6%;transform-origin:50% 0;transform:translateX(-50%) skewX(-18deg)}
-.flag i{flex:1;display:block;background:var(--blue)}
-.flag i:nth-child(2){background:var(--mint)}
-.flag i:nth-child(3){background:var(--pink)}
-.flag i:nth-child(4){background:var(--yellow)}
-.cartridge{position:relative;z-index:1;width:100%;aspect-ratio:var(--art-ratio);transform:rotate(-5deg)}
+.cartridge{position:relative;width:100%;aspect-ratio:var(--art-ratio)}
 .lede{grid-area:lede;position:relative;z-index:2;align-self:end;max-width:420px;margin:0 0 26px}
 .lede p{font-size:18px;line-height:1.55;margin:0;color:#d9cec4}
 .lede .sub{margin:0 0 12px;font:750 27px/1.12 var(--font-anybody),Arial,sans-serif;letter-spacing:-.03em;color:var(--cream-light)}
@@ -57,26 +51,18 @@
 
 /* Plays once when the section scrolls into view (only set by script, never with reduced motion). */
 .scene[data-anim="ready"] .tags li{opacity:0;transform:translateY(10px) scale(.94)}
-.scene[data-anim="play"] .tags li{transition:opacity 260ms ease calc(var(--d,0ms) + 450ms),transform 460ms cubic-bezier(.3,1.5,.5,1) calc(var(--d,0ms) + 450ms)}
-.scene[data-anim="ready"] .flag i{transform:translateY(70%)}
-.scene[data-anim="play"] .flag i{transition:transform 720ms cubic-bezier(.2,.8,.25,1)}
-.scene[data-anim="play"] .flag i:nth-child(2){transition-delay:70ms}
-.scene[data-anim="play"] .flag i:nth-child(3){transition-delay:140ms}
-.scene[data-anim="play"] .flag i:nth-child(4){transition-delay:210ms}
+.scene[data-anim="play"] .tags li{transition:opacity 260ms ease var(--d,0ms),transform 460ms cubic-bezier(.3,1.5,.5,1) var(--d,0ms)}
 
 /* Tablet: the same left side, with the picture across the full width below, edge to edge. */
 @media(max-width:1100px){
   .scene{grid-template-columns:minmax(0,210px) minmax(0,1fr);grid-template-rows:none;grid-template-areas:"head head" "cart lede" "cart cta" "picture picture";column-gap:30px;padding:40px 36px 0}
   .head{font-size:clamp(32px,4.8vw,48px)}
   .picture{align-self:auto;margin:40px -36px 0;aspect-ratio:1.15}
-  .flag{top:-8%;bottom:-8%}
 }
 /* Phone: one column. Cartridge, words, picture, button. */
 @media(max-width:700px){
   .scene{grid-template-columns:1fr;grid-template-areas:"cart" "head" "lede" "picture" "cta";padding:0 0 32px}
-  .hero{justify-self:center;width:min(50%,230px);margin:34px 0 10px}
-  /* On phones the bars hang from the top of the card behind the cartridge, like stadium banners. */
-  .flag{top:-60px;bottom:12%}
+  .hero{justify-self:center;width:min(50%,230px);margin:28px 0 8px}
   .head{padding:6px 24px 0;margin-bottom:20px}
   .lede{padding:0 24px;max-width:none;margin-bottom:26px}
   .picture{justify-self:stretch;width:auto;margin:0;aspect-ratio:auto;container-type:inline-size;overflow:visible}
@@ -87,7 +73,7 @@
 @media(max-width:480px){
   .section{margin-bottom:42px}
   .scene{border-radius:23px;padding-bottom:30px}
-  .hero{width:min(52%,210px);margin-top:30px}
+  .hero{width:min(52%,210px);margin-top:24px}
   .head{padding:4px 20px 0;font-size:min(32px,8.6vw)}
   .lede{padding:0 20px;margin-bottom:22px}
   .lede p{font-size:16px}
