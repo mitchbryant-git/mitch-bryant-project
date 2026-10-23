@@ -15,9 +15,8 @@
   box-shadow:0 8px 16px #11141108
 }
 .head{grid-area:head;font:800 clamp(32px,3.4vw,50px)/1.04 var(--font-anybody),Arial,sans-serif;letter-spacing:-.045em;margin:0 0 30px;text-wrap:balance}
-/* "This is for you." sits on a brand yellow band, angled like the logo bars. Ink on yellow keeps it readable. */
-.accent{position:relative;z-index:0;white-space:nowrap}
-.accent::before{content:"";position:absolute;z-index:-1;left:-.1em;right:-.12em;top:.1em;bottom:-.02em;background:var(--yellow);transform:skewX(-14deg);border-radius:3px}
+/* "This is for you." in brand electric blue: 4.4:1 on the cream card, fine at headline size. */
+.accent{color:var(--blue)}
 .cartridge{grid-area:cart;position:relative;align-self:center;width:100%;aspect-ratio:var(--art-ratio);margin-left:-6px}
 .lede{grid-area:lede;align-self:end;max-width:420px;margin:0 0 26px}
 .lede p{font-size:18px;line-height:1.55;margin:0}
