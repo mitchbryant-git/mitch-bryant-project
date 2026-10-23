@@ -53,7 +53,7 @@ export function BigGamePlaybookSection({ onOpen }) {
   return (
     <section className={styles.section} aria-labelledby="bgp-product-title" data-bgp-review-section>
       <div className={styles.scene}>
-        <h2 id="bgp-product-title" className={styles.head}><span className={styles.srOnly}>Big Game Playbook. </span>No idea what you want to do with your life?<br />This is for you.</h2>
+        <h2 id="bgp-product-title" className={styles.head}><span className={styles.srOnly}>Big Game Playbook. </span>No idea what you want to do with your life?<br /><span className={styles.accent}>This is for you.</span></h2>
         <AnimatedCartridge
           className={styles.cartridge}
           src={CARTRIDGE.src}
