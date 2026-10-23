@@ -30,12 +30,12 @@ const STEPS = [
 ];
 
 export function BigGamePlaybookSection({ onOpen }) {
-  const picture = useRef(null);
+  const scene = useRef(null);
 
-  // Enhancement only: the tags render in place. With motion allowed, they pop in one after
-  // another the first time the picture comes into view.
+  // Enhancement only: everything renders in place. With motion allowed, the brand bars rise and
+  // the tags pop in one after another the first time the section comes into view.
   useEffect(() => {
-    const el = picture.current;
+    const el = scene.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const box = el.getBoundingClientRect();
@@ -52,21 +52,24 @@ export function BigGamePlaybookSection({ onOpen }) {
 
   return (
     <section className={styles.section} aria-labelledby="bgp-product-title" data-bgp-review-section>
-      <div className={styles.scene}>
+      <div ref={scene} className={styles.scene}>
         <h2 id="bgp-product-title" className={styles.head}><span className={styles.srOnly}>Big Game Playbook. </span>No idea what you want to do with your life?<br /><span className={styles.accent}>This is for you.</span></h2>
-        <AnimatedCartridge
-          className={styles.cartridge}
-          src={CARTRIDGE.src}
-          motion={CARTRIDGE.motion}
-          width={CARTRIDGE.width}
-          height={CARTRIDGE.height}
-          alt="The Big Game Playbook cartridge"
-        />
+        <div className={styles.hero}>
+          <div className={styles.flag} aria-hidden="true"><i /><i /><i /><i /></div>
+          <AnimatedCartridge
+            className={styles.cartridge}
+            src={CARTRIDGE.src}
+            motion={CARTRIDGE.motion}
+            width={CARTRIDGE.width}
+            height={CARTRIDGE.height}
+            alt="The Big Game Playbook cartridge"
+          />
+        </div>
         <div className={styles.lede}>
           <p className={styles.sub}>The life you want.<br />A plan to build it.</p>
           <p>Design the life you’d love, discover who you’ll need to become and what it really takes, then go and get it.</p>
         </div>
-        <figure ref={picture} className={styles.picture} style={{ "--pic-ratio": PICTURE.width / PICTURE.height, "--pic-zoom": PICTURE.zoom }}>
+        <figure className={styles.picture} style={{ "--pic-ratio": PICTURE.width / PICTURE.height, "--pic-zoom": PICTURE.zoom }}>
           <div className={styles.pictureInner}>
             <Image src={PICTURE.src} alt={PICTURE.alt} width={PICTURE.width} height={PICTURE.height} unoptimized />
             <ol className={styles.tags}>

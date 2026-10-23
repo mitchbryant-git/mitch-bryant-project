@@ -1,6 +1,6 @@
 .section{position:relative;margin:0 0 64px;color:var(--ink);isolation:isolate}
 
-/* Same card surface as the module cards.
+/* Night game: the flagship gets the one ink stage on the page, like the BGP sales page hero.
    Desktop: headline across the top of the left side, the hero cartridge with the words and button
    beside it, and the playbook picture filling the right of the card edge to edge. */
 .scene{
@@ -10,20 +10,28 @@
   grid-template-areas:". . picture" "head head picture" "cart lede picture" "cart cta picture" ". . picture";
   column-gap:30px;
   padding:44px 0 44px 48px;
-  border:1px solid #cdbfb5;border-radius:28px;overflow:hidden;
-  background:#f3e9df;
-  box-shadow:0 8px 16px #11141108
+  border:1px solid #000;border-radius:28px;overflow:hidden;
+  background:var(--ink);color:var(--cream-light);
+  box-shadow:0 12px 28px #11141124
 }
-.head{grid-area:head;font:800 clamp(32px,3.4vw,50px)/1.04 var(--font-anybody),Arial,sans-serif;letter-spacing:-.045em;margin:0 0 30px;text-wrap:balance}
-/* "This is for you." in brand electric blue: 4.4:1 on the cream card, fine at headline size. */
-.accent{color:var(--blue)}
-.cartridge{grid-area:cart;position:relative;align-self:center;width:100%;aspect-ratio:var(--art-ratio);margin-left:-6px}
-.lede{grid-area:lede;align-self:end;max-width:420px;margin:0 0 26px}
-.lede p{font-size:18px;line-height:1.55;margin:0}
-.lede .sub{margin:0 0 12px;font:750 27px/1.12 var(--font-anybody),Arial,sans-serif;letter-spacing:-.03em}
-.cta{grid-area:cta;align-self:start;padding-right:8px}
+.head{grid-area:head;position:relative;z-index:2;font:800 clamp(32px,3.4vw,50px)/1.04 var(--font-anybody),Arial,sans-serif;letter-spacing:-.045em;margin:0 0 30px;text-wrap:balance}
+/* "This is for you." in acid yellow: 12.4:1 on ink. */
+.accent{color:var(--yellow)}
+/* The hero: the BGP cartridge, tilted, standing in front of a giant version of the ATN logo bars
+   that rise from the bottom of the card. */
+.hero{grid-area:cart;position:relative;align-self:center;margin-left:-6px}
+.flag{position:absolute;z-index:0;left:50%;top:-7%;bottom:-120px;width:116%;display:flex;gap:6%;transform-origin:50% 0;transform:translateX(-50%) skewX(-18deg)}
+.flag i{flex:1;display:block;background:var(--blue)}
+.flag i:nth-child(2){background:var(--mint)}
+.flag i:nth-child(3){background:var(--pink)}
+.flag i:nth-child(4){background:var(--yellow)}
+.cartridge{position:relative;z-index:1;width:100%;aspect-ratio:var(--art-ratio);transform:rotate(-5deg)}
+.lede{grid-area:lede;position:relative;z-index:2;align-self:end;max-width:420px;margin:0 0 26px}
+.lede p{font-size:18px;line-height:1.55;margin:0;color:#d9cec4}
+.lede .sub{margin:0 0 12px;font:750 27px/1.12 var(--font-anybody),Arial,sans-serif;letter-spacing:-.03em;color:var(--cream-light)}
+.cta{grid-area:cta;position:relative;z-index:2;align-self:start;padding-right:8px}
 .button{min-height:52px;display:inline-flex;align-items:center;justify-content:center;gap:20px;padding:14px 20px;border:2px solid #111411;border-radius:10px;background:#f8d018;color:#111411;box-shadow:4px 4px 0 #0068d8;font:400 12px/1.4 var(--font-archivo-black),Arial,sans-serif;text-transform:uppercase;letter-spacing:.035em;cursor:pointer;transition:transform 140ms ease,box-shadow 140ms ease}
-.button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 #0068d8}.button:active{transform:translate(2px,2px);box-shadow:none}.button:focus-visible{outline:3px solid #0068d8;outline-offset:5px}
+.button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 #0068d8}.button:active{transform:translate(2px,2px);box-shadow:none}.button:focus-visible{outline:3px solid var(--cream-light);outline-offset:5px}
 .srOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* The playbook picture. On desktop it fills the right of the card to its top, right and bottom
@@ -42,25 +50,33 @@
   position:absolute;left:var(--x);top:var(--y,auto);bottom:var(--yb,auto);max-width:var(--w);
   display:flex;align-items:center;gap:8px;
   padding:6px 13px 6px 6px;
-  background:#fffaf5;border:2px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--ink);
+  background:#fffaf5;color:var(--ink);border:2px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--ink);
   font:700 clamp(12px,2.6cqw,16px)/1.2 var(--font-instrument-sans),Arial,sans-serif;letter-spacing:-.01em
 }
 .tagNo{flex:none;padding:3px 7px;border:1.5px solid var(--ink);border-radius:999px;background:#f8d018;font:400 clamp(9px,1.7cqw,11px)/1.2 var(--font-archivo-black),Arial,sans-serif;letter-spacing:.04em}
 
-/* Plays once when the picture scrolls into view (only set by script, never with reduced motion). */
-.picture[data-anim="ready"] .tags li{opacity:0;transform:translateY(10px) scale(.94)}
-.picture[data-anim="play"] .tags li{transition:opacity 260ms ease var(--d,0ms),transform 460ms cubic-bezier(.3,1.5,.5,1) var(--d,0ms)}
+/* Plays once when the section scrolls into view (only set by script, never with reduced motion). */
+.scene[data-anim="ready"] .tags li{opacity:0;transform:translateY(10px) scale(.94)}
+.scene[data-anim="play"] .tags li{transition:opacity 260ms ease calc(var(--d,0ms) + 450ms),transform 460ms cubic-bezier(.3,1.5,.5,1) calc(var(--d,0ms) + 450ms)}
+.scene[data-anim="ready"] .flag i{transform:translateY(70%)}
+.scene[data-anim="play"] .flag i{transition:transform 720ms cubic-bezier(.2,.8,.25,1)}
+.scene[data-anim="play"] .flag i:nth-child(2){transition-delay:70ms}
+.scene[data-anim="play"] .flag i:nth-child(3){transition-delay:140ms}
+.scene[data-anim="play"] .flag i:nth-child(4){transition-delay:210ms}
 
 /* Tablet: the same left side, with the picture across the full width below, edge to edge. */
 @media(max-width:1100px){
   .scene{grid-template-columns:minmax(0,210px) minmax(0,1fr);grid-template-rows:none;grid-template-areas:"head head" "cart lede" "cart cta" "picture picture";column-gap:30px;padding:40px 36px 0}
   .head{font-size:clamp(32px,4.8vw,48px)}
   .picture{align-self:auto;margin:40px -36px 0;aspect-ratio:1.15}
+  .flag{top:-8%;bottom:-8%}
 }
 /* Phone: one column. Cartridge, words, picture, button. */
 @media(max-width:700px){
   .scene{grid-template-columns:1fr;grid-template-areas:"cart" "head" "lede" "picture" "cta";padding:0 0 32px}
-  .cartridge{justify-self:center;width:min(50%,230px);margin:28px 0 8px}
+  .hero{justify-self:center;width:min(50%,230px);margin:34px 0 10px}
+  /* On phones the bars hang from the top of the card behind the cartridge, like stadium banners. */
+  .flag{top:-60px;bottom:12%}
   .head{padding:6px 24px 0;margin-bottom:20px}
   .lede{padding:0 24px;max-width:none;margin-bottom:26px}
   .picture{justify-self:stretch;width:auto;margin:0;aspect-ratio:auto;container-type:inline-size;overflow:visible}
@@ -71,7 +87,7 @@
 @media(max-width:480px){
   .section{margin-bottom:42px}
   .scene{border-radius:23px;padding-bottom:30px}
-  .cartridge{width:min(52%,210px);margin-top:24px}
+  .hero{width:min(52%,210px);margin-top:30px}
   .head{padding:4px 20px 0;font-size:min(32px,8.6vw)}
   .lede{padding:0 20px;margin-bottom:22px}
   .lede p{font-size:16px}
