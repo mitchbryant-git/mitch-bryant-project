@@ -43,7 +43,8 @@
   .hero{--cartridge-height:363px;height:374px}
   .cartridge{margin-top:20px}
   .copy{padding:6px 24px 32px}
-  .head{font-size:29px;line-height:1.15}
+  .head{margin-left:-8px;margin-right:-8px;font-size:clamp(26px,6.6667vw,32px);line-height:1.15}
+  .accent{margin-top:16px;font-size:clamp(30px,8.6vw,38px);line-height:1.08;font-weight:800;text-align:center}
   .mobileBreak{display:initial}
   .desktopBreak{display:none}
   .sub{margin-top:22px;font-size:23px;color:#f8f5ed}
@@ -51,10 +52,14 @@
   .cta{margin-top:23px}
   .button{min-height:56px;padding:15px 12px;font-size:13px}
 }
+@media(min-width:390px) and (max-width:700px){
+  .mobileBreak{display:none}
+  .desktopBreak{display:initial}
+}
 @media(max-width:360px){
   .hero{--cartridge-height:320px;height:332px}
   .cartridge{margin-top:18px}
   .copy{padding-left:20px;padding-right:20px}
-  .head{font-size:26px}
+  .head{margin-left:-4px;margin-right:-4px;font-size:26px}
 }
 @media(prefers-reduced-motion:reduce){.button{transition:none}}
