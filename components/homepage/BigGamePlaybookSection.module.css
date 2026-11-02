@@ -1,88 +1,54 @@
-.section{position:relative;margin:0 0 64px;color:var(--ink);isolation:isolate}
-
-/* Night game: the flagship gets the one ink stage on the page, like the BGP sales page hero.
-   Desktop: headline across the top of the left side, the hero cartridge with the words and button
-   beside it, and the playbook picture filling the right of the card edge to edge. */
-.scene{
-  position:relative;display:grid;
-  grid-template-columns:minmax(0,230px) minmax(0,1fr) minmax(0,1.6fr);
-  grid-template-rows:1fr auto auto auto 1fr;
-  grid-template-areas:". . picture" "head head picture" "cart lede picture" "cart cta picture" ". . picture";
-  column-gap:30px;
-  padding:44px 0 44px 48px;
-  border:1px solid #000;border-radius:28px;overflow:hidden;
-  background:var(--ink);color:var(--cream-light);
-  box-shadow:0 12px 28px #11141124
-}
-.head{grid-area:head;position:relative;z-index:2;font:800 clamp(32px,3.4vw,50px)/1.04 var(--font-anybody),Arial,sans-serif;letter-spacing:-.045em;margin:0 0 30px;text-wrap:balance}
-/* "This is for you." in acid yellow: 12.4:1 on ink, with a little air above it so the answer
-   lands after the question. */
-.accent{display:inline-block;margin-top:.22em;color:var(--yellow)}
-/* The hero: the BGP cartridge, upright, on the ink stage. */
-.hero{grid-area:cart;position:relative;align-self:center;margin-left:-6px}
+.section{position:relative;margin:0 0 64px;color:#f8f1eb;isolation:isolate}
+.scene{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 440px;grid-template-areas:"copy cart";gap:62px;align-items:center;min-height:760px;padding:58px 62px;border:1px solid #272a22;border-radius:32px;background:#10130e;color:#f8f1eb;box-shadow:0 12px 28px #11141124}
+.copy{grid-area:copy;min-width:0}
+.head{margin:0;font:800 50px/1.045 var(--font-anybody),Arial,sans-serif;letter-spacing:-.045em}
+.accent{display:block;margin-top:15px;font-size:52px;line-height:1.04;color:#f8d018}
+.mobileBreak{display:none}
+.sub{margin:35px 0 0;font:750 35px/1.12 var(--font-anybody),Arial,sans-serif;letter-spacing:-.035em;color:#f8f1eb}
+.teaser{max-width:570px;margin:23px 0 0;font:400 21px/1.48 var(--font-instrument-sans),Arial,sans-serif;color:#d9cec4}
+.cta{margin-top:30px}
+.button{display:inline-flex;align-items:center;justify-content:center;gap:24px;min-height:62px;padding:17px 24px;border:0;border-radius:11px;background:#f8d018;color:#111411;box-shadow:6px 7px 0 #0068d8;font:800 21px/1.2 var(--font-instrument-sans),Arial,sans-serif;text-decoration:none;cursor:pointer;transition:transform 140ms ease,box-shadow 140ms ease}
+.button>span{display:inline-flex;align-items:center;justify-content:center;width:29px;height:24px;font-size:29px;line-height:1}
+.button:hover{transform:translate(-1px,-1px);box-shadow:7px 8px 0 #0068d8}
+.button:active{transform:translate(2px,2px);box-shadow:3px 4px 0 #0068d8}
+.cta .button:focus-visible{outline:3px solid #f8f1eb;outline-offset:6px}
+.hero{grid-area:cart;position:relative;justify-self:center;align-self:center;width:430px}
 .cartridge{position:relative;width:100%;aspect-ratio:var(--art-ratio)}
-.lede{grid-area:lede;position:relative;z-index:2;align-self:end;max-width:420px;margin:0 0 26px}
-.lede p{font-size:18px;line-height:1.55;margin:0;color:#d9cec4}
-.lede .sub{margin:0 0 12px;font:750 27px/1.12 var(--font-anybody),Arial,sans-serif;letter-spacing:-.03em;color:var(--cream-light)}
-.cta{grid-area:cta;position:relative;z-index:2;align-self:start;padding-right:8px}
-.button{min-height:52px;display:inline-flex;align-items:center;justify-content:center;gap:20px;padding:14px 20px;border:2px solid #111411;border-radius:10px;background:#f8d018;color:#111411;box-shadow:4px 4px 0 #0068d8;font:400 12px/1.4 var(--font-archivo-black),Arial,sans-serif;text-transform:uppercase;letter-spacing:.035em;cursor:pointer;transition:transform 140ms ease,box-shadow 140ms ease}
-.button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 #0068d8}.button:active{transform:translate(2px,2px);box-shadow:none}.button:focus-visible{outline:3px solid var(--cream-light);outline-offset:5px}
 .srOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-/* The playbook picture. On desktop it fills the right of the card to its top, right and bottom
-   edges: the inner layer keeps the picture's own shape (so the tags stay put) and covers the
-   panel, centred, zoomed slightly past the desk. */
-.picture{grid-area:picture;position:relative;align-self:stretch;margin:-44px 0 -44px 10px;overflow:hidden;container-type:size}
-.pictureInner{
-  position:absolute;left:50%;top:50%;
-  width:calc(max(100cqw, 100cqh * var(--pic-ratio)) * var(--pic-zoom, 1));
-  aspect-ratio:var(--pic-ratio);
-  transform:translate(-50%,-50%)
+@media(min-width:1100px) and (max-width:1300px){
+  .scene{grid-template-columns:minmax(0,1fr) minmax(300px,38%);gap:32px;min-height:680px;padding:44px 40px}
+  .hero{width:min(100%,390px)}
+  .head{font-size:clamp(38px,3.48vw,50px)}
+  .accent{font-size:clamp(40px,3.61vw,52px)}
+  .sub{font-size:32px}
+  .teaser{font-size:19px}
 }
-.pictureInner img{display:block;width:100%;height:100%}
-.tags{list-style:none;margin:0;padding:0}
-.tags li{
-  position:absolute;left:var(--x);top:var(--y,auto);bottom:var(--yb,auto);max-width:var(--w);
-  display:flex;align-items:center;gap:8px;
-  padding:6px 13px 6px 6px;
-  background:#fffaf5;color:var(--ink);border:2px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--ink);
-  font:700 clamp(12px,2.6cqw,16px)/1.2 var(--font-instrument-sans),Arial,sans-serif;letter-spacing:-.01em
+@media(max-width:1099px){
+  .scene{grid-template-columns:1fr;grid-template-areas:"cart" "copy";gap:0;min-height:0;padding:30px 36px 40px}
+  .hero{width:230px;margin-bottom:20px}
+  .copy{width:100%;max-width:660px;margin-inline:auto}
+  .head{font-size:clamp(32px,5.2vw,48px)}
+  .accent{font-size:44px}
+  .sub{font-size:30px;margin-top:28px}
+  .teaser{font-size:19px;margin-top:20px}
 }
-.tagNo{flex:none;padding:3px 7px;border:1.5px solid var(--ink);border-radius:999px;background:#f8d018;font:400 clamp(9px,1.7cqw,11px)/1.2 var(--font-archivo-black),Arial,sans-serif;letter-spacing:.04em}
-
-/* Plays once when the section scrolls into view (only set by script, never with reduced motion). */
-.scene[data-anim="ready"] .tags li{opacity:0;transform:translateY(10px) scale(.94)}
-.scene[data-anim="play"] .tags li{transition:opacity 260ms ease var(--d,0ms),transform 460ms cubic-bezier(.3,1.5,.5,1) var(--d,0ms)}
-
-/* Tablet: the same left side, with the picture across the full width below, edge to edge. */
-@media(max-width:1100px){
-  .scene{grid-template-columns:minmax(0,210px) minmax(0,1fr);grid-template-rows:none;grid-template-areas:"head head" "cart lede" "cart cta" "picture picture";column-gap:30px;padding:40px 36px 0}
-  .head{font-size:clamp(32px,4.8vw,48px)}
-  .picture{align-self:auto;margin:40px -36px 0;aspect-ratio:1.15}
-}
-/* Phone: one column. Cartridge, words, picture, button. */
 @media(max-width:700px){
-  .scene{grid-template-columns:1fr;grid-template-areas:"cart" "head" "lede" "picture" "cta";padding:0 0 32px}
-  .hero{justify-self:center;width:min(50%,230px);margin:28px 0 8px}
-  .head{padding:6px 24px 0;margin-bottom:20px}
-  .lede{padding:0 24px;max-width:none;margin-bottom:26px}
-  .picture{justify-self:stretch;width:auto;margin:0;aspect-ratio:auto;container-type:inline-size;overflow:visible}
-  .pictureInner{position:relative;left:auto;top:auto;width:100%;transform:none}
-  .lede .sub{font-size:25px}
-  .cta{padding:28px 24px 0}
+  .section{width:calc(100% + 20px);margin-left:-10px;margin-right:-10px;margin-bottom:42px;color:#f8f5ed}
+  .scene{padding:0;border-radius:19px;color:#f8f5ed}
+  .hero{width:130px;margin:17px 0 0}
+  .copy{max-width:none;padding:9px 20px 22.5px}
+  .head{font-size:32px;line-height:1.015;font-weight:850;letter-spacing:-.065em}
+  .mobileBreak{display:initial}
+  .desktopBreak{display:none}
+  .accent{margin-top:7.5px;font-size:28.5px;line-height:1.05;font-weight:850}
+  .sub{margin-top:18px;font-size:21.5px;line-height:1.08;font-weight:800;color:#f8f5ed}
+  .teaser{margin-top:12px;font:420 13px/1.43 var(--font-anybody),Arial,sans-serif;letter-spacing:-.035em;color:#d8d9d0}
+  .cta{margin-top:23.5px}
+  .button{width:100%;min-height:44px;padding:12px 16px;gap:16px;border-radius:7.5px;box-shadow:4px 4.5px 0 #0068d8;font:850 13px/1.2 var(--font-anybody),Arial,sans-serif}
+  .button>span{width:20px;height:18px;font-size:20px}
+  .button:hover{box-shadow:5px 5.5px 0 #0068d8}
+  .button:active{box-shadow:2px 2.5px 0 #0068d8}
 }
-@media(max-width:480px){
-  .section{margin-bottom:42px}
-  .scene{border-radius:23px;padding-bottom:30px}
-  .hero{width:min(52%,210px);margin-top:24px}
-  .head{padding:4px 20px 0;font-size:min(32px,8.6vw)}
-  .lede{padding:0 20px;margin-bottom:22px}
-  .lede p{font-size:16px}
-  .lede .sub{font-size:23px}
-  /* Phones: one-line tags without numbers, so none of them cover a face. */
-  .tags li{padding:4px 9px;box-shadow:2px 2px 0 var(--ink);border-width:1.5px;font-size:11px;white-space:nowrap;max-width:none}
-  .tagNo{display:none}
-  .cta{padding:26px 20px 0}
-  .button{width:100%;font-size:11px;gap:12px}
-}
+@media(max-width:360px){.section{width:calc(100% + 10px);margin-left:-5px;margin-right:-5px}}
 @media(prefers-reduced-motion:reduce){.button{transition:none}}
