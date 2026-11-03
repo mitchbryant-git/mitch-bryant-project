@@ -10,7 +10,7 @@ const CARTRIDGE = {
   height: 1121,
 };
 
-export function BigGamePlaybookSection() {
+export function BigGamePlaybookSection({ onOpen }) {
   return (
     <section className={styles.section} aria-labelledby="bgp-product-title" data-bgp-review-section>
       <div className={styles.scene}>
@@ -23,7 +23,11 @@ export function BigGamePlaybookSection() {
           <p className={styles.sub}>The life you want.<br />A plan to build it.</p>
           <p className={styles.teaser}>Pick the life you&rsquo;d love. Work out what it could cost. Find work you&rsquo;d enjoy that could pay for it, and build your plan to get there.</p>
           <div className={styles.cta}>
-            <a className={styles.button} href="/big-game-playbook">See how it works <span aria-hidden="true">&#8594;</span></a>
+            <a className={styles.button} href="/big-game-playbook" aria-haspopup="dialog" aria-controls="loaded-module" onClick={(event) => {
+              if (!onOpen || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+              event.preventDefault();
+              onOpen(event);
+            }}>See how it works <span aria-hidden="true">&#8594;</span></a>
           </div>
         </div>
         <div className={styles.hero}>

@@ -101,7 +101,7 @@ export function ModuleBay() {
 
   return (
     <section className={styles.modules} id="modules" aria-labelledby="module-heading">
-      <BigGamePlaybookSection />
+      <BigGamePlaybookSection onOpen={(event) => selectModule(presentation.find((item) => item.id === "big-game"), event)} />
       <svg width="0" height="0" className={styles.clipDefinitions} aria-hidden="true" focusable="false">
         <defs>{Object.entries(moduleMotion).filter(([,config])=>config.enabled!==false).map(([id, config]) => (
           <clipPath key={id} id={`module-internal-${id}`} clipPathUnits="objectBoundingBox">
